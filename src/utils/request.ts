@@ -1,31 +1,9 @@
 import axios from "axios";
-import type {AxiosRequestConfig} from "axios";
-import {message} from "antd";
+import type {AxiosResponse, AxiosInstance} from "axios";
+import {message, notification} from "antd";
 
-type Fn = (data: FcResponse<any>) => unknown;
-
-interface IAnyObj {
-    [index: string]: unknown;
-}
-
-interface FcResponse<T> {
-    errno: string;
-    errmsg: string;
-    data: T;
-}
-
-const handleChangeRequestHeader = (config: AxiosRequestConfig) => {
-    config["xxxx"] = "xxx";
-    return config;
-};
-
-const handleConfigureAuth = (config: AxiosRequestConfig) => {
-    config.headers = config.headers || {};
-    config.headers["Authorization"] = localStorage.getItem("token") || "";
-    return config;
-};
-
-const handleNetworkError = (errStatus?: number): void => {
+// 请求错误处理
+const handleNetworkError = async (errStatus?: number): Promise<void> => {
     const networkErrMap = {
         "400": "错误的请求", // token 失效
         "401": "未授权，请重新登录",
@@ -41,68 +19,87 @@ const handleNetworkError = (errStatus?: number): void => {
         "505": "http版本不支持该请求",
     };
     if (errStatus) {
-        message.error(networkErrMap[errStatus.toString()] ?? `其他连接错误 --${errStatus}`);
+        if (String(errStatus) in networkErrMap) {
+            message.error(networkErrMap[String(errStatus) as keyof typeof networkErrMap])
+        }else {
+            message.error(`其他连接错误 --${errStatus}`);
+        }
         return;
     }
     message.error("无法连接到服务器！");
 };
 
+// 业务错误处理
+const handleBusinessError = async (data: ApiResponse.ResponseStructure<unknown>) => {
+    const { msg = '', showType = 0, description = '', placement = 'topRight' } = data;
+    switch (showType) {
+        case 99:
+            break;
+        case 0:
+            message.success(msg);
+            break;
+        case 1:
+            message.warning(msg);
+            break;
+        case 2:
+            message.error(msg);
+            break;
+        case 3:
+            notification.success({
+                description: description,
+                message: msg,
+                placement
+            });
+            break;
+        case 4:
+            notification.warning({
+                description: description,
+                message: msg,
+                placement
+            });
+            break;
+        case 5:
+            notification.error({
+                description: description,
+                message: msg,
+                placement
+            });
+            break;
+        default:
+            message.error(msg);
+    }
+}
 
+// 创建 axios 实例
+const instance: AxiosInstance = axios.create({
+    baseURL: import.meta.env.BASE_URL,
+    timeout: 5000,
+    headers: {
+        "X-Requested-With": "XMLHttpRequest",
+    }
+});
 
-axios.interceptors.request.use((config) => {
-    config = handleChangeRequestHeader(config);
-    config = handleConfigureAuth(config);
+instance.interceptors.request.use((config) => {
+    config.headers = config.headers || {};
+    let token: string = "";
+    if(localStorage.getItem("token")) {
+        token =  `Bearer ${localStorage.getItem("token")}`
+    }
+    config.headers["Authorization"] = token;
     return config;
 });
 
-axios.interceptors.response.use(
-    (response) => {
-        if (response.status !== 200) return Promise.reject(response.data);
-        handleAuthError(response.data.errno);
-        handleGeneralError(response.data.errno, response.data.errmsg);
-        return response;
+instance.interceptors.response.use(
+    async (response: AxiosResponse<ApiResponse.ResponseStructure<unknown>>) => {
+        const { data } = response;
+        if(data.success) return Promise.resolve(response);
+        await handleBusinessError(data);
+        return Promise.reject(response);
     },
-    (err) => {
-        handleNetworkError(err.response.status);
-        Promise.reject(err.response);
+    async (err) => {
+        await handleNetworkError(err.response.status);
+        return Promise.reject(err.response);
     }
 );
 
-export const Get = <T,>(
-    url: string,
-    params: IAnyObj = {},
-    clearFn?: Fn
-): Promise<[any, FcResponse<T> | undefined]> =>
-    new Promise((resolve) => {
-        axios
-            .get(url, { params })
-            .then((result) => {
-                let res: FcResponse<T>;
-                if (clearFn !== undefined) {
-                    res = clearFn(result.data) as unknown as FcResponse<T>;
-                } else {
-                    res = result.data as FcResponse<T>;
-                }
-                resolve([null, res as FcResponse<T>]);
-            })
-            .catch((err) => {
-                resolve([err, undefined]);
-            });
-    });
-
-export const Post = <T,>(
-    url: string,
-    data: IAnyObj,
-    params: AxiosRequestConfig = {}
-): Promise<[any, FcResponse<T> | undefined]> => {
-    return new Promise((resolve) => {
-        axios
-            .post(url, data, { params })
-            .then((result) => {
-                resolve([null, result.data as FcResponse<T>]);
-            })
-            .catch((err) => {
-                resolve([err, undefined]);
-            });
-    });
-};
+export const request = instance;

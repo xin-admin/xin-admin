@@ -27,7 +27,8 @@
       "@/*": ["src/*"],
       "@com/*": ["src/components/*"],
       "@stores/*": ["src/stores/*"]
-    }
+    },
+    "types": ["vite/client", "./types/global"]
   },
   "include": ["src"]
 }
