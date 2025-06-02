@@ -42,5 +42,11 @@ export type IAdminInfoResult = API.ResponseStructure<AdminInfo>
 
 export type IAdminLoginResult = API.ResponseStructure<{
   plainTextToken: string;
-  refresh_token: string
+  accessToken: {
+    created_at: string;
+    expires_at: string | null;
+    id: number;
+    name: string;
+    abilities: string[];
+  }
 }>

@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { LoginFormPage, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { Divider, message, Space } from 'antd';
-import type { CSSProperties } from 'react';
+import {type CSSProperties, useEffect} from 'react';
 import React from 'react';
 import useAuthStore from "@stores/user.ts";
 import {useNavigate} from "react-router";
@@ -35,9 +35,13 @@ const iconDivStyle: CSSProperties = {
 const Login: React.FC = () => {
     const navigate = useNavigate()
     const { getInfo, login } = useAuthStore()
-    if(localStorage.getItem('token')) {
-        navigate('/', { replace: true })
-    }
+
+    useEffect(() => {
+        if(localStorage.getItem('token')) {
+            console.log("已登录，路由重定向！")
+            navigate('/', { replace: true })
+        }
+    }, [navigate]);
 
     const handleSubmit = async (values: IAdminLoginParams) => {
         // 登录
