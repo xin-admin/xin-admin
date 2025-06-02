@@ -1,4 +1,4 @@
-declare namespace ApiResponse {
+declare namespace API {
 
     type IAnyObj = {
         [key: string]: unknown

@@ -8,6 +8,7 @@ export interface IRule {
   sort?: number;
   name?: string;
   path?: string;
+  elementPath?: string;
   icon?: string;
   key?: string;
   local?: string;

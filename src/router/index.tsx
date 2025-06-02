@@ -32,10 +32,10 @@ export default function createRouter(routes: IRule[]) {
                     path: "/",
                     element: lazyLoad('/src/pages/Index/index.tsx'),
                 },
-                {
-                    path: "dashboard",
-                    element: lazyLoad('/src/pages/Dashboard/index.tsx')
-                },
+                // {
+                //     path: "dashboard",
+                //     element: lazyLoad('/src/pages/Dashboard/index.tsx')
+                // },
                 // 动态添加从状态中获取的路由
                 ...routes.map(route => ({
                     path: route.path,

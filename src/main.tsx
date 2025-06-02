@@ -1,17 +1,7 @@
 import ReactDOM from "react-dom/client";
-import { RouterProvider } from "react-router";
-import createRouter from '@/router';
-import {useGlobalStore} from "@/stores";
+import App from "./App";
+import '@ant-design/v5-patch-for-react-19';
 
 const root = document.getElementById("root");
 
-function App() {
-    const { routes } = useGlobalStore()
-    const router = createRouter(isAuthenticated ? routes : [])
-
-    return <RouterProvider router={router} />
-}
-
-ReactDOM.createRoot(root!).render(
-    <RouterProvider router={router} />
-);
+ReactDOM.createRoot(root!).render(<App/>);

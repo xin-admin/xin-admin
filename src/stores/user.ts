@@ -1,36 +1,65 @@
 import { create } from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
-import type {IAdminUser} from "@/domain/iAdmin.ts";
-
-interface UserLoginFrom {
-    username?: string
-    password?: string
-    autoLogin?: boolean
-    mobile?: string
-    captcha?: number
-    loginType?: 'phone' | 'account' | 'email'
-}
+import type {IAdminUser, IAdminLoginParams} from "@/domain/iAdmin.ts";
+import {adminInfo, adminLogin} from "@/api";
+import type {IRule} from "@/domain/iRule.ts";
 
 interface AuthState {
     token: string | null
+    refresh_token: string | null
     user: IAdminUser | null
-    login: (credentials: UserLoginFrom) => Promise<void>
+    access: string[]
+    menus: IRule[]
+    login: (credentials: IAdminLoginParams) => Promise<boolean>
+    getInfo: () => Promise<void>
     logout: () => void
 }
 
 const useAuthStore = create<AuthState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             token: null,
+            refresh_token: null,
             user: null,
-            login: async (credentials) => {
-                // 登录逻辑
-                set({ token: '...', user: {} })
+            access: [],
+            menus: [
+                {
+                    path: "/",
+                    elementPath: "/Index/index.tsx"
+                },
+                {
+                    path: "dashboard",
+                    elementPath: "/Dashboard/index.tsx"
+                }
+            ],
+            login: async (params) => {
+                const { data } = await adminLogin(params);
+                 if (!data.success) {
+                    return false;
+                }
+                set({
+                    token: data.data.plainTextToken,
+                    refresh_token : data.data.refresh_token,
+                })
+                localStorage.setItem( "token", data.data.plainTextToken)
+                localStorage.setItem( "refresh_token", data.data.refresh_token)
+                return true;
             },
             getInfo: async () => {
-                
+                const {data} = await adminInfo();
+                set({
+                    user: data.data.info,
+                    access: data.data.access,
+                    menus: data.data.menus
+                })
             },
-            logout: () => set({ token: null, user: null })
+            logout: () => set({
+                token: null,
+                user: null,
+                refresh_token : null,
+                access: [],
+                menus: []
+            })
         }),
         {
             name: 'auth-storage',

@@ -23,8 +23,24 @@ export interface IAdminUser {
   update_time?: string;
 }
 
-export interface IAdminInfoResult {
-  menus: IRule[],
-  access: string[],
+export interface IAdminLoginParams {
+  username?: string
+  password?: string
+  autoLogin?: boolean
+  mobile?: string
+  captcha?: number
+  loginType?: 'phone' | 'account' | 'email'
+}
+
+type AdminInfo = {
+  menus: IRule[]
+  access: string[]
   info: IAdminUser
 }
+
+export type IAdminInfoResult = API.ResponseStructure<AdminInfo>
+
+export type IAdminLoginResult = API.ResponseStructure<{
+  plainTextToken: string;
+  refresh_token: string
+}>

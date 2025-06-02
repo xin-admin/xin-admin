@@ -30,7 +30,7 @@ const handleNetworkError = async (errStatus?: number): Promise<void> => {
 };
 
 // 业务错误处理
-const handleBusinessError = async (data: ApiResponse.ResponseStructure<unknown>) => {
+const handleBusinessError = async (data: API.ResponseStructure<unknown>) => {
     const { msg = '', showType = 0, description = '', placement = 'topRight' } = data;
     switch (showType) {
         case 99:
@@ -72,7 +72,7 @@ const handleBusinessError = async (data: ApiResponse.ResponseStructure<unknown>)
 
 // 创建 axios 实例
 const instance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.BASE_URL,
+    baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 5000,
     headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -90,7 +90,7 @@ instance.interceptors.request.use((config) => {
 });
 
 instance.interceptors.response.use(
-    async (response: AxiosResponse<ApiResponse.ResponseStructure<unknown>>) => {
+    async (response: AxiosResponse<API.ResponseStructure<unknown>>) => {
         const { data } = response;
         if(data.success) return Promise.resolve(response);
         await handleBusinessError(data);

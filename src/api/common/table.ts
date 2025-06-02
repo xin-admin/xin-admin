@@ -1,8 +1,6 @@
-/**
- * Xin Table 公共接口
- */
+/** Xin Table 公共接口 */
 import { request } from '@/utils/request';
-import type {AxiosRequestConfig} from "axios";
+import type { AxiosRequestConfig } from "axios";
 
 type IListParams = {
   keyword?: string;
@@ -16,13 +14,13 @@ type IListParams = {
  * @param id
  * @param options
  */
-export const getApi = (
+export function Get<T,>(
     url: string,
     id: number | string,
     options?: AxiosRequestConfig | undefined
-) => {
+){
   return request.get<
-      ApiResponse.ResponseStructure<unknown>
+      API.ResponseStructure<T>
   >(url + '/' + id, options || {});
 }
 
@@ -32,16 +30,15 @@ export const getApi = (
  * @param params
  * @param options
  */
-export const listApi = (
+export function List<T,>(
     url: string,
     params?: IListParams,
-    options?: { [key: string]: unknown }
-) =>  {
-  return request<API.ResponseStructure<unknown>>(url, {
-    method: 'GET',
-    params: {
-      ...params,
-    },
+    options?: AxiosRequestConfig | undefined
+){
+  return request.get<
+      API.ResponseStructure<T>
+  >(url, {
+    params,
     ...(options || {}),
   });
 }
@@ -52,9 +49,14 @@ export const listApi = (
  * @param data
  * @param options
  */
-export const addApi = (url: string, data?: { [key: string]: unknown }, options?: { [key: string]: unknown }) => {
-  return request<API.ResponseStructure<unknown>>(url, {
-    method: 'POST',
+export function Create<T,>(
+    url: string,
+    data?: { [key: string]: unknown },
+    options?: AxiosRequestConfig | undefined
+){
+  return request.post<
+      API.ResponseStructure<T>
+  >(url, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -69,10 +71,15 @@ export const addApi = (url: string, data?: { [key: string]: unknown }, options?:
  * @param data
  * @param options
  */
-export const editApi = (url: string, data?: { [key: string]: any }, options?: { [key: string]: unknown }) =>  {
-  return request<API.ResponseStructure<unknown>>(url, {
-    method: 'PUT',
-    data: { ...data },
+export function Update<T,>(
+    url: string,
+    data?: { [key: string]: unknown },
+    options?: AxiosRequestConfig | undefined
+){
+  return request.put<
+      API.ResponseStructure<T>
+  >(url, {
+    data,
     ...(options || {}),
   });
 }
@@ -83,10 +90,15 @@ export const editApi = (url: string, data?: { [key: string]: any }, options?: { 
  * @param params
  * @param options
  */
-export const deleteApi = (url: string, params?: { [key: string]: any }, options?: { [key: string]: unknown }) => {
-  return request<API.ResponseStructure<unknown>>(url, {
-    method: 'DELETE',
-    params: { ...params },
+export function Delete<T,>(
+    url: string,
+    params?: { [key: string]: unknown },
+    options?: AxiosRequestConfig | undefined
+){
+  return request.delete<
+      API.ResponseStructure<T>
+  >(url, {
+    params,
     ...(options || {}),
   });
 }
