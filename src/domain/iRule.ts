@@ -3,7 +3,7 @@
  */
 export interface IRule {
   rule_id?: number;
-  pid?: number;
+  parent_id?: number;
   type?: string | number;
   sort?: number;
   name?: string;
