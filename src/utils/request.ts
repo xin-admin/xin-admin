@@ -97,8 +97,13 @@ instance.interceptors.response.use(
         return Promise.reject(response);
     },
     async (err) => {
-        await handleNetworkError(err.response.status);
-        return Promise.reject(err.response);
+        if(err.response) {
+            await handleNetworkError(err.response.status);
+            return Promise.reject(err.response);
+        }else {
+            message.error("网络链接错误：" + err.message);
+            return Promise.reject(err);
+        }
     }
 );
 

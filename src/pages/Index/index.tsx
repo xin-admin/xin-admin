@@ -1,4 +1,4 @@
 export default () => {
 
-    return <>首页</>
+    return <div className="h-1000">首页</div>
 }

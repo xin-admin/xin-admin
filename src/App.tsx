@@ -7,9 +7,7 @@ const App = () => {
     const { menus, getInfo, token } = useAuthStore()
     const router = createRouter(menus)
 
-    useEffect(() => {
-        getInfo()
-    }, [getInfo, token]);
+    useEffect(() => { if(token) getInfo() }, [getInfo, token]);
 
     return <RouterProvider router={router} />
 }
