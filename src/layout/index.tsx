@@ -2,7 +2,7 @@ import React from 'react';
 // import { Breadcrumb, Layout, Menu, theme } from 'antd';
 // import {Outlet} from "react-router";
 // import FooterRender from './FooterRender';
-import SiderRender from "@/layout/LayoutRender/SiderRender";
+import SiderRender from "@/layout/LayoutRender/ClassicRender.tsx";
 
 // const { Header, Content } = Layout;
 //
