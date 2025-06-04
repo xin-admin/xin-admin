@@ -1,5 +1,5 @@
 import {Outlet} from "react-router";
-import {Breadcrumb, ConfigProvider, Layout, Menu, type ThemeConfig} from "antd";
+import {Breadcrumb, Layout, Menu, Space} from "antd";
 import React from "react";
 import type { MenuProps } from 'antd';
 import {useGlobalStore} from "@/stores";
@@ -40,27 +40,6 @@ const ClassicRender = () => {
         bgColor: '#fff',
         headerHeight: 56,
         borderStyle: '1px solid #ebebeb'
-        // color: 'rgba(251,251,251,0.88)',
-        // bgColor: '#1d2938',
-        // headerHeight: 56,
-        // borderStyle: '1px solid #171d4d'
-    }
-
-    const globalTheme: ThemeConfig = {
-        components: {
-            Layout: {
-                siderBg: layoutStyle.bgColor,
-                headerBg: layoutStyle.bgColor,
-                headerColor: layoutStyle.color,
-                headerHeight: layoutStyle.headerHeight
-            },
-            Menu: {
-                activeBarBorderWidth: 0,
-                itemBg: layoutStyle.bgColor,
-                itemColor: layoutStyle.color,
-                darkItemBg: layoutStyle.bgColor,
-            }
-        },
     }
 
     const siderStyle: React.CSSProperties = {
@@ -89,28 +68,28 @@ const ClassicRender = () => {
     }
 
     return (
-        <ConfigProvider theme={globalTheme}>
-            <Layout className="min-h-screen">
-                <Sider style={siderStyle} width={256}>
-                    <div className="flex justify-center items-center mb-3" style={logoStyle}>
-                        <img className="w-8 mr-[10px]" src={ logo } alt="logo" />
-                        <h1 className="font-semibold text-[18px]" style={{color: layoutStyle.color}}>{ title }</h1>
-                    </div>
-                    <Menu defaultSelectedKeys={['1']} mode="inline" items={items}/>
-                </Sider>
-                <Layout>
-                    <Header style={headerStyle}></Header>
-                    <Content style={{margin: '0 16px'}}>
-                        <Breadcrumb style={{margin: '16px 0'}} items={[{title: 'User'}, {title: 'Bill'}]}/>
-                        <Outlet></Outlet>
-                    </Content>
-                    <Footer style={{textAlign: 'center'}}>
-                        Ant Design ©{new Date().getFullYear()} Created by Ant UED
-                    </Footer>
-                </Layout>
-            </Layout>
-        </ConfigProvider>
+        <Layout className="min-h-screen">
+            <Header style={headerStyle}>
+                <Space>
+                    <img className="w-8 mr-[10px]" src={ logo } alt="logo" />
+                    <h1 className="font-semibold text-[18px]" style={{color: layoutStyle.color}}>{ title }</h1>
+                </Space>
+            </Header>
+            <Sider style={siderStyle} width={256}>
 
+                <Menu defaultSelectedKeys={['1']} mode="inline" items={items}/>
+            </Sider>
+            <Layout>
+                <Header style={headerStyle}></Header>
+                <Content style={{margin: '0 16px'}}>
+                    <Breadcrumb style={{margin: '16px 0'}} items={[{title: 'User'}, {title: 'Bill'}]}/>
+                    <Outlet></Outlet>
+                </Content>
+                <Footer style={{textAlign: 'center'}}>
+                    Ant Design ©{new Date().getFullYear()} Created by Ant UED
+                </Footer>
+            </Layout>
+        </Layout>
     )
 }
 

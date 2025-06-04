@@ -1,24 +1,41 @@
-import React from 'react';
-// import { Breadcrumb, Layout, Menu, theme } from 'antd';
-// import {Outlet} from "react-router";
-// import FooterRender from './FooterRender';
-import SiderRender from "@/layout/LayoutRender/ClassicRender.tsx";
+import {GithubFilled, InfoCircleFilled, QuestionCircleFilled,} from '@ant-design/icons';
+import {ProConfigProvider, ProLayout, SettingDrawer,} from '@ant-design/pro-components';
+import SearchInputRender from '@/layout/SearchInputRender';
+import {useGlobalStore} from "@/stores";
+import {Outlet} from 'react-router';
 
-// const { Header, Content } = Layout;
-//
-// const items = Array.from({ length: 15 }).map((_, index) => ({
-//     key: index + 1,
-//     label: `nav ${index + 1}`,
-// }));
-
-const App: React.FC = () => {
-    // const {
-    //     token: { colorBgContainer, borderRadiusLG },
-    // } = theme.useToken();
+const Layout = () => {
+    const {logo, title, layoutSetting, setLayout} = useGlobalStore();
 
     return (
-        <SiderRender/>
+        <ProConfigProvider hashed={false}>
+            <ProLayout
+                logo={logo}
+                title={title}
+                // avatarProps={}
+                actionsRender={() => [
+                    <SearchInputRender/>,
+                    <InfoCircleFilled key="InfoCircleFilled"/>,
+                    <QuestionCircleFilled key="QuestionCircleFilled"/>,
+                    <GithubFilled key="GithubFilled"/>,
+                ]}
+                // menuFooterRender={}
+                // onMenuHeaderClick={(e) => console.log(e)}
+                // menuItemRender={}
+                {...layoutSetting}
+            >
+                <Outlet/>
+                <SettingDrawer
+                    enableDarkTheme
+                    settings={layoutSetting}
+                    onSettingChange={(changeSetting) => {
+                        setLayout(changeSetting);
+                    }}
+                    disableUrlParams={true}
+                />
+            </ProLayout>
+        </ProConfigProvider>
     );
 };
 
-export default App;
+export default Layout;
