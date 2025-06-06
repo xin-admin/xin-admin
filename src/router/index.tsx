@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router"
 import Layout from "@/layout"
 import Login from "@/pages/Login"
 import { lazy, Suspense } from "react"
-import AuthRoute from "@/components/AuthRoute"
+// import AuthRoute from "@/components/AuthRoute"
 import Loading from "@/components/Loading"
 import React from "react";
 import type {IRule} from "@/domain/iRule.ts"
@@ -10,17 +10,13 @@ import type {IRule} from "@/domain/iRule.ts"
 const modules = import.meta.glob('/src/pages/**/*')
 
 function lazyLoad(path: string) {
-    console.log(path)
-    console.log(modules[path])
     const Component = lazy(modules[path] as () => Promise<{ default: React.ComponentType }>)
     return (
-        <>
-            <Suspense fallback={<Loading />}>
-                <AuthRoute>
-                    <Component />
-                </AuthRoute>
-            </Suspense>
-        </>
+        <Suspense fallback={<Loading />}>
+            {/*<AuthRoute>*/}
+                <Component />
+            {/*</AuthRoute>*/}
+        </Suspense>
     )
 }
 

@@ -62,10 +62,10 @@ const ClassicRender = () => {
         borderBottom: layoutStyle.borderStyle,
     }
 
-    const logoStyle: React.CSSProperties = {
-        height: layoutStyle.headerHeight,
-        borderBottom: layoutStyle.borderStyle,
-    }
+    // const logoStyle: React.CSSProperties = {
+    //     height: layoutStyle.headerHeight,
+    //     borderBottom: layoutStyle.borderStyle,
+    // }
 
     return (
         <Layout className="min-h-screen">

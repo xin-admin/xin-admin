@@ -1,4 +1,4 @@
-import type { IAdminUserList } from './iAdmin.ts';
+import type { IAdminUser } from './iAdmin.ts';
 
 export interface IAiConversationGroup {
   /**
@@ -40,5 +40,5 @@ export interface IAiConversationGroup {
   /**
    * 对话关联用户
    */
-  user?: IAdminUserList;
+  user?: IAdminUser;
 }

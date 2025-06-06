@@ -11,7 +11,7 @@ import { LoginFormPage, ProFormCheckbox, ProFormText } from '@ant-design/pro-com
 import { Divider, message, Space } from 'antd';
 import {type CSSProperties, useEffect} from 'react';
 import React from 'react';
-import useAuthStore from "@stores/user.ts";
+import useAuthStore from "@/stores/user.ts";
 import {useNavigate} from "react-router";
 import type {IAdminLoginParams} from "@/domain/iAdmin.ts";
 
@@ -34,14 +34,14 @@ const iconDivStyle: CSSProperties = {
 
 const Login: React.FC = () => {
     const navigate = useNavigate()
-    const { getInfo, login } = useAuthStore()
+    const { getInfo, login, token, user } = useAuthStore()
 
     useEffect(() => {
-        if(localStorage.getItem('token')) {
+        if(token && user) {
             console.log("已登录，路由重定向！")
             navigate('/', { replace: true })
         }
-    }, [navigate]);
+    }, [token, user, navigate]);
 
     const handleSubmit = async (values: IAdminLoginParams) => {
         // 登录

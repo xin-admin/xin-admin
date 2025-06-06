@@ -1,6 +1,6 @@
 import createRouter from "@/router";
 import {RouterProvider} from "react-router";
-import useAuthStore from "@stores/user.ts";
+import useAuthStore from "@/stores/user.ts";
 import {useEffect} from "react";
 
 const App = () => {
