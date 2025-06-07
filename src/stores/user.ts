@@ -14,7 +14,7 @@ interface AuthState {
     menus: IRule[]
     login: (credentials: IAdminLoginParams) => Promise<boolean>
     getInfo: () => Promise<void>
-    logout: () => void
+    logout: () => Promise<void>
 }
 
 const useAuthStore = create<AuthState>()(
@@ -55,7 +55,7 @@ const useAuthStore = create<AuthState>()(
                 set({
                     user: data.data.info,
                     access: data.data.access,
-                    // menus: data.data.menus
+                    menus: data.data.menus
                 })
             },
             logout: async () => {
