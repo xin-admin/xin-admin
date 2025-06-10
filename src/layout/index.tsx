@@ -1,11 +1,9 @@
-import {GithubFilled, InfoCircleFilled, LogoutOutlined, QuestionCircleFilled,} from '@ant-design/icons';
-import {ProConfigProvider, ProLayout, SettingDrawer,} from '@ant-design/pro-components';
-import SearchInputRender from '@/layout/SearchInputRender';
 import {useGlobalStore} from "@/stores";
 import {Outlet, useNavigate} from 'react-router';
 import useAuthStore from "@/stores/user.ts";
-import {Dropdown, type MenuProps} from "antd";
-import {useEffect, useState} from "react";
+import type {MenuProps} from "antd";
+import React, {useEffect, useState} from "react";
+import ClassicRender from "@/layout/LayoutRender/ClassicRender.tsx";
 
 interface RouterTypes {
     path: string;
@@ -17,6 +15,32 @@ interface RouterTypes {
         children?: RouterTypes['children'];
     }>;
 }
+
+type MenuItem = Required<MenuProps>['items'][number];
+
+function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    children?: MenuItem[],
+): MenuItem {
+    return {
+        key,
+        children,
+        label,
+    } as MenuItem;
+}
+
+const items: MenuItem[] = [
+    getItem('Option 1', '1',),
+    getItem('Option 2', '2'),
+    getItem('User', 'sub1', [
+        getItem('Tom', '3'),
+        getItem('Bill', '4'),
+        getItem('Alex', '5'),
+    ]),
+    getItem('Team', 'sub2', [getItem('Team 1', '6'), getItem('Team 2', '8')]),
+    getItem('Files', '9'),
+];
 
 const Layout = () => {
     const navigate = useNavigate()
@@ -45,56 +69,22 @@ const Layout = () => {
         })
     }, [getInfo, navigate, token]);
 
-    const avatarMenuItem: MenuProps['items'] = [
-        {
-            key: 'logout',
-            icon: <LogoutOutlined/>,
-            label: '退出登录',
-            onClick: async () => {
-                await logout()
-                navigate('/login', { replace: true })
-            }
-        },
-    ]
+    // const avatarMenuItem: MenuProps['items'] = [
+    //     {
+    //         key: 'logout',
+    //         icon: <LogoutOutlined/>,
+    //         label: '退出登录',
+    //         onClick: async () => {
+    //             await logout()
+    //             navigate('/login', { replace: true })
+    //         }
+    //     },
+    // ]
 
     return (
-        <ProConfigProvider hashed={false}>
-            <ProLayout
-                logo={logo}
-                title={title}
-                route={routes}
-                // avatarProps={}
-                actionsRender={() => [
-                    <SearchInputRender/>,
-                    <InfoCircleFilled key="InfoCircleFilled"/>,
-                    <QuestionCircleFilled key="QuestionCircleFilled"/>,
-                    <GithubFilled key="GithubFilled"/>,
-                ]}
-                avatarProps={{
-                    src: user?.avatar_url,
-                    size: 'small',
-                    title: user?.nickname,
-                    render: (_, dom) => (
-                        <Dropdown menu={{items: avatarMenuItem}}>{dom}</Dropdown>
-                    ),
-                }}
-                appList={appList}
-                // menuFooterRender={}
-                // onMenuHeaderClick={(e) => console.log(e)}
-                // menuItemRender={}
-                {...layoutSetting}
-            >
-                <Outlet/>
-                <SettingDrawer
-                    enableDarkTheme
-                    settings={layoutSetting}
-                    onSettingChange={(changeSetting) => {
-                        setLayout(changeSetting);
-                    }}
-                    disableUrlParams={true}
-                />
-            </ProLayout>
-        </ProConfigProvider>
+        <ClassicRender menus={items}>
+            <Outlet />
+        </ClassicRender>
     );
 };
 

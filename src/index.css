@@ -1,8 +1,1 @@
-@layer theme, base, components, utilities, antd;
-
-@import "tailwindcss";
-
-:root {
-    scrollbar-width: thin;
-    scrollbar-gutter: stable;
-}
+@import "tailwindcss" important;

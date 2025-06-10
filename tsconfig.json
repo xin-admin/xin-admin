@@ -27,7 +27,7 @@
       "@/*": ["./src/*"],
       "~/*": ["./*"]
     },
-    "types": ["vite/client", "./types/global", "./types/env", "@tailwindcss/vite"]
+    "types": ["vite/client", "@tailwindcss/vite", "./types/global", "./types/env"]
   },
   "include": ["src"]
 }

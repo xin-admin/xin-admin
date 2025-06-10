@@ -6,7 +6,9 @@ const App = () => {
     const { menus } = useAuthStore()
     const router = createRouter(menus)
 
-    return <RouterProvider router={router} />
+    return (
+        <RouterProvider router={router} />
+    )
 }
 
 export default App

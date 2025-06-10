@@ -26,21 +26,21 @@ export default function createRouter(routes: IRule[]) {
             path: "/",
             Component: Layout,
             children: [
-                // {
-                //     index: true,
-                //     path: "/",
-                //     element: lazyLoad('/src/pages/Index/index.tsx'),
-                // },
-                // {
-                //     path: "dashboard",
-                //     element: lazyLoad('/src/pages/Dashboard/index.tsx')
-                // },
+                {
+                    index: true,
+                    path: "/",
+                    element: lazyLoad('/src/pages/Index/index.tsx'),
+                },
+                {
+                    path: "dashboard",
+                    element: lazyLoad('/src/pages/Dashboard/index.tsx')
+                },
                 // 动态添加从状态中获取的路由
-                ...routes.map(route => ({
-                    index: route.index,
-                    path: route.path,
-                    element: lazyLoad(`/src/pages${route.elementPath}`),
-                }))
+                // ...routes.map(route => ({
+                //     index: route.index,
+                //     path: route.path,
+                //     element: lazyLoad(`/src/pages${route.elementPath}`),
+                // }))
             ],
         },
         {
