@@ -52,6 +52,7 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
         fixedFooter: true,
         // 主题色
         theme: {
+            // ---------------- 亮色模式 ----------------
             // // 基础文字颜色
             // colorText: "#000",
             // // 基础背景颜色
@@ -65,13 +66,16 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
             // // 头部文字颜色
             // headerColor: "#000",
             // // 侧边栏背景色
-            // siderBg: "#fff"
+            // siderBg: "#fff",
+            // // 布局分割线边框颜色
+            // colorBorder: token.colorBorderSecondary,
+            // ---------------- 暗色模式 ----------------
             // 基础文字颜色
-            colorText: "#fff",
+            colorText: "#e1e1e1",
             // 基础背景颜色
             colorBg: "#000",
             // 内容区域背景色
-            bodyBg: "#3d3d3d",
+            bodyBg: "#000",
             // 页脚背景色
             footerBg: "#000",
             // 头部背景色
@@ -79,7 +83,9 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
             // 头部文字颜色
             headerColor: "#fff",
             // 侧边栏背景色
-            siderBg: "#000"
+            siderBg: "#000",
+            // 布局分割线边框颜色
+            colorBorder: "#3b3b3b",
         }
     }
 
@@ -110,7 +116,6 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
             borderRadius: themeConfig.borderRadius,
             controlHeight: themeConfig.controlHeight,
             motion: false,
-
         },
         algorithm: themeConfig.themeScheme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm
     }
@@ -130,7 +135,7 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
     return (
         <ConfigProvider theme={theme}>
             <Layout className="min-h-screen">
-                <Header className={"border-b-1 border-solid sticky z-1 top-0"} style={{borderBottomColor: token.colorBorderSecondary}}>
+                <Header className={"border-b-1 border-solid sticky z-1 top-0"} style={{borderBottomColor: themeConfig.theme.colorBorder}}>
                     <div className={"flex items-center"}>
                         <img className={"w-9 mr-5"} src={logo} alt="logo"/>
                         <span className={"font-semibold text-[20px] mr-2"}>{title}</span>
@@ -154,7 +159,7 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
                         width={themeConfig.siderWeight}
                         className={"p-2.5 border-r-1 border-solid sticky overflow-auto bottom-0"}
                         style={{
-                            borderRightColor: token.colorBorderSecondary,
+                            borderRightColor: themeConfig.theme.colorBorder,
                             top: themeConfig.headerHeight,
                             height: `calc(100vh - ${themeConfig.headerHeight}px)`,
                         }}
@@ -174,7 +179,7 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
                                 (themeConfig.fixedFooter ? 'fixed' : 'absolute') +
                                 " bottom-0 border-t-1 border-solid z-10 w-full"
                             }
-                            style={{borderTopColor: token.colorBorderSecondary}}
+                            style={{borderTopColor: themeConfig.theme.colorBorder}}
                         >
                             <div className={"flex items-center justify-center w-full"}>
                                 Xin Admin ©{new Date().getFullYear()} Created by xiaoliu
