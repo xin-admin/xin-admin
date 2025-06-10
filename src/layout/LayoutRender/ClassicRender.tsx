@@ -15,13 +15,71 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
     const {children, menus} = props;
     const {logo, title} = useGlobalStore();
     const [collapsed, setCollapsed] = useState<boolean>(false);
-    const {token} = useToken();
+    const { token } = useToken();
 
-    const themeConfig = {
+    const darkColorTheme = {
+        colorText: "#fff",
+        // 基础背景颜色
+        colorBg: "#000",
+        // 内容区域背景色
+        bodyBg: "#101010",
+        // 页脚背景色
+        footerBg: "#141414",
+        // 头部背景色
+        headerBg: "#141414",
+        // 头部文字颜色
+        headerColor: "#fff",
+        // 侧边栏背景色
+        siderBg: "#141414",
+        // 布局分割线边框颜色
+        colorBorder: "#3b3b3b",
+    }
+
+    const defaultColorTheme = {
+        // 基础文字颜色
+        colorText: "#000",
+        // 基础背景颜色
+        colorBg: "#fff",
+        // 内容区域背景色
+        bodyBg: "transparent",
+        // 页脚背景色
+        footerBg: "#fff",
+        // 头部背景色
+        headerBg: "#fff",
+        // 头部文字颜色
+        headerColor: "#000",
+        // 侧边栏背景色
+        siderBg: "#fff",
+        // 布局分割线边框颜色
+        colorBorder: "#f0f0f0"
+    }
+
+    const pinkColorTheme = {
+        // 基础文字颜色
+        colorText: "#000",
+        // 基础背景颜色
+        colorBg: "rgba(255,255,255,0.68)",
+        // 内容区域背景色
+        bodyBg: "rgba(255,255,255,0.2)",
+        // 页脚背景色
+        footerBg: "rgba(255,255,255,0.68)",
+        // 头部背景色
+        headerBg: "rgba(255,255,255,0.68)",
+        // 头部文字颜色
+        headerColor: "#000",
+        // 侧边栏背景色
+        siderBg: "rgba(255,255,255,0.68)",
+        // 布局分割线边框颜色
+        colorBorder: "transparent",
+    }
+
+    const [colorTheme, setColorTheme] = useState(defaultColorTheme);
+
+    const [themeConfig, setThemeConfig] = useState({
         // 主题
-        themeScheme: "dack",
+        themeScheme: "light",
         // 品牌色
-        colorPrimary: "#704cff",
+        colorPrimary: "#ED4192",
         // 错误色
         colorError: "#ff4d4f",
         // 信息色
@@ -37,55 +95,32 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
         // 按钮和输入框等基础控件的高度
         controlHeight: 32,
         // 是否开启动画
-        motion: false,
+        motion: true,
         // 头部两侧内边距
         headerPadding: 20,
         // 头部高度
         headerHeight: 56,
-        // 亮色模式下内容区域背景色
-        lightBodyBg: "#ffffff",
-        // 暗色模式下内容区域背景色
-        darkBodyBg: "#000000",
         // 侧边栏宽度
         siderWeight: 226,
         // 固定页脚
-        fixedFooter: true,
+        fixedFooter: false,
         // 主题色
-        theme: {
-            // ---------------- 亮色模式 ----------------
-            // // 基础文字颜色
-            // colorText: "#000",
-            // // 基础背景颜色
-            // colorBg: "#fff",
-            // // 内容区域背景色
-            // bodyBg: "transparent",
-            // // 页脚背景色
-            // footerBg: "#fff",
-            // // 头部背景色
-            // headerBg: "#fff",
-            // // 头部文字颜色
-            // headerColor: "#000",
-            // // 侧边栏背景色
-            // siderBg: "#fff",
-            // // 布局分割线边框颜色
-            // colorBorder: token.colorBorderSecondary,
-            // ---------------- 暗色模式 ----------------
-            // 基础文字颜色
-            colorText: "#e1e1e1",
-            // 基础背景颜色
-            colorBg: "#000",
-            // 内容区域背景色
-            bodyBg: "#000",
-            // 页脚背景色
-            footerBg: "#000",
-            // 头部背景色
-            headerBg: "#000",
-            // 头部文字颜色
-            headerColor: "#fff",
-            // 侧边栏背景色
-            siderBg: "#000",
-            // 布局分割线边框颜色
-            colorBorder: "#3b3b3b",
+        theme: defaultColorTheme
+    })
+
+    const darkChange = () => {
+        if(themeConfig.themeScheme === "dark") {
+            setThemeConfig({
+                ...themeConfig,
+                themeScheme: 'light',
+                theme: colorTheme
+            })
+        } else {
+            setThemeConfig({
+                ...themeConfig,
+                themeScheme: 'dark',
+                theme: darkColorTheme
+            })
         }
     }
 
@@ -134,7 +169,9 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
 
     return (
         <ConfigProvider theme={theme}>
-            <Layout className="min-h-screen">
+            <Layout className="min-h-screen" style={{
+                backgroundImage: `url(/fmt.webp)`,
+            }}>
                 <Header className={"border-b-1 border-solid sticky z-1 top-0"} style={{borderBottomColor: themeConfig.theme.colorBorder}}>
                     <div className={"flex items-center"}>
                         <img className={"w-9 mr-5"} src={logo} alt="logo"/>
@@ -149,6 +186,13 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
                                 :
                                 <MenuFoldOutlined/>
                             }
+                        </Button>
+                        <Button
+                            type={'text'}
+                            className={'text-[16px] mr-2'}
+                            onClick={darkChange}
+                        >
+
                         </Button>
                         <Breadcrumb items={breadcrumbItems}/>
                     </div>
@@ -176,7 +220,7 @@ const ClassicRender: React.FC<ClassicProps> = (props) => {
                         </Content>
                         <Footer
                             className={
-                                (themeConfig.fixedFooter ? 'fixed' : 'absolute') +
+                                (themeConfig.fixedFooter ? 'fixed' : 'relative') +
                                 " bottom-0 border-t-1 border-solid z-10 w-full"
                             }
                             style={{borderTopColor: themeConfig.theme.colorBorder}}
