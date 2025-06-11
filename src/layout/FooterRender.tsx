@@ -1,37 +1,25 @@
-import { GithubOutlined } from '@ant-design/icons';
-import { DefaultFooter } from '@ant-design/pro-components';
 import React from "react";
+import {Layout} from "antd";
+import {useGlobalStore} from "@/stores";
+const { Footer } = Layout;
 
-/** 页面底部渲染 */
 const FooterRender: React.FC = () => {
 
     const currentYear = new Date().getFullYear();
+    const {themeConfig} = useGlobalStore();
 
     return (
-        <DefaultFooter
-            copyright={`${currentYear} Xin Admin`}
-            style={{background: 'transparent'}}
-            links={[
-                {
-                    key: 'Ant Design Pro',
-                    title: 'Ant Design Pro',
-                    href: 'https://pro.ant.design',
-                    blankTarget: true,
-                },
-                {
-                    key: 'github',
-                    title: <GithubOutlined />,
-                    href: 'https://github.com/ant-design/ant-design-pro',
-                    blankTarget: true,
-                },
-                {
-                    key: 'Ant Design',
-                    title: 'Ant Design',
-                    href: 'https://ant.design',
-                    blankTarget: true,
-                },
-            ]}
-        />
+        <Footer
+            className={
+                (themeConfig.fixedFooter ? 'fixed' : 'relative') +
+                " bottom-0 border-t-1 border-solid z-10 w-full"
+            }
+            style={{borderTopColor: themeConfig.colorBorder}}
+        >
+            <div className={"flex items-center justify-center w-full"}>
+                Xin Admin ©{currentYear} Created by xiaoliu
+            </div>
+        </Footer>
     );
 };
 

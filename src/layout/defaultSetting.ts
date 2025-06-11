@@ -1,6 +1,6 @@
-import type {ThemeProps} from "./typing.ts";
+import type {ThemePropsV2} from "./typing.ts";
 
-const defaultSetting: ThemeProps = {
+const defaultSetting: ThemePropsV2 = {
   themeScheme:"light",
   grayscale:false,
   colourWeakness:false,
