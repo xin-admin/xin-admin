@@ -3,14 +3,15 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import type {AppListProps} from "@ant-design/pro-components";
 import type {BreadcrumbProps, MenuProps} from "antd";
 import React from "react";
-import type {ThemeProps} from "@/layout/typing.ts";
-import {configTheme, defaultColorTheme} from "@/layout/theme.ts";
+import type {LayoutType, ThemeProps} from "@/layout/typing";
+import {configTheme, defaultColorTheme} from "@/layout/theme";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 interface GlobalState {
     logo:  string;
     title: string;
+    layout: LayoutType;
     themeConfig: ThemeProps;
     collapsed: boolean;
     themeDrawer: boolean;
@@ -21,6 +22,7 @@ interface GlobalState {
     setThemeConfig: (themeConfig: ThemeProps) => void;
     setThemeDrawer: (themeDrawer: boolean) => void;
     setTheme: (theme: ThemeProps) => void;
+    setLayout:  (layout: LayoutType) => void;
 }
 
 function getItem(
@@ -52,6 +54,7 @@ export const useGlobalStore = create<GlobalState>()(
         (setState) => ({
             logo: "https://file.xinadmin.cn/file/favicons.ico",
             title: "Xin Admin",
+            layout: "vertical",
             themeConfig: {...defaultColorTheme, ...configTheme},
             collapsed: false,
             themeDrawer: false,
@@ -79,6 +82,9 @@ export const useGlobalStore = create<GlobalState>()(
             },
             setTheme: (theme: ThemeProps) => {
                 setState({themeConfig: theme})
+            },
+            setLayout: (layout: LayoutType) => {
+                setState({layout})
             }
         }),
         {

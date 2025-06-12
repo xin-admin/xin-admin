@@ -1,6 +1,9 @@
 import {Outlet} from 'react-router';
 import ClassicRender from "@/layout/LayoutRender/ClassicRender.tsx";
 import SettingDrawer from "@/layout/SettingDrawer.tsx";
+import {useGlobalStore} from "@/stores";
+import {ConfigProvider, theme as antTheme, type ThemeConfig} from "antd";
+import {useMemo} from "react";
 
 // interface RouterTypes {
 //     path: string;
@@ -52,13 +55,48 @@ const Layout = () => {
     //     },
     // ]
 
+    const themeConfig = useGlobalStore(state => state.themeConfig);
+
+    const theme: ThemeConfig = useMemo(() => ({
+        components: {
+            Layout: {
+                headerPadding: "0 " + themeConfig.headerPadding + "px",
+                headerHeight: themeConfig.headerHeight,
+                bodyBg: themeConfig.bodyBg,
+                footerBg: themeConfig.footerBg,
+                headerBg: themeConfig.headerBg,
+                headerColor: themeConfig.headerColor,
+                siderBg: themeConfig.siderBg,
+            },
+            Menu: {
+                activeBarBorderWidth: 0,
+                itemBg: 'transparent',
+            }
+        },
+        token: {
+            colorPrimary: themeConfig.colorPrimary,
+            colorBgBase: themeConfig.colorBg,
+            colorTextBase: themeConfig.colorText,
+            colorError: themeConfig.colorError,
+            colorInfo: themeConfig.colorPrimary,
+            colorLink: themeConfig.colorPrimary,
+            colorSuccess: themeConfig.colorSuccess,
+            colorWarning: themeConfig.colorWarning,
+            borderRadius: themeConfig.borderRadius,
+            controlHeight: themeConfig.controlHeight,
+            colorBorder: themeConfig.colorBorder,
+            motion: false,
+        },
+        algorithm: themeConfig.themeScheme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm
+    }), [themeConfig])
+
     return (
-        <>
+        <ConfigProvider theme={{...theme, cssVar: true}}>
             <ClassicRender>
                 <SettingDrawer></SettingDrawer>
                 <Outlet/>
             </ClassicRender>
-        </>
+        </ConfigProvider>
     );
 };
 

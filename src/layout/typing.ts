@@ -1,5 +1,7 @@
 export type ThemeScheme = "light" | "dark" | "pink" | "green";
 
+export type LayoutType = "vertical"  | "classic" | "transverse" | "columns";
+
 export interface ThemeProps {
     // 主题
     themeScheme?: ThemeScheme;

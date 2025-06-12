@@ -94,6 +94,23 @@ const SettingDrawer: React.FC = () => {
                 </div>
             )}
         >
+            <Divider>布局样式</Divider>
+            <Space wrap={true} size={'large'}>
+                <div className={'w-38 flex h-24 p-2 rounded-lg justify-between'} style={{boxShadow: token.boxShadow, borderRadius: token.borderRadius}}>
+                    <div className={'flex-none rounded-sm mr-2 w-6'} style={{background: token.colorPrimary}}></div>
+                    <div className={'flex flex-1 rounded-sm flex-col'}>
+                        <div style={{background: token.colorPrimary}} className={"rounded-sm w-full h-6 mb-1.5"}></div>
+                        <div style={{background: token.colorPrimaryBorder}} className={"flex-auto rounded-sm"}></div>
+                    </div>
+                </div>
+                <div className={'w-38 flex h-22 p-2 rounded-lg'} style={{boxShadow: token.boxShadow, borderRadius: token.borderRadius}}>
+                    <div className={'flex-1/6 rounded-sm'} style={{background: token.colorPrimary}}></div>
+                    <div className={'flex flex-5/6 rounded-sm flex-col'}>
+                        <div style={{background: token.colorPrimary}} className={"rounded-sm"}></div>
+                        <div className={"rounded-sm"}></div>
+                    </div>
+                </div>
+            </Space>
             <Divider>预设主题</Divider>
             <Space wrap={true} onClick={themeChange}>
                 {themeList.map((item) => (
