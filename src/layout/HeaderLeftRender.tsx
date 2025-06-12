@@ -2,7 +2,8 @@ import React from "react";
 import {useGlobalStore} from "@/stores";
 
 const HeaderLeftRender: React.FC = () => {
-    const {logo, title} = useGlobalStore();
+    const logo= useGlobalStore(state => state.logo);
+    const title= useGlobalStore(state => state.title);
 
     return (
         <div className={"flex items-center"}>

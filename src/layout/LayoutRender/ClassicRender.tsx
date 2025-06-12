@@ -1,19 +1,18 @@
 import {ConfigProvider, Layout , theme as antTheme} from "antd";
-import React from "react";
+import React, {useMemo} from "react";
 import type { ThemeConfig } from 'antd';
 import {useGlobalStore} from "@/stores";
-import HeaderLeftRender from "@/layout/HeaderLeftRender.tsx";
-import HeaderBodyRender from "@/layout/HeaderBodyRender.tsx";
-import HeaderRightRender from "@/layout/HeaderRightRender.tsx";
-import SiderRender from "@/layout/SiderRender.tsx";
-import FooterRender from "@/layout/FooterRender.tsx";
-const { Header, Content } = Layout;
+import HeaderRender from "@/layout/HeaderRender";
+import SiderRender from "@/layout/SiderRender";
+import FooterRender from "@/layout/FooterRender";
+
+const { Content } = Layout;
 
 const ClassicRender: React.FC<{children: React.ReactNode}> = (props) => {
     const {children} = props;
-    const {themeConfig} = useGlobalStore();
+    const themeConfig = useGlobalStore(state => state.themeConfig);
 
-    const theme: ThemeConfig = {
+    const theme: ThemeConfig = useMemo(() => ({
         components: {
             Layout: {
                 headerPadding: "0 " + themeConfig.headerPadding + "px",
@@ -25,7 +24,8 @@ const ClassicRender: React.FC<{children: React.ReactNode}> = (props) => {
                 siderBg: themeConfig.siderBg,
             },
             Menu: {
-                activeBarBorderWidth: 0
+                activeBarBorderWidth: 0,
+                itemBg: 'transparent',
             }
         },
         token: {
@@ -43,21 +43,15 @@ const ClassicRender: React.FC<{children: React.ReactNode}> = (props) => {
             motion: false,
         },
         algorithm: themeConfig.themeScheme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm
-    }
+    }), [themeConfig])
 
     return (
-        <ConfigProvider theme={theme}>
-            <Layout className="min-h-screen" style={{
-                // backgroundImage: `url(/fmt.webp)`,
-            }}>
-                <Header
-                    className={"flex border-b-1 border-solid sticky z-1 top-0"}
-                    style={{borderBottomColor: themeConfig.colorBorder}}
-                >
-                    <HeaderLeftRender/>
-                    <HeaderBodyRender/>
-                    <HeaderRightRender/>
-                </Header>
+        <ConfigProvider theme={{...theme, cssVar: true}}>
+            <Layout
+                className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
+                style={{background: themeConfig.background}}
+            >
+                <HeaderRender/>
                 <Layout hasSider>
                     <SiderRender/>
                     <Layout className={"relative"}>

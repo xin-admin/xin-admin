@@ -1,5 +1,6 @@
 import {Outlet} from 'react-router';
 import ClassicRender from "@/layout/LayoutRender/ClassicRender.tsx";
+import SettingDrawer from "@/layout/SettingDrawer.tsx";
 
 // interface RouterTypes {
 //     path: string;
@@ -52,9 +53,12 @@ const Layout = () => {
     // ]
 
     return (
-        <ClassicRender>
-            <Outlet/>
-        </ClassicRender>
+        <>
+            <ClassicRender>
+                <SettingDrawer></SettingDrawer>
+                <Outlet/>
+            </ClassicRender>
+        </>
     );
 };
 

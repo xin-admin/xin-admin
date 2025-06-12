@@ -5,7 +5,7 @@ import {useGlobalStore} from "@/stores";
 
 const SiderTopRender: React.FC = () => {
 
-    const {collapsed} = useGlobalStore();
+    const collapsed = useGlobalStore((state) => state.collapsed);
 
 
     const Title: React.FC<Readonly<{ title?: string }>> = (props) => (
@@ -45,21 +45,18 @@ const SiderTopRender: React.FC = () => {
     ];
 
     return (
-        <>
+        <div className={"mb-2 p-1"} style={{flex: "0 0 auto"}}>
             { !collapsed ?
                 <AutoComplete
-                    classNames={{ popup: { root: 'certain-category-search-dropdown' } }}
-                    className={"mb-2.5"}
-                    style={{flex: "0 0 auto"}}
                     popupMatchSelectWidth={500}
                     options={options}
                 >
-                    <Input.Search placeholder="input here" />
+                    <Input.Search size={'large'} placeholder="input here" />
                 </AutoComplete>
                 :
                 <Button icon={<SearchOutlined/>} className={"w-full"}></Button>
             }
-        </>
+        </div>
     )
 }
 

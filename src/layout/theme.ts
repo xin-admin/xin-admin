@@ -1,39 +1,64 @@
 import type {ThemeProps} from "@/layout/typing.ts";
 
+export const defaultColorTheme: ThemeProps = {
+    themeScheme: "light",
+    background: "transparent",
+    colorPrimary: "#1677ff",
+    colorText: "#000",
+    colorBg: "#fff",
+    bodyBg: "#f5f5f5",
+    footerBg: "#fff",
+    headerBg: "#fff",
+    headerColor: "#000",
+    siderBg: "#fff",
+    siderColor: "#000",
+    colorBorder: "#f0f0f0"
+}
+
 export const darkColorTheme: ThemeProps = {
+    themeScheme: "dark",
+    background: "transparent",
+    colorPrimary: "#1677ff",
     colorText: "#fff",
-    // 基础背景颜色
     colorBg: "#000",
-    // 内容区域背景色
     bodyBg: "#101010",
-    // 页脚背景色
     footerBg: "#141414",
-    // 头部背景色
     headerBg: "#141414",
-    // 头部文字颜色
     headerColor: "#fff",
-    // 侧边栏背景色
     siderBg: "#141414",
-    // 布局分割线边框颜色
+    siderColor: "#fff",
     colorBorder: "#3b3b3b",
 }
 
-export const defaultColorTheme: ThemeProps = {
-    // 基础文字颜色
+export const pinkColorTheme: ThemeProps = {
+    themeScheme: "pink",
+    background: "url(/theme/pink.webp)",
+    colorPrimary: "#ED4192",
+    borderRadius: 20,
     colorText: "#000",
-    // 基础背景颜色
-    colorBg: "#fff",
-    // 内容区域背景色
+    colorBg: "#ffdceb",
     bodyBg: "transparent",
-    // 页脚背景色
-    footerBg: "#fff",
-    // 头部背景色
-    headerBg: "#fff",
-    // 头部文字颜色
+    footerBg: "transparent",
+    headerBg: "rgba(255, 255, 255, 0.29)",
     headerColor: "#000",
-    // 侧边栏背景色
-    siderBg: "#fff",
-    // 布局分割线边框颜色
+    siderBg: "rgba(255, 255, 255, 0.29)",
+    siderColor: "#000",
+    colorBorder: "#f0f0f0"
+}
+
+export const greenColorTheme: ThemeProps = {
+    themeScheme: "green",
+    colorPrimary: "#00B96B",
+    background: "url(/theme/green.webp)",
+    borderRadius: 8,
+    colorText: "#000",
+    colorBg: "#c3ffef",
+    bodyBg: "transparent",
+    footerBg: "transparent",
+    headerBg: "rgba(255, 255, 255, 0.29)",
+    headerColor: "#000",
+    siderBg: "rgba(255, 255, 255, 0.29)",
+    siderColor: "#000",
     colorBorder: "#f0f0f0"
 }
 
@@ -49,7 +74,7 @@ export const configTheme: ThemeProps = {
     // 警告色
     colorWarning: "#faad14",
     // 基础组件的圆角大小
-    borderRadius: 24,
+    borderRadius: 10,
     // 按钮和输入框等基础控件的高度
     controlHeight: 32,
     // 是否开启动画
