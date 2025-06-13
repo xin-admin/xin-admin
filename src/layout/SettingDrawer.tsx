@@ -1,6 +1,6 @@
 import React from 'react';
 import { debounce } from 'lodash';
-import {Button, ColorPicker, Divider, Drawer, InputNumber, Space, Switch, theme} from 'antd';
+import {Button, Col, ColorPicker, Divider, Drawer, InputNumber, Row, Switch, theme, Tooltip} from 'antd';
 import {useGlobalStore} from "@/stores";
 import {darkColorTheme, defaultColorTheme, pinkColorTheme, greenColorTheme, configTheme} from "@/layout/theme.ts";
 const { useToken } = theme;
@@ -10,6 +10,8 @@ const SettingDrawer: React.FC = () => {
     const setThemeDrawer = useGlobalStore(state => state.setThemeDrawer);
     const setTheme = useGlobalStore(state => state.setTheme);
     const themeConfig = useGlobalStore(state => state.themeConfig);
+    const layout = useGlobalStore(state => state.layout);
+    const setLayout = useGlobalStore(state => state.setLayout);
 
     const onClose = () => {
         setThemeDrawer(false);
@@ -95,29 +97,90 @@ const SettingDrawer: React.FC = () => {
             )}
         >
             <Divider>布局样式</Divider>
-            <Space wrap={true} size={'large'}>
-                <div className={'w-38 flex h-24 p-2 rounded-lg justify-between'} style={{boxShadow: token.boxShadow, borderRadius: token.borderRadius}}>
-                    <div className={'flex-none rounded-sm mr-2 w-6'} style={{background: token.colorPrimary}}></div>
-                    <div className={'flex flex-1 rounded-sm flex-col'}>
-                        <div style={{background: token.colorPrimary}} className={"rounded-sm w-full h-6 mb-1.5"}></div>
-                        <div style={{background: token.colorPrimaryBorder}} className={"flex-auto rounded-sm"}></div>
-                    </div>
-                </div>
-                <div className={'w-38 flex h-22 p-2 rounded-lg'} style={{boxShadow: token.boxShadow, borderRadius: token.borderRadius}}>
-                    <div className={'flex-1/6 rounded-sm'} style={{background: token.colorPrimary}}></div>
-                    <div className={'flex flex-5/6 rounded-sm flex-col'}>
-                        <div style={{background: token.colorPrimary}} className={"rounded-sm"}></div>
-                        <div className={"rounded-sm"}></div>
-                    </div>
-                </div>
-            </Space>
+            <Row gutter={[20, 20]}>
+                <Col span={12}>
+                    <Tooltip title="左侧导航">
+                        <div
+                            className="p-2 rounded-lg cursor-pointer"
+                            style={{
+                                boxShadow: token.boxShadow,
+                                borderRadius: token.borderRadius,
+                                border: layout === 'side' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
+                            }}
+                            onClick={() => setLayout('side')}
+                        >
+                            <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimaryBorder}}></div>
+                            <div className="flex">
+                                <div className="rounded-sm h-16 w-6" style={{background: token.colorPrimary}}></div>
+                                <div className="rounded-sm flex-1 ml-1.5"
+                                     style={{background: token.colorPrimaryBg}}>
+                                </div>
+                            </div>
+                        </div>
+                    </Tooltip>
+                </Col>
+                <Col span={12}>
+                    <Tooltip title="顶部导航">
+                        <div
+                            className="p-2 rounded-lg cursor-pointer"
+                            style={{
+                                boxShadow: token.boxShadow,
+                                borderRadius: token.borderRadius,
+                                border: layout === 'top' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
+                            }}
+                            onClick={() => setLayout('top')}
+                        >
+                            <div className={"rounded-sm h-6 w-full mb-1.5"} style={{background: token.colorPrimary}}></div>
+                            <div className={"rounded-sm h-16"} style={{background: token.colorPrimaryBg}}></div>
+                        </div>
+                    </Tooltip>
+                </Col>
+                <Col span={12}>
+                    <Tooltip title="混合导航">
+                        <div
+                            className="p-2 rounded-lg cursor-pointer"
+                            style={{
+                                boxShadow: token.boxShadow,
+                                borderRadius: token.borderRadius,
+                                border: layout === 'mix' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
+                            }}
+                            onClick={() => setLayout('mix')}
+                        >
+                            <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimary}}></div>
+                            <div className="flex">
+                                <div className="rounded-sm h-16 w-6" style={{background: token.colorPrimary}}></div>
+                                <div className="rounded-sm flex-1 ml-1.5"
+                                     style={{background: token.colorPrimaryBg}}>
+                                </div>
+                            </div>
+                        </div>
+                    </Tooltip>
+                </Col>
+                <Col span={12}>
+                    <Tooltip title="双栏导航">
+                        <div
+                            className="p-2 rounded-lg cursor-pointer flex"
+                            style={{
+                                boxShadow: token.boxShadow,
+                                borderRadius: token.borderRadius,
+                                border: layout === 'columns' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
+                            }}
+                            onClick={() => setLayout('columns')}
+                        >
+                            <div className={"rounded-sm mr-1.5 w-3 h-24"} style={{background: token.colorPrimary}}></div>
+                            <div className={"rounded-sm mr-1.5 w-6 h-24"} style={{background: token.colorPrimaryHover}}></div>
+                            <div className={"rounded-sm flex-auto h-24"} style={{background: token.colorPrimaryBg}}></div>
+                        </div>
+                    </Tooltip>
+                </Col>
+            </Row>
             <Divider>预设主题</Divider>
-            <Space wrap={true} onClick={themeChange}>
+            <Row gutter={20} onClick={themeChange}>
                 {themeList.map((item) => (
-                    <div key={item.name} className={'text-center'}>
+                    <Col span={8} key={item.name} className={'mb-2.5'}>
                         <div
                             data-theme={item.name}
-                            className={'w-26 cursor-pointer overflow-hidden border-solid mb-1'}
+                            className={'cursor-pointer overflow-hidden border-solid'}
                             style={{
                                 borderRadius: token.borderRadius,
                                 borderWidth: themeConfig.themeScheme === item.name ? '2px' : '0px',
@@ -126,10 +189,10 @@ const SettingDrawer: React.FC = () => {
                         >
                             <img src={item.background} alt={item.name} />
                         </div>
-                        {item.title}
-                    </div>
+                        <div className={'text-center mt-1.5'}>{item.title}</div>
+                    </Col>
                 ))}
-            </Space>
+            </Row>
             <Divider>主题颜色</Divider>
             <div className={'flex justify-between items-center mb-2.5'}>
                 <div>主色</div>

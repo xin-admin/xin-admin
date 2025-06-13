@@ -10,6 +10,11 @@ const SiderRender: React.FC = () => {
     const collapsed = useGlobalStore(state => state.collapsed);
     const siderMenus = useGlobalStore(state => state.siderMenus);
     const themeConfig = useGlobalStore(state => state.themeConfig);
+    const layout = useGlobalStore(state => state.layout);
+
+    if (layout === "top") {
+        return;
+    }
 
     return (
         <ConfigProvider

@@ -16,9 +16,11 @@ const ClassicRender: React.FC<{children: React.ReactNode}> = (props) => {
             className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
             style={{background: themeConfig.background}}
         >
-            <HeaderRender/>
+
             <Layout hasSider>
                 <SiderRender/>
+                <HeaderRender/>
+
                 <Layout className={"relative"}>
                     <Content>
                         {children}

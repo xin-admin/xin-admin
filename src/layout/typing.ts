@@ -1,6 +1,6 @@
 export type ThemeScheme = "light" | "dark" | "pink" | "green";
 
-export type LayoutType = "vertical"  | "classic" | "transverse" | "columns";
+export type LayoutType = "side"  | "top" | "mix" | "columns";
 
 export interface ThemeProps {
     // 主题

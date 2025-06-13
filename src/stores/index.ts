@@ -54,7 +54,7 @@ export const useGlobalStore = create<GlobalState>()(
         (setState) => ({
             logo: "https://file.xinadmin.cn/file/favicons.ico",
             title: "Xin Admin",
-            layout: "vertical",
+            layout: "side",
             themeConfig: {...defaultColorTheme, ...configTheme},
             collapsed: false,
             themeDrawer: false,
