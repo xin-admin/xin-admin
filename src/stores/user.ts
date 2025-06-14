@@ -3,6 +3,7 @@ import {createJSONStorage, persist} from 'zustand/middleware'
 import type {IAdminUser, IAdminLoginParams} from "@/domain/iAdmin.ts";
 import {adminInfo, adminLogin, adminLogout} from "@/api";
 import type {IRule} from "@/domain/iRule.ts";
+import defaultRoute from "@/router/default.ts";
 
 interface AuthState {
     token: string | null
@@ -26,17 +27,7 @@ const useAuthStore = create<AuthState>()(
             user_id: null,
             user_name: null,
             access: [],
-            menus: [
-                {
-                    index: true,
-                    path: "/",
-                    elementPath: "/Index/index.tsx"
-                },
-                {
-                    path: "/dashboard",
-                    elementPath: "/Dashboard/index.tsx"
-                }
-            ],
+            menus: defaultRoute,
             login: async (params) => {
                 const { data } = await adminLogin(params);
                  if (!data.success) {

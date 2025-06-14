@@ -3,7 +3,8 @@ import {RouterProvider} from "react-router";
 import useAuthStore from "@/stores/user.ts";
 
 const App = () => {
-    const { menus } = useAuthStore()
+    const { menus } = useAuthStore();
+
     const router = createRouter(menus)
 
     return (

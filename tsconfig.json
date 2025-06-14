@@ -27,7 +27,15 @@
       "@/*": ["./src/*"],
       "~/*": ["./*"]
     },
-    "types": ["vite/client", "@tailwindcss/vite", "@types/lodash", "./types/global", "./types/env"]
+//    "types": [
+//      "vite/client",
+//      "@tailwindcss/vite",
+//      "@types/lodash",
+//      "@types/react-dom",
+//      "@types/react",
+//      "./types/global",
+//      "./types/env"
+//    ]
   },
   "include": ["src"]
 }

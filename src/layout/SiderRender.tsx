@@ -1,18 +1,36 @@
-import {ConfigProvider, Layout, Menu} from "antd";
-import React from "react";
+import {ConfigProvider, Layout, Menu, type MenuProps} from "antd";
+import React, {useEffect, useState} from "react";
 import {useGlobalStore} from "@/stores";
 import SiderTopRender from "@/layout/SiderTopRender.tsx";
 import SiderBottomRender from "@/layout/SiderBottomRender.tsx";
+import useAuthStore from "@/stores/user.ts";
+import {buildMenu} from "@/layout/utils.ts";
 
 const { Sider } = Layout;
+type MenuItem = Required<MenuProps>['items'][number];
 
 const SiderRender: React.FC = () => {
+    const menus = useAuthStore(state => state.menus)
     const collapsed = useGlobalStore(state => state.collapsed);
-    const siderMenus = useGlobalStore(state => state.siderMenus);
     const themeConfig = useGlobalStore(state => state.themeConfig);
     const layout = useGlobalStore(state => state.layout);
+    const mixValue = useGlobalStore(state => state.mixValue);
+    const [menu, setMenu] = useState<MenuItem[]>();
 
-    if (layout === "top") {
+    useEffect(() => {
+        if(layout === 'side') {
+            setMenu(menus.map(item => buildMenu(item)!))
+            return;
+        }
+        if(layout === 'mix' && mixValue) {
+            const mixMenu = menus.find(item => mixValue === item.key)
+            if(mixMenu && mixMenu.children && mixMenu.children.length > 0) {
+                setMenu(mixMenu.children.map(item => buildMenu(item)!))
+            }
+        }
+    }, [menus, layout, mixValue]);
+
+    if (layout === "top" || layout === "columns") {
         return;
     }
 
@@ -39,7 +57,7 @@ const SiderRender: React.FC = () => {
                         <Menu
                             defaultSelectedKeys={['1']}
                             mode="inline"
-                            items={siderMenus}
+                            items={menu}
                         />
                     </div>
                     <SiderBottomRender/>

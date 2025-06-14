@@ -63,7 +63,6 @@ export const greenColorTheme: ThemeProps = {
 }
 
 export const configTheme: ThemeProps = {
-    layout: "vertical",
     // 主题
     themeScheme: "light",
     // 品牌色

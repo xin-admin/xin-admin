@@ -1,60 +1,14 @@
 import {Outlet} from 'react-router';
-import ClassicRender from "@/layout/LayoutRender/ClassicRender.tsx";
 import SettingDrawer from "@/layout/SettingDrawer.tsx";
 import {useGlobalStore} from "@/stores";
-import {ConfigProvider, theme as antTheme, type ThemeConfig} from "antd";
+import {ConfigProvider, Layout, theme as antTheme, type ThemeConfig} from "antd";
 import {useMemo} from "react";
+import HeaderRender from "@/layout/HeaderRender.tsx";
+import SiderRender from "@/layout/SiderRender.tsx";
+import FooterRender from "@/layout/FooterRender.tsx";
+const { Content } = Layout;
 
-// interface RouterTypes {
-//     path: string;
-//     children: Array<{
-//         icon?: string;
-//         name?: string;
-//         path?: string;
-//         // 可选二级菜单
-//         children?: RouterTypes['children'];
-//     }>;
-// }
-
-const Layout = () => {
-    // const navigate = useNavigate()
-    // const {logo, title, appList, layoutSetting, setLayout} = useGlobalStore();
-    // const {user, token, menus, getInfo, logout} = useAuthStore();
-    // const [routes, setRoute] = useState<RouterTypes>();
-
-    // useEffect(() => {
-    //     if(!token) {
-    //         navigate('/login', { replace: true })
-    //     }else {
-    //         getInfo()
-    //     }
-    //     setRoute({
-    //         path: '/',
-    //         children: menus.map((item) => ({
-    //             // icon: item.icon,
-    //             name: item.name,
-    //             path: item.path,
-    //             children: item.children?.map((child) => ({
-    //                 // icon: child.icon,
-    //                 name: child.name,
-    //                 path: child.path,
-    //             })),
-    //         })),
-    //     })
-    // }, [getInfo, navigate, token]);
-
-    // const avatarMenuItem: MenuProps['items'] = [
-    //     {
-    //         key: 'logout',
-    //         icon: <LogoutOutlined/>,
-    //         label: '退出登录',
-    //         onClick: async () => {
-    //             await logout()
-    //             navigate('/login', { replace: true })
-    //         }
-    //     },
-    // ]
-
+const LayoutRender = () => {
     const themeConfig = useGlobalStore(state => state.themeConfig);
 
     const theme: ThemeConfig = useMemo(() => ({
@@ -92,12 +46,24 @@ const Layout = () => {
 
     return (
         <ConfigProvider theme={{...theme, cssVar: true}}>
-            <ClassicRender>
-                <SettingDrawer></SettingDrawer>
-                <Outlet/>
-            </ClassicRender>
+            <SettingDrawer></SettingDrawer>
+            <Layout
+                className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
+                style={{background: themeConfig.background}}
+            >
+                <HeaderRender/>
+                <Layout hasSider>
+                    <SiderRender/>
+                    <Layout className={"relative"}>
+                        <Content>
+                            <Outlet/>
+                        </Content>
+                        <FooterRender/>
+                    </Layout>
+                </Layout>
+            </Layout>
         </ConfigProvider>
     );
 };
 
-export default Layout;
+export default LayoutRender;

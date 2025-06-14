@@ -7,10 +7,10 @@ export default function AuthRoute({ children }: { children: JSX.Element }) {
     const { token } = useAuthStore()
 
     useEffect(() => {
-        if (!token) {
-            console.log('未登录，路由重定向到登录页')
-            navigate('/login', { replace: true })
-        }
+        // if (!token) {
+        //     console.log('未登录，路由重定向到登录页')
+        //     navigate('/login', { replace: true })
+        // }
     }, [navigate, token])
 
     return children
