@@ -1,15 +1,17 @@
 import React from 'react';
-import { Button, Result } from 'antd';
+import {Button, Card, Result} from 'antd';
 
 const App: React.FC = () => (
-    <Result
-        title="Your operation has been executed"
-        extra={
-            <Button type="primary" key="console">
-                Go Console
-            </Button>
-        }
-    />
+    <Card>
+        <Result
+            title="Your operation has been executed"
+            extra={
+                <Button type="primary" key="console">
+                    Go Console
+                </Button>
+            }
+        />
+    </Card>
 );
 
 export default App;
