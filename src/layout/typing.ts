@@ -27,6 +27,8 @@ export interface ThemeProps {
     headerHeight?: number;
     // 侧边栏宽度
     siderWeight?: number;
+    // 内容区域内边距
+    bodyPadding?: number;
     // 固定页脚
     fixedFooter?: boolean;
     // 基础文字颜色

@@ -88,6 +88,8 @@ export const configTheme: ThemeProps = {
     headerHeight: 56,
     // 侧边栏宽度
     siderWeight: 226,
+    // 内容区域内边距
+    bodyPadding: 20,
     // 固定页脚
     fixedFooter: false,
 }

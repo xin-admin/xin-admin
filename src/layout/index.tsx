@@ -57,7 +57,7 @@ const LayoutRender = () => {
                         <ColumnSiderRender/>
                         <Layout>
                             <HeaderRender/>
-                            <Content>
+                            <Content style={{padding: themeConfig.bodyPadding}}>
                                 <Outlet/>
                             </Content>
                             <FooterRender/>
@@ -69,7 +69,7 @@ const LayoutRender = () => {
                         <Layout hasSider>
                             {(layout === "mix" || layout === "side") && <SiderRender/>}
                             <Layout className={"relative"}>
-                                <Content>
+                                <Content style={{padding: themeConfig.bodyPadding}}>
                                     <Outlet/>
                                 </Content>
                                 <FooterRender/>

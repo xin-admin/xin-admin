@@ -362,6 +362,14 @@ const SettingDrawer: React.FC = () => {
                     onChange={(value) => changeSetting('siderWeight', value)}
                 />
             </div>
+            <div className={'flex justify-between items-center mb-2.5'}>
+                <div>内容区域内边距</div>
+                <InputNumber
+                    min={0}
+                    value={themeConfig.bodyPadding}
+                    onChange={(value) => changeSetting('bodyPadding', value)}
+                />
+            </div>
         </Drawer>
     );
 };
