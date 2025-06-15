@@ -1,29 +1,42 @@
 import {ConfigProvider, Menu, Layout, theme, type MenuProps} from "antd";
 import {useGlobalStore} from "@/stores";
 import React, {useEffect, useState} from "react";
-import {buildMenu} from "@/layout/utils.ts";
 import useAuthStore from "@/stores/user.ts";
 import IconFont from "@/components/IconFont";
+import {transformMenus} from "@/layout/utils.ts";
+import {useNavigate} from "react-router";
 const {Sider} = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 const {useToken} = theme
+
 const ColumnSiderRender: React.FC = () => {
+    const navigate = useNavigate();
     const themeConfig = useGlobalStore(state => state.themeConfig);
     const logo = useGlobalStore(state => state.logo);
     const title = useGlobalStore(state => state.title);
-    const mixValue = useGlobalStore(state => state.mixValue);
-    const setMixValue = useGlobalStore(state => state.setMixValue);
-    const menus = useAuthStore(state => state.menus);
-    const [menu, setMenu] = useState<MenuItem[]>();
+    const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
+    const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
+    const rules = useAuthStore(state => state.menus);
+    const [menu, setMenu] = useState<MenuItem[]>([]);
     const {token} = useToken();
+    const [parentKeys, setParentKeys] =  useState(menuSelectedKeys[menuSelectedKeys.length-1]);
 
     useEffect(() => {
-        const mixMenu = menus.find(item => mixValue === item.key)
-        if(mixMenu && mixMenu.children && mixMenu.children.length > 0) {
-            setMenu(mixMenu.children.map(item => buildMenu(item)!))
+        const parentRule = rules.find(item => parentKeys === item.key)
+        if(parentRule) {
+            const menus = transformMenus(rules, parentRule.rule_id)
+            setMenu(menus)
         }
-    }, [menus, mixValue])
-    
+    }, [rules, parentKeys])
+
+    const menuClick: MenuProps['onClick'] = (data) => {
+        setMenuSelectedKeys([...data.keyPath, parentKeys])
+        const rule = rules.find(item => item.key === data.key)
+        if(rule && rule.path) {
+            navigate(rule.path!)
+        }
+    }
+
     return (
         <ConfigProvider
             theme={{
@@ -33,11 +46,11 @@ const ColumnSiderRender: React.FC = () => {
                 cssVar: true
             }}
         >
-            <Sider width={themeConfig.siderWeight}>
+            <Sider width={menu.length > 0 ? themeConfig.siderWeight : '72px'}>
                 <div
                     className={"overflow-auto h-screen sticky top-0 bottom-0 flex w-full"}
                     style={{
-                        borderRight: themeConfig.layoutBorder ? "1px solid " + themeConfig.colorBorder : 'none',
+                        borderRight: (themeConfig.layoutBorder && menu.length > 0) ? "1px solid " + themeConfig.colorBorder : 'none',
                         color: themeConfig.siderColor,
                     }}
                 >
@@ -51,38 +64,47 @@ const ColumnSiderRender: React.FC = () => {
                         >
                             <img className={"w-9"} src={logo} alt="logo"/>
                         </div>
-                        {menus.map(menu => (
+                        {rules.filter(item => item.parent_id === 0).map(menu => (
                             <div
+                                key={menu.key}
                                 style={{
-                                    backgroundColor: mixValue === menu.key ? token.colorPrimaryBg : 'transparent',
-                                    color: mixValue === menu.key ? token.colorPrimary : themeConfig.siderColor,
+                                    backgroundColor: parentKeys === menu.key ? token.colorPrimaryBg : 'transparent',
+                                    color: parentKeys === menu.key ? token.colorPrimary : themeConfig.siderColor,
                                 }}
                                 className={"flex flex-col p-2 items-center justify-center mb-2 pt-3 pb-3 cursor-pointer"}
-                                onClick={() => setMixValue(menu.key!)}
+                                onClick={() => {
+                                    const rule = rules.find(item => item.key === menu.key);
+                                    if(rule && !rules.find(item => item.parent_id === rule.rule_id)) {
+                                        navigate(rule.path!)
+                                    }
+                                    setParentKeys(menu.key!)
+                                }}
                             >
                                 <IconFont name={menu.icon}/>
                                 <span className={"mt-1"}>{menu.name}</span>
                             </div>
                         ))}
                     </div>
-                    <div className={"flex-auto"}>
-                        <div
-                            className={"w-full flex items-center justify-center font-semibold text-[20px]"}
-                            style={{height: themeConfig.headerHeight}}
-                        >
-                            {title}
+                    { menu.length > 0 && (
+                        <div className={"flex-auto"}>
+                            <div
+                                className={"w-full flex items-center justify-center font-semibold text-[20px]"}
+                                style={{height: themeConfig.headerHeight}}
+                            >
+                                {title}
+                            </div>
+                            <Menu
+                                selectedKeys={menuSelectedKeys}
+                                mode="inline"
+                                items={menu}
+                                onClick={menuClick}
+                            />
                         </div>
-                        <Menu
-                            defaultSelectedKeys={['1']}
-                            mode="inline"
-                            items={menu}
-                        />
-                    </div>
+                    )}
                 </div>
             </Sider>
         </ConfigProvider>
     )
 }
-
 
 export default ColumnSiderRender

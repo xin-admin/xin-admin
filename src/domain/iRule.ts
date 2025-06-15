@@ -32,6 +32,4 @@ export interface IRule {
   created_at?: string;
   // 更新时间
   updated_at?: string;
-  // 子节点
-  children?: IRule[];
 }

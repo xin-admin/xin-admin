@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type {AppListProps} from "@ant-design/pro-components";
-import type {BreadcrumbProps} from "antd";
 import type {LayoutType, ThemeProps} from "@/layout/typing";
 import {configTheme, defaultColorTheme} from "@/layout/theme";
 
@@ -13,14 +12,13 @@ interface GlobalState {
     collapsed: boolean;
     themeDrawer: boolean;
     appList: AppListProps;
-    mixValue: string;
+    menuSelectedKeys:  string[];
     setCollapsed: (collapsed: boolean) => void;
-    breadcrumbItems: BreadcrumbProps['items'];
     setThemeConfig: (themeConfig: ThemeProps) => void;
     setThemeDrawer: (themeDrawer: boolean) => void;
     setTheme: (theme: ThemeProps) => void;
     setLayout:  (layout: LayoutType) => void;
-    setMixValue: (mixValue: string) => void;
+    setMenuSelectedKeys:  (menuSelectedKeys: string[]) => void;
 }
 
 export const useGlobalStore = create<GlobalState>()(
@@ -32,19 +30,8 @@ export const useGlobalStore = create<GlobalState>()(
             themeConfig: {...defaultColorTheme, ...configTheme},
             collapsed: false,
             themeDrawer: false,
-            breadcrumbItems: [
-                {
-                    title: 'Home',
-                },
-                {
-                    title: 'List',
-                },
-                {
-                    title: 'App',
-                },
-            ],
             appList: [],
-            mixValue: '',
+            menuSelectedKeys: [],
             setCollapsed: (collapsed: boolean) => {
                 setState({collapsed})
             },
@@ -60,9 +47,9 @@ export const useGlobalStore = create<GlobalState>()(
             setLayout: (layout: LayoutType) => {
                 setState({layout})
             },
-            setMixValue: (mixValue: string) => {
-                setState({mixValue})
-            },
+            setMenuSelectedKeys: (menuSelectedKeys: string[]) => {
+                setState({menuSelectedKeys})
+            }
         }),
         {
             name: 'global-store-storage', // name of the item in the storage (must be unique)

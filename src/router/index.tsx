@@ -6,7 +6,6 @@ import AuthRoute from "@/components/AuthRoute"
 import Loading from "@/components/Loading"
 import React from "react";
 import type {IRule} from "@/domain/iRule.ts"
-import defaultRoute from "@/router/default.ts";
 
 const modules = import.meta.glob('/src/pages/**/*')
 
@@ -23,41 +22,39 @@ function lazyLoad(path: string) {
 
 export default function createRouter(rules: IRule[]) {
 
-    console.log(rules);
-    const buildRoute = (rule: IRule): DataRouteObject | undefined => {
-        if (!['route', 'menu'].includes(rule.type!)) {
-            return;
-        }
+    const transformRoutes = (pid: number = 0): DataRouteObject[] => {
+        const routes: DataRouteObject[] = [];
+        rules.forEach((rule) => {
 
-        const route: DataRouteObject = {
-            id: rule.key!,
-            path: rule.path,
-            index: rule.index,
-        }
+            if (!rule.key || !rule.type || rule.parent_id != pid || !['route', 'menu'].includes(rule.type)) {
+                return;
+            }
+            const route: DataRouteObject = {
+                id: rule.key,
+                path: rule.path,
+                index: rule.index,
+            }
+            if(rule.elementPath && modules[`/src/pages${rule.elementPath}.tsx`]) {
+                route.element = lazyLoad(`/src/pages${rule.elementPath}.tsx`)
+            }
+            // 不能在索引路由上定义子路由
+            // TODO 需要优化嵌套路由
+            if(rule.index || rule.type === "route") {
+                routes.push(route);
+                return;
+            }
 
-        if(rule.elementPath && modules[`/src/pages${rule.elementPath}.tsx`]) {
-            route.element = lazyLoad(`/src/pages${rule.elementPath}.tsx`)
-        }
+            const children = transformRoutes(rule.rule_id)
+            if(children && children.length) {
+                route.children = children
+            }
+            routes.push(route);
+        })
 
-        // 不能在索引路由上定义子路由
-        if(rule.index) {
-            return route
-        }
-
-        if(rule.children && rule.children.length) {
-            const children: DataRouteObject['children'] = [];
-            rule.children.forEach(child => {
-                const childRoute = buildRoute(child)
-                if(childRoute) {
-                    children.push(childRoute)
-                }
-            })
-            route.children = children
-        }
-        return route
+        return routes;
     }
 
-    const routes  = defaultRoute.map(route => buildRoute(route)!)
+    const routes  = transformRoutes()
     console.log(routes)
 
     return createBrowserRouter([

@@ -4,31 +4,51 @@ import {useGlobalStore} from "@/stores";
 import SiderTopRender from "@/layout/SiderTopRender.tsx";
 import SiderBottomRender from "@/layout/SiderBottomRender.tsx";
 import useAuthStore from "@/stores/user.ts";
-import {buildMenu} from "@/layout/utils.ts";
+import {transformMenus} from "@/layout/utils.ts";
+import {useNavigate} from "react-router";
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
 const SiderRender: React.FC = () => {
-    const menus = useAuthStore(state => state.menus)
+    const navigate = useNavigate();
+    const rules = useAuthStore(state => state.menus)
     const collapsed = useGlobalStore(state => state.collapsed);
     const themeConfig = useGlobalStore(state => state.themeConfig);
     const layout = useGlobalStore(state => state.layout);
-    const mixValue = useGlobalStore(state => state.mixValue);
-    const [menu, setMenu] = useState<MenuItem[]>();
+    const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
+    const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
+    const [menu, setMenu] = useState<MenuItem[]>([]);
 
     useEffect(() => {
         if(layout === 'side') {
-            setMenu(menus.map(item => buildMenu(item)!))
+            setMenu(transformMenus(rules))
             return;
         }
-        if(layout === 'mix' && mixValue) {
-            const mixMenu = menus.find(item => mixValue === item.key)
-            if(mixMenu && mixMenu.children && mixMenu.children.length > 0) {
-                setMenu(mixMenu.children.map(item => buildMenu(item)!))
+        if(layout === 'mix' && menuSelectedKeys) {
+            const parentRule = rules.find(item => menuSelectedKeys[menuSelectedKeys.length-1] === item.key)
+            if(parentRule) {
+                const menus = transformMenus(rules, parentRule.rule_id)
+                setMenu(menus)
             }
         }
-    }, [menus, layout, mixValue]);
+    }, [rules, layout, menuSelectedKeys]);
+
+    const menuClick: MenuProps['onClick'] = (data) => {
+        const rule = rules.find(item => item.key === data.key)
+        if(rule && rule.path) {
+            navigate(rule.path!)
+        }
+        if(layout === 'mix') {
+            setMenuSelectedKeys([...data.keyPath, menuSelectedKeys[menuSelectedKeys.length-1]])
+        }else {
+            setMenuSelectedKeys(data.keyPath)
+        }
+    }
+
+    if(menu.length === 0) {
+        return;
+    }
 
     return (
         <ConfigProvider
@@ -52,9 +72,10 @@ const SiderRender: React.FC = () => {
                     <SiderTopRender/>
                     <div style={{flex: "1 1 auto"}}>
                         <Menu
-                            defaultSelectedKeys={['1']}
+                            selectedKeys={menuSelectedKeys}
                             mode="inline"
                             items={menu}
+                            onClick={menuClick}
                         />
                     </div>
                     <SiderBottomRender/>

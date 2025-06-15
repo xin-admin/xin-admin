@@ -1,33 +1,46 @@
 import React, {useEffect, useState} from "react";
-import {Breadcrumb, Button, ConfigProvider, Layout, Menu, type MenuProps} from "antd";
+import {Button, ConfigProvider, Layout, Menu, type MenuProps} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {useGlobalStore} from "@/stores";
 import HeaderLeftRender from "@/layout/HeaderLeftRender";
 import HeaderRightRender from "@/layout/HeaderRightRender";
-import {buildMenu} from "@/layout/utils.ts";
+import {transformMenus} from "@/layout/utils.ts";
 import useAuthStore from "@/stores/user.ts";
 import IconFont from "@/components/IconFont";
+import {useNavigate} from "react-router";
+import BreadcrumbRender from "@/layout/BreadcrumbRender.tsx";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 const { Header } = Layout;
 
 const HeaderRender: React.FC = () => {
-    const menus = useAuthStore(state => state.menus)
+    const navigate = useNavigate();
+    const rules = useAuthStore(state => state.menus)
     const collapsed = useGlobalStore(state => state.collapsed);
     const setCollapsed = useGlobalStore(state => state.setCollapsed);
-    const setMixValue = useGlobalStore(state => state.setMixValue);
-    const mixValue = useGlobalStore(state => state.mixValue);
+    const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
+    const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
     const themeConfig = useGlobalStore(state => state.themeConfig);
-    const breadcrumbItems = useGlobalStore(state => state.breadcrumbItems);
     const layout = useGlobalStore(state => state.layout);
-    const [headMenu, setHeadMenu] = useState<MenuItem[]>();
+    const [headMenu, setHeadMenu] = useState<MenuItem[]>([]);
+    const [parentKeys, setParentKeys] =  useState(menuSelectedKeys[menuSelectedKeys.length-1]);
 
     useEffect(() => {
         if(layout == 'top') {
-            setHeadMenu(menus.map(item => buildMenu(item)!))
+            const menus = transformMenus(rules, 0)
+            setHeadMenu(menus)
         }
-    }, [menus, layout]);
+    }, [rules, layout]);
+
+    const menuClick: MenuProps['onClick'] = (data) => {
+        navigate(data.key)
+        if(layout === 'mix') {
+            setMenuSelectedKeys([...data.keyPath, menuSelectedKeys[menuSelectedKeys.length-1]])
+        }else {
+            setMenuSelectedKeys(data.keyPath)
+        }
+    }
 
     return (
         <ConfigProvider
@@ -66,29 +79,36 @@ const HeaderRender: React.FC = () => {
                         </Button>
                     )}
                     {['columns', 'side'].includes(layout) && (
-                        <Breadcrumb items={breadcrumbItems}/>
+                        <BreadcrumbRender/>
                     )}
                     {layout == 'top' && (
                         <Menu
                             style={{ borderBottom: 'none' }}
-                            defaultSelectedKeys={['1']}
                             mode="horizontal"
                             items={headMenu}
+                            selectedKeys={menuSelectedKeys}
+                            onClick={menuClick}
                         />
                     )}
                     {layout == 'mix' && (
                         <Menu
                             style={{ borderBottom: 'none' }}
-                            defaultSelectedKeys={['1']}
                             mode="horizontal"
-                            items={menus.map(item => ({
+                            items={rules.filter(item => item.parent_id === 0).map(item => ({
                                 label: item.name,
                                 icon: <IconFont name={item.icon} />,
                                 key: item.key!,
                                 path: item.path,
                             }))}
-                            selectedKeys={[mixValue]}
-                            onClick={(info) => setMixValue(info.key)}
+                            selectedKeys={[parentKeys]}
+                            onClick={(info) => {
+                                const rule = rules.find(item => item.key === info.key);
+                                if(rule && !rules.find(item => item.parent_id === rule.rule_id)) {
+                                    navigate(rule.path!)
+                                }
+                                setParentKeys(info.key)
+                                setMenuSelectedKeys([info.key])
+                            }}
                         />
                     )}
                 </div>
