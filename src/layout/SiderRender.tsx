@@ -30,10 +30,6 @@ const SiderRender: React.FC = () => {
         }
     }, [menus, layout, mixValue]);
 
-    if (layout === "top" || layout === "columns") {
-        return;
-    }
-
     return (
         <ConfigProvider
             theme={{
@@ -49,6 +45,7 @@ const SiderRender: React.FC = () => {
                 style={{
                     top: themeConfig.headerHeight,
                     height: `calc(100vh - ${themeConfig.headerHeight}px)`,
+                    borderRight: themeConfig.layoutBorder ? '1px solid ' +  themeConfig.colorBorder : 'none',
                 }}
             >
                 <div className="flex flex-col min-h-full">

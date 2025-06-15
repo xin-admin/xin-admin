@@ -47,4 +47,6 @@ export interface ThemeProps {
     siderColor?: string;
     // 布局分割线边框颜色
     colorBorder?: string;
+    // 开启布局边框
+    layoutBorder?: boolean;
 }

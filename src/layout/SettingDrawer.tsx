@@ -71,6 +71,7 @@ const SettingDrawer: React.FC = () => {
         });
     }, 300, {
         leading: true,
+        trailing: false
     });
 
     // 重置主题
@@ -290,6 +291,14 @@ const SettingDrawer: React.FC = () => {
                     onChange={(value) => changeSetting('siderColor', value.toCssString())}
                 />
             </div>
+            <div className={'flex justify-between items-center mb-2.5'}>
+                <div>布局边框颜色</div>
+                <ColorPicker
+                    showText
+                    value={themeConfig.colorBorder}
+                    onChange={(value) => changeSetting('colorBorder', value.toCssString())}
+                />
+            </div>
             <Divider>风格配置</Divider>
             <div className={'flex justify-between items-center mb-2.5'}>
                 <div>固定页脚</div>
@@ -303,6 +312,13 @@ const SettingDrawer: React.FC = () => {
                 <Switch
                     value={themeConfig.motion}
                     onChange={(value) => changeSetting('motion', value)}
+                />
+            </div>
+            <div className={'flex justify-between items-center mb-2.5'}>
+                <div>开启边框</div>
+                <Switch
+                    value={themeConfig.layoutBorder}
+                    onChange={(value) => changeSetting('layoutBorder', value)}
                 />
             </div>
             <div className={'flex justify-between items-center mb-2.5'}>

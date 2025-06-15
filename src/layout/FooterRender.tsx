@@ -14,6 +14,9 @@ const FooterRender: React.FC = () => {
                 (themeConfig.fixedFooter ? 'fixed' : 'relative') +
                 " border-solid z-10 w-full bottom-0"
             }
+            style={{
+                borderRight: themeConfig.layoutBorder ? '1px solid ' +  themeConfig.colorBorder : 'none',
+            }}
         >
             <div className={"flex items-center justify-center w-full"}>
                 Xin Admin ©{currentYear} Created by xiaoliu

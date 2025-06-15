@@ -44,12 +44,15 @@ const HeaderRender: React.FC = () => {
                 cssVar: true
             }}
         >
-            <Header className={"flex sticky z-1 top-0 backdrop-blur-xs"}>
-                {layout !== 'columns' && (
-                    <HeaderLeftRender/>
-                )}
+            <Header
+                className={"flex sticky z-1 top-0 backdrop-blur-xs"}
+                style={{
+                    borderBottom: themeConfig.layoutBorder ? '1px solid ' +  themeConfig.colorBorder : 'none',
+                }}
+            >
+                {layout !== 'columns' && <HeaderLeftRender/>}
                 <div className="flex-1 flex items-center">
-                    {['columns', 'side'].includes(layout) && (
+                    {['mix', 'side'].includes(layout) && (
                         <Button
                             type={'text'}
                             className={'text-[16px] mr-2'}
@@ -76,7 +79,6 @@ const HeaderRender: React.FC = () => {
                     {layout == 'mix' && (
                         <Menu
                             style={{ borderBottom: 'none' }}
-                            className="ml-10"
                             defaultSelectedKeys={['1']}
                             mode="horizontal"
                             items={menus.map(item => ({

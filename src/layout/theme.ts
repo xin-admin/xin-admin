@@ -4,6 +4,7 @@ export const defaultColorTheme: ThemeProps = {
     themeScheme: "light",
     background: "transparent",
     colorPrimary: "#1677ff",
+    borderRadius: 8,
     colorText: "#000",
     colorBg: "#fff",
     bodyBg: "#f5f5f5",
@@ -18,6 +19,7 @@ export const defaultColorTheme: ThemeProps = {
 export const darkColorTheme: ThemeProps = {
     themeScheme: "dark",
     background: "transparent",
+    borderRadius: 8,
     colorPrimary: "#1677ff",
     colorText: "#fff",
     colorBg: "#000",
@@ -27,7 +29,7 @@ export const darkColorTheme: ThemeProps = {
     headerColor: "#fff",
     siderBg: "#141414",
     siderColor: "#fff",
-    colorBorder: "#3b3b3b",
+    colorBorder: "#282828",
 }
 
 export const pinkColorTheme: ThemeProps = {
@@ -43,7 +45,8 @@ export const pinkColorTheme: ThemeProps = {
     headerColor: "#000",
     siderBg: "rgba(255, 255, 255, 0.29)",
     siderColor: "#000",
-    colorBorder: "#f0f0f0"
+    colorBorder: "#ffa8d1",
+    layoutBorder: false
 }
 
 export const greenColorTheme: ThemeProps = {
