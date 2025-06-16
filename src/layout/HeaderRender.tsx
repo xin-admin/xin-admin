@@ -4,7 +4,7 @@ import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {useGlobalStore} from "@/stores";
 import HeaderLeftRender from "@/layout/HeaderLeftRender";
 import HeaderRightRender from "@/layout/HeaderRightRender";
-import {transformMenus} from "@/layout/utils.ts";
+import transformMenus from "@/utils/transformMenus.ts";
 import useAuthStore from "@/stores/user.ts";
 import IconFont from "@/components/IconFont";
 import {useNavigate} from "react-router";

@@ -4,7 +4,7 @@ import {useGlobalStore} from "@/stores";
 import SiderTopRender from "@/layout/SiderTopRender.tsx";
 import SiderBottomRender from "@/layout/SiderBottomRender.tsx";
 import useAuthStore from "@/stores/user.ts";
-import {transformMenus} from "@/layout/utils.ts";
+import transformMenus from "@/utils/transformMenus.ts";
 import {useNavigate} from "react-router";
 
 const { Sider } = Layout;

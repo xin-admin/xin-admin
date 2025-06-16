@@ -3,7 +3,7 @@ import {useGlobalStore} from "@/stores";
 import React, {useEffect, useState} from "react";
 import useAuthStore from "@/stores/user.ts";
 import IconFont from "@/components/IconFont";
-import {transformMenus} from "@/layout/utils.ts";
+import transformMenus from "@/utils/transformMenus.ts";
 import {useNavigate} from "react-router";
 const {Sider} = Layout;
 type MenuItem = Required<MenuProps>['items'][number];

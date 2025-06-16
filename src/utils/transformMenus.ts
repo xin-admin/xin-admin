@@ -3,7 +3,7 @@ import IconFont from "@/components/IconFont";
 import type {MenuProps} from "antd";
 type MenuItem = Required<MenuProps>['items'][number];
 
-export const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
+const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
     const menus: MenuItem[] = []
 
     rules.forEach((item) => {
@@ -29,3 +29,5 @@ export const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
     })
     return menus;
 }
+
+export default transformMenus;
