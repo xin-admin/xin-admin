@@ -23,7 +23,7 @@ export const darkColorTheme: ThemeProps = {
     colorPrimary: "#1677ff",
     colorText: "#fff",
     colorBg: "#000",
-    bodyBg: "#101010",
+    bodyBg: "#000",
     footerBg: "#141414",
     headerBg: "#141414",
     headerColor: "#fff",
