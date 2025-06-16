@@ -34,12 +34,11 @@ const HeaderRender: React.FC = () => {
     }, [rules, layout]);
 
     const menuClick: MenuProps['onClick'] = (data) => {
-        navigate(data.key)
-        if(layout === 'mix') {
-            setMenuSelectedKeys([...data.keyPath, menuSelectedKeys[menuSelectedKeys.length-1]])
-        }else {
-            setMenuSelectedKeys(data.keyPath)
+        const rule = rules.find(item => item.key === data.key)
+        if(rule && rule.path) {
+            navigate(rule.path!)
         }
+        setMenuSelectedKeys(data.keyPath)
     }
 
     return (
