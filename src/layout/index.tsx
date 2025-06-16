@@ -23,6 +23,7 @@ const LayoutRender = () => {
                 headerBg: themeConfig.headerBg,
                 headerColor: themeConfig.headerColor,
                 siderBg: themeConfig.siderBg,
+                footerPadding: 0
             },
             Menu: {
                 activeBarBorderWidth: 0,
@@ -55,7 +56,7 @@ const LayoutRender = () => {
                 { layout === 'columns' ? (
                     <>
                         <ColumnSiderRender/>
-                        <Layout>
+                        <Layout className={"relative"}>
                             <HeaderRender/>
                             <Content style={{padding: themeConfig.bodyPadding}}>
                                 <Outlet/>

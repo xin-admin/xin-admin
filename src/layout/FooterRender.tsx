@@ -9,19 +9,24 @@ const FooterRender: React.FC = () => {
     const themeConfig = useGlobalStore(state => state.themeConfig);
 
     return (
-        <Footer
-            className={
-                (themeConfig.fixedFooter ? 'fixed' : 'relative') +
-                " z-10 w-full bottom-0"
+        <>
+            { themeConfig.fixedFooter &&
+                <div className={"h-10"}></div>
             }
-            style={{
-                borderTop: themeConfig.layoutBorder ? '1px solid ' +  themeConfig.colorBorder : 'none',
-            }}
-        >
-            <div className={"flex items-center justify-center w-full"}>
-                Xin Admin ©{currentYear} Created by xiaoliu
-            </div>
-        </Footer>
+            <Footer
+                className={
+                    (themeConfig.fixedFooter ? 'sticky' : 'relative') +
+                    " z-10 w-full bottom-0 pt-2.5 pb-2.5"
+                }
+                style={{
+                    borderTop: themeConfig.layoutBorder ? '1px solid ' +  themeConfig.colorBorder : 'none',
+                }}
+            >
+                <div className={"flex items-center justify-center w-full"}>
+                    Xin Admin ©{currentYear} Created by xiaoliu
+                </div>
+            </Footer>
+        </>
     );
 };
 
