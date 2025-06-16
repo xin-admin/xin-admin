@@ -2,6 +2,17 @@ import type {IRule} from "@/domain/iRule.ts";
 
 const defaultRoute: IRule[] = [
     {
+        rule_id: 10,
+        parent_id: 0,
+        type: 'route',
+        index: true,
+        name: '首页',
+        icon: "HomeOutlined",
+        key: 'index',
+        path: '/index',
+        elementPath: '/index',
+    },
+    {
         rule_id: 1,
         parent_id: 0,
         type: 'menu',
@@ -95,17 +106,6 @@ const defaultRoute: IRule[] = [
         key: 'result.info',
         path: '/result/info',
         elementPath: '/result/info',
-    },
-    {
-        rule_id: 10,
-        parent_id: 0,
-        type: 'route',
-        index: true,
-        name: '首页',
-        icon: "HomeOutlined",
-        key: 'index',
-        path: '/index',
-        elementPath: '/index',
     }
 ]
 

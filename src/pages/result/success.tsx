@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Card, Result} from 'antd';
 
 const App: React.FC = () => (
-    <Card>
+    <Card variant={"borderless"}>
         <Result
             status="success"
             title="Successfully Purchased Cloud Server ECS!"

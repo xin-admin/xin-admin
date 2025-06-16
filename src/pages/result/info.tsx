@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Card, Result} from 'antd';
 
 const App: React.FC = () => (
-    <Card>
+    <Card variant={"borderless"}>
         <Result
             title="Your operation has been executed"
             extra={

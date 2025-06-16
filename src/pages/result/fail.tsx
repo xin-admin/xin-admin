@@ -5,7 +5,7 @@ import {Button, Card, Result, Typography} from 'antd';
 const { Paragraph, Text } = Typography;
 
 const App: React.FC = () => (
-    <Card>
+    <Card variant={"borderless"}>
         <Result
             status="error"
             title="Submission Failed"

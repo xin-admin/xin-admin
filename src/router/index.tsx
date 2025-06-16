@@ -55,11 +55,9 @@ export default function createRouter(rules: IRule[]) {
     }
 
     const routes  = transformRoutes()
-    console.log(routes)
 
     return createBrowserRouter([
         {
-            path: "/",
             Component: Layout,
             children: [
                 ...routes,
@@ -68,6 +66,10 @@ export default function createRouter(rules: IRule[]) {
                     element: <Navigate to="/404" />
                 }
             ],
+        },
+        {
+            path: '/',
+            element: <Navigate to="/index"/>
         },
         {
             path: "login",
