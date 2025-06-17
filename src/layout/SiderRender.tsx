@@ -1,8 +1,6 @@
 import {ConfigProvider, Layout, Menu, type MenuProps} from "antd";
 import React, {useEffect, useState} from "react";
 import {useGlobalStore} from "@/stores";
-import SiderTopRender from "@/layout/SiderTopRender.tsx";
-import SiderBottomRender from "@/layout/SiderBottomRender.tsx";
 import useAuthStore from "@/stores/user.ts";
 import transformMenus from "@/utils/transformMenus.ts";
 import {useNavigate} from "react-router";
@@ -69,7 +67,6 @@ const SiderRender: React.FC = () => {
                 }}
             >
                 <div className="flex flex-col min-h-full">
-                    <SiderTopRender/>
                     <div style={{flex: "1 1 auto"}}>
                         <Menu
                             selectedKeys={menuSelectedKeys}
@@ -78,7 +75,6 @@ const SiderRender: React.FC = () => {
                             onClick={menuClick}
                         />
                     </div>
-                    <SiderBottomRender/>
                 </div>
             </Sider>
         </ConfigProvider>
