@@ -62,9 +62,9 @@ const Index: React.FC = () => {
         title: {
             text: '年度销售额',
             textStyle: {
-                fontWeight: 'normal',
                 color: token.colorText,
-                fontSize: 14
+                fontSize: token.fontSizeLG,
+                fontWeight: token.fontWeightStrong
             },
         },
         tooltip: {
@@ -165,9 +165,9 @@ const Index: React.FC = () => {
         title: {
             text: 'Access From',
             textStyle: {
-                fontWeight: 'normal',
                 color: token.colorText,
-                fontSize: 14
+                fontSize: token.fontSizeLG,
+                fontWeight: token.fontWeightStrong
             },
         },
         tooltip: {
@@ -336,7 +336,7 @@ const Index: React.FC = () => {
                 <Col xl={12} xs={24}>
                     <Card variant={"borderless"}>
                         <div className={"flex items-center justify-between mb-5"}>
-                            <div>销售排名</div>
+                            <div style={{ fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>销售排名</div>
                             <Radio.Group
                                 options={[
                                     { label: '月份', value: 'month'},
@@ -404,7 +404,7 @@ const Index: React.FC = () => {
                 </Col>
                 <Col xl={12} xs={24}>
                     <Card variant={"borderless"}>
-                        <div className={"mb-5"}>用户评价</div>
+                        <div className={"mb-5"} style={{ fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>用户评价</div>
                         <List
                             dataSource={msgData}
                             renderItem={(item, index) => (
