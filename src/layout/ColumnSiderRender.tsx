@@ -73,11 +73,14 @@ const ColumnSiderRender: React.FC = () => {
                                 }}
                                 className={"flex flex-col p-2 items-center justify-center mb-2 pt-3 pb-3 cursor-pointer"}
                                 onClick={() => {
-                                    const rule = rules.find(item => item.key === menu.key);
-                                    if(rule && !rules.find(item => item.parent_id === rule.rule_id)) {
-                                        navigate(rule.path!)
+                                    if(menu.key) {
+                                        const rule = rules.find(item => item.key === menu.key);
+                                        if(rule && !rules.find(item => item.parent_id === rule.rule_id)) {
+                                            navigate(rule.path!)
+                                        }
+                                        setParentKeys(menu.key)
+                                        setMenuSelectedKeys([menu.key])
                                     }
-                                    setParentKeys(menu.key!)
                                 }}
                             >
                                 <IconFont name={menu.icon}/>
