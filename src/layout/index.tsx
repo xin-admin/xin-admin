@@ -7,6 +7,7 @@ import HeaderRender from "@/layout/HeaderRender.tsx";
 import SiderRender from "@/layout/SiderRender.tsx";
 import FooterRender from "@/layout/FooterRender.tsx";
 import ColumnSiderRender from "@/layout/ColumnSiderRender.tsx";
+import {ProConfigProvider} from "@ant-design/pro-components";
 const { Content } = Layout;
 
 const LayoutRender = () => {
@@ -48,37 +49,39 @@ const LayoutRender = () => {
 
     return (
         <ConfigProvider theme={{...theme, cssVar: true}}>
-            <SettingDrawer></SettingDrawer>
-            <Layout
-                className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
-                style={{background: themeConfig.background}}
-            >
-                { layout === 'columns' ? (
-                    <>
-                        <ColumnSiderRender/>
-                        <Layout className={"relative"}>
-                            <HeaderRender/>
-                            <Content style={{padding: themeConfig.bodyPadding}}>
-                                <Outlet/>
-                            </Content>
-                            <FooterRender/>
-                        </Layout>
-                    </>
-                ) : (
-                    <>
-                        <HeaderRender/>
-                        <Layout hasSider>
-                            {(layout === "mix" || layout === "side") && <SiderRender/>}
+            <ProConfigProvider dark={themeConfig.themeScheme === 'dark'}>
+                <SettingDrawer></SettingDrawer>
+                <Layout
+                    className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
+                    style={{background: themeConfig.background}}
+                >
+                    { layout === 'columns' ? (
+                        <>
+                            <ColumnSiderRender/>
                             <Layout className={"relative"}>
+                                <HeaderRender/>
                                 <Content style={{padding: themeConfig.bodyPadding}}>
                                     <Outlet/>
                                 </Content>
                                 <FooterRender/>
                             </Layout>
-                        </Layout>
-                    </>
-                ) }
-            </Layout>
+                        </>
+                    ) : (
+                        <>
+                            <HeaderRender/>
+                            <Layout hasSider>
+                                {(layout === "mix" || layout === "side") && <SiderRender/>}
+                                <Layout className={"relative"}>
+                                    <Content style={{padding: themeConfig.bodyPadding}}>
+                                        <Outlet/>
+                                    </Content>
+                                    <FooterRender/>
+                                </Layout>
+                            </Layout>
+                        </>
+                    ) }
+                </Layout>
+            </ProConfigProvider>
         </ConfigProvider>
     );
 };
