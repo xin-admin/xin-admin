@@ -63,7 +63,7 @@ export default function createRouter(rules: IRule[]) {
                 ...routes,
                 {
                     path: "*",
-                    element: <Navigate to="/404" />
+                    element: lazyLoad(`/src/pages/result/404.tsx`)
                 }
             ],
         },
