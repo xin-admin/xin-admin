@@ -2,7 +2,7 @@ import {Card, Row, Col, Space, Divider, List, Avatar, theme} from "antd";
 import {ArrowDownOutlined, ArrowUpOutlined} from "@ant-design/icons";
 const {useToken} = theme
 
-const Index = () => {
+const Monitor = () => {
     const {token} = useToken();
     const data = [
         {
@@ -133,4 +133,4 @@ const Index = () => {
     );
 }
 
-export default Index;
+export default Monitor;

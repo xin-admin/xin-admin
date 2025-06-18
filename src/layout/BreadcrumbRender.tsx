@@ -14,7 +14,7 @@ const BreadcrumbRender = () => {
     useEffect(() => {
         const item: BreadcrumbProps['items'] = [
             {
-                href: '/index',
+                href: '/',
                 title: <HomeOutlined />,
             },
         ];

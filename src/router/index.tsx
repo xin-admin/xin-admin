@@ -69,7 +69,7 @@ export default function createRouter(rules: IRule[]) {
         },
         {
             path: '/',
-            element: <Navigate to="/index"/>
+            element: <Navigate to="/dashboard/analysis"/>
         },
         {
             path: "login",
