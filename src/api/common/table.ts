@@ -6,7 +6,7 @@ type IListParams = {
   keyword?: string;
   current?: number;
   pageSize?: number;
-} | { [key: string]: unknown }
+} & { [key: string]: unknown }
 
 /**
  * 查询详情接口
@@ -36,7 +36,7 @@ export function List<T,>(
     options?: AxiosRequestConfig | undefined
 ){
   return request.get<
-      API.ResponseStructure<T>
+      API.ListResponse<T>
   >(url, {
     params,
     ...(options || {}),

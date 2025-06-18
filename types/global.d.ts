@@ -13,13 +13,13 @@ declare namespace API {
         | 5      // 失败通知
         | 99;    // 无状态
 
-    interface ListResponse<T> {
+    type ListResponse<T> = ResponseStructure<{
         data: T[]
         page: number
         total: number
         per_page: number
         current_page: number
-    }
+    }> 
 
     // 与后端约定的响应数据格式
     interface ResponseStructure<T> {
