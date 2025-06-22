@@ -1,9 +1,8 @@
 import { create } from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
 import type {IAdminUser, IAdminLoginParams} from "@/domain/iAdmin.ts";
-import {adminInfo, adminLogin, adminLogout} from "@/api";
+import {info, login, logout, rules} from "@/api";
 import type {IRule} from "@/domain/iRule.ts";
-import defaultRoute from "@/router/default.ts";
 
 interface AuthState {
     token: string | null
@@ -12,7 +11,7 @@ interface AuthState {
     user_id : number | null
     user_name: string | null
     access: string[]
-    menus: IRule[]
+    rules: IRule[]
     login: (credentials: IAdminLoginParams) => Promise<boolean>
     getInfo: () => Promise<void>
     logout: () => Promise<void>
@@ -27,30 +26,31 @@ const useAuthStore = create<AuthState>()(
             user_id: null,
             user_name: null,
             access: [],
-            menus: defaultRoute,
+            rules: [],
             login: async (params) => {
-                const { data } = await adminLogin(params);
+                const { data } = await login(params);
                  if (!data.success) {
                     return false;
                 }
-                set({
-                    token: data.data.plainTextToken,
-                    user_id : data.data.accessToken.id,
-                    user_name: data.data.accessToken.name,
-                })
+                set({ token: data.data.plainTextToken })
                 localStorage.setItem( "token", data.data.plainTextToken)
                 return true;
             },
             getInfo: async () => {
-                const {data} = await adminInfo();
+                const {data} = await info();
+                const rulesRes = await rules();
+                const rulesData = rulesRes.data.data;
+                const access = rulesData.map(rule => rule.key!);
                 set({
-                    user: data.data.info,
-                    access: data.data.access,
-                    menus: data.data.menus
-                })
+                    user: data.data,
+                    rules: rulesData,
+                    access: access,
+                    user_id: data.data.user_id,
+                    user_name: data.data.username
+                });
             },
             logout: async () => {
-                await adminLogout()
+                await logout()
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh_token')
                 set({
@@ -58,7 +58,7 @@ const useAuthStore = create<AuthState>()(
                     refresh_token: null,
                     user: null,
                     access: [],
-                    menus: []
+                    rules: []
                 })
             }
         }),

@@ -8,7 +8,7 @@ import IconFont from "@/components/IconFont";
 const BreadcrumbRender = () => {
 
     const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
-    const rules = useAuthStore(state => state.menus);
+    const rules = useAuthStore(state => state.rules);
     const [items, setItems] = useState<BreadcrumbProps['items']>([]);
 
     useEffect(() => {

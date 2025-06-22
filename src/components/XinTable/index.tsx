@@ -3,7 +3,7 @@ import { BetaSchemaForm, ProTable } from '@ant-design/pro-components';
 import type {ProTableProps, ProFormInstance, ProColumns, ActionType,} from '@ant-design/pro-components';
 import { Create, Delete, Update, List } from '@/api/common/table';
 import { Button, Divider, message, Popconfirm, Space } from 'antd';
-import ButtonAccess from '@/components/ButtonAccess';
+import ButtonAccess from 'src/components/AuthButton';
 import type { XinTableProps } from './typings.ts';
 
 function XinTable<T extends Record<string, never>>(props: XinTableProps<T>) {

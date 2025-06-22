@@ -1,5 +1,3 @@
-import type { IRule } from './iRule';
-
 /**
  * 管理员列表
  */
@@ -32,17 +30,11 @@ export interface IAdminLoginParams {
   loginType?: 'phone' | 'account' | 'email'
 }
 
-type AdminInfo = {
-  menus: IRule[]
-  access: string[]
-  info: IAdminUser
-}
-
-export type IAdminInfoResult = API.ResponseStructure<AdminInfo>
+export type IAdminInfoResult = API.ResponseStructure<IAdminUser>
 
 export type IAdminLoginResult = API.ResponseStructure<{
   plainTextToken: string;
-  accessToken: {
+  accessToken?: {
     created_at: string;
     expires_at: string | null;
     id: number;

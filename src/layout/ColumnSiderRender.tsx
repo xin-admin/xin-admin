@@ -16,7 +16,7 @@ const ColumnSiderRender: React.FC = () => {
     const title = useGlobalStore(state => state.title);
     const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
     const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
-    const rules = useAuthStore(state => state.menus);
+    const rules = useAuthStore(state => state.rules);
     const [menu, setMenu] = useState<MenuItem[]>([]);
     const {token} = useToken();
     const [parentKeys, setParentKeys] =  useState(menuSelectedKeys[menuSelectedKeys.length-1]);

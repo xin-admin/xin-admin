@@ -16,7 +16,7 @@ const { Header } = Layout;
 
 const HeaderRender: React.FC = () => {
     const navigate = useNavigate();
-    const rules = useAuthStore(state => state.menus)
+    const rules = useAuthStore(state => state.rules)
     const collapsed = useGlobalStore(state => state.collapsed);
     const setCollapsed = useGlobalStore(state => state.setCollapsed);
     const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);

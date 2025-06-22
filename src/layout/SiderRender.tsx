@@ -10,7 +10,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 const SiderRender: React.FC = () => {
     const navigate = useNavigate();
-    const rules = useAuthStore(state => state.menus)
+    const rules = useAuthStore(state => state.rules)
     const collapsed = useGlobalStore(state => state.collapsed);
     const themeConfig = useGlobalStore(state => state.themeConfig);
     const layout = useGlobalStore(state => state.layout);

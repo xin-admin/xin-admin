@@ -44,12 +44,16 @@ const Login: React.FC = () => {
     }, [token, user, navigate]);
 
     const handleSubmit = async (values: IAdminLoginParams) => {
-        // 登录
-        const loginStatus = await login(values);
-        if(loginStatus) {
-            await getInfo();
-            message.success('登录成功！');
-            navigate('/', { replace: true })
+        try {
+            // 登录
+            const loginStatus = await login(values);
+            if(loginStatus) {
+                await getInfo();
+                message.success('登录成功！');
+                navigate('/', { replace: true })
+            }
+        } catch {
+            console.error('登录失败');
         }
         return;
     };
