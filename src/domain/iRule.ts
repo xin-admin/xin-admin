@@ -17,7 +17,7 @@ export interface IRule {
   // 是否索引路由，当类型值为 menu 和 route 时该配置有效
   index?: boolean;
   // 路由组件的路径，当类型值为 route 时该配置有效
-  elementPath?: string;
+  elementPath?: string | null;
   // 路由的图标
   icon?: string;
   // 权限标识
