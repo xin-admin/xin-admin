@@ -1,0 +1,23 @@
+export default {
+    "menu.dashboard": "Dashboard",
+    "menu.analysis": "Analysis",
+    "menu.monitor": "Monitor",
+    "menu.workplace": "Workplace",
+    "menu.result": "Result",
+    "menu.result.success": "Success",
+    "menu.result.fail": "Failure",
+    "menu.result.warning": "Warning",
+    "menu.result.info": "Information",
+    "menu.result.403": "403",
+    "menu.result.404": "404",
+    "menu.result.500": "500",
+    "menu.auth": "Authorization",
+    "menu.auth.page": "Page Permission",
+    "menu.auth.button": "Button Permission",
+    "menu.multi-menu": "Multi-level Menu",
+    "menu.multi-menu.two": "Second Level",
+    "menu.multi-menu.first": "Second Level Page",
+    "menu.multi-menu.two.three": "Third Level",
+    "menu.multi-menu.two.second": "Third Level Page",
+    "menu.multi-menu.two.three.third": "Fourth Level Page"
+}

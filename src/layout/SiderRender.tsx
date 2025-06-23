@@ -1,15 +1,18 @@
 import {ConfigProvider, Layout, Menu, type MenuProps} from "antd";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useGlobalStore} from "@/stores";
 import useAuthStore from "@/stores/user.ts";
-import transformMenus from "@/utils/transformMenus.ts";
 import {useNavigate} from "react-router";
+import type {IRule} from "@/domain/iRule.ts";
+import IconFont from "@/components/IconFont";
+import {useTranslation} from "react-i18next";
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
 const SiderRender: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const rules = useAuthStore(state => state.rules)
     const collapsed = useGlobalStore(state => state.collapsed);
     const themeConfig = useGlobalStore(state => state.themeConfig);
@@ -17,6 +20,37 @@ const SiderRender: React.FC = () => {
     const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
     const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
     const [menu, setMenu] = useState<MenuItem[]>([]);
+    const transformMenus = useCallback((rules: IRule[], pid: number = 0): MenuItem[] => {
+        const menus: MenuItem[] = []
+        rules.forEach((item) => {
+            if (item.type === 'rule') return;
+            if (item.parent_id !== pid) return;
+            if (item.type === 'route') {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                })
+                return;
+            }
+            const children = transformMenus(rules, item.rule_id);
+            if(children &&  children.length > 0) {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                    children
+                })
+            } else {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                })
+            }
+        })
+        return menus;
+    }, [t])
 
     useEffect(() => {
         if(layout === 'side') {
@@ -30,7 +64,7 @@ const SiderRender: React.FC = () => {
                 setMenu(menus)
             }
         }
-    }, [rules, layout, menuSelectedKeys]);
+    }, [rules, layout, menuSelectedKeys, transformMenus]);
 
     const menuClick: MenuProps['onClick'] = (data) => {
         const rule = rules.find(item => item.key === data.key)

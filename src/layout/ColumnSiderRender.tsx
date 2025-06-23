@@ -1,16 +1,18 @@
 import {ConfigProvider, Menu, Layout, theme, type MenuProps} from "antd";
 import {useGlobalStore} from "@/stores";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import useAuthStore from "@/stores/user.ts";
 import IconFont from "@/components/IconFont";
-import transformMenus from "@/utils/transformMenus.ts";
 import {useNavigate} from "react-router";
+import {useTranslation} from "react-i18next";
+import type {IRule} from "@/domain/iRule.ts";
 const {Sider} = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 const {useToken} = theme
 
 const ColumnSiderRender: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const themeConfig = useGlobalStore(state => state.themeConfig);
     const logo = useGlobalStore(state => state.logo);
     const title = useGlobalStore(state => state.title);
@@ -21,13 +23,45 @@ const ColumnSiderRender: React.FC = () => {
     const {token} = useToken();
     const [parentKeys, setParentKeys] =  useState(menuSelectedKeys[menuSelectedKeys.length-1]);
 
+    const transformMenus = useCallback((rules: IRule[], pid: number = 0): MenuItem[] => {
+        const menus: MenuItem[] = []
+        rules.forEach((item) => {
+            if (item.type === 'rule') return;
+            if (item.parent_id !== pid) return;
+            if (item.type === 'route') {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                })
+                return;
+            }
+            const children = transformMenus(rules, item.rule_id);
+            if(children &&  children.length > 0) {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                    children
+                })
+            } else {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                })
+            }
+        })
+        return menus;
+    }, [t])
+
     useEffect(() => {
         const parentRule = rules.find(item => parentKeys === item.key)
         if(parentRule) {
             const menus = transformMenus(rules, parentRule.rule_id)
             setMenu(menus)
         }
-    }, [rules, parentKeys])
+    }, [rules, parentKeys, transformMenus])
 
     const menuClick: MenuProps['onClick'] = (data) => {
         setMenuSelectedKeys([...data.keyPath, parentKeys])
@@ -84,12 +118,12 @@ const ColumnSiderRender: React.FC = () => {
                                 }}
                             >
                                 <IconFont name={menu.icon}/>
-                                <span className={"mt-1"}>{menu.name}</span>
+                                <span className={"mt-1 truncate w-full text-center"}>{menu.local ? t(menu.local) : menu.name}</span>
                             </div>
                         ))}
                     </div>
                     { menu.length > 0 && (
-                        <div className={"flex-auto"}>
+                        <div className={"flex-auto w-full"}>
                             <div
                                 className={"w-full flex items-center justify-center font-semibold text-[20px]"}
                                 style={{height: themeConfig.headerHeight}}

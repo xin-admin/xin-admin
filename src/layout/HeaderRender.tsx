@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Button, ConfigProvider, Layout, Menu, type MenuProps} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {useGlobalStore} from "@/stores";
 import HeaderLeftRender from "@/layout/HeaderLeftRender";
 import HeaderRightRender from "@/layout/HeaderRightRender";
-import transformMenus from "@/utils/transformMenus.ts";
 import useAuthStore from "@/stores/user.ts";
 import IconFont from "@/components/IconFont";
 import {useNavigate} from "react-router";
 import BreadcrumbRender from "@/layout/BreadcrumbRender.tsx";
+import {useTranslation} from "react-i18next";
+import type {IRule} from "@/domain/iRule.ts";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -16,6 +17,7 @@ const { Header } = Layout;
 
 const HeaderRender: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const rules = useAuthStore(state => state.rules)
     const collapsed = useGlobalStore(state => state.collapsed);
     const setCollapsed = useGlobalStore(state => state.setCollapsed);
@@ -26,12 +28,44 @@ const HeaderRender: React.FC = () => {
     const [headMenu, setHeadMenu] = useState<MenuItem[]>([]);
     const [parentKeys, setParentKeys] =  useState(menuSelectedKeys[menuSelectedKeys.length-1]);
 
+    const transformMenus = useCallback((rules: IRule[], pid: number = 0): MenuItem[] => {
+        const menus: MenuItem[] = []
+        rules.forEach((item) => {
+            if (item.type === 'rule') return;
+            if (item.parent_id !== pid) return;
+            if (item.type === 'route') {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                })
+                return;
+            }
+            const children = transformMenus(rules, item.rule_id);
+            if(children &&  children.length > 0) {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                    children
+                })
+            } else {
+                menus.push({
+                    label: item.local ? t(item.local) : item.name,
+                    icon: <IconFont name={item.icon}/>,
+                    key: item.key!,
+                })
+            }
+        })
+        return menus;
+    }, [t])
+    
     useEffect(() => {
         if(layout == 'top') {
             const menus = transformMenus(rules, 0)
             setHeadMenu(menus)
         }
-    }, [rules, layout]);
+    }, [rules, layout, transformMenus]);
 
     const menuClick: MenuProps['onClick'] = (data) => {
         const rule = rules.find(item => item.key === data.key)

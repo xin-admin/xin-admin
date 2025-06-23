@@ -16,9 +16,11 @@
     "antd": "^5.25.3",
     "axios": "^1.9.0",
     "echarts-for-react": "^3.0.2",
+    "i18next": "^25.2.1",
     "lodash": "^4.17.21",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^15.5.3",
     "react-router": "^7.6.1",
     "zustand": "^5.0.5"
   },

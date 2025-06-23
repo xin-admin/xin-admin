@@ -4,9 +4,10 @@ import useAuthStore from "@/stores/user.ts";
 import {useEffect, useState} from "react";
 import {HomeOutlined} from "@ant-design/icons";
 import IconFont from "@/components/IconFont";
+import {useTranslation} from "react-i18next";
 
 const BreadcrumbRender = () => {
-
+    const { t } = useTranslation();
     const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
     const rules = useAuthStore(state => state.rules);
     const [items, setItems] = useState<BreadcrumbProps['items']>([]);
@@ -26,14 +27,14 @@ const BreadcrumbRender = () => {
                     title: (
                         <>
                             <IconFont name={rule.icon}/>
-                            <span>{rule.name}</span>
+                            <span>{ rule.local ? t(rule.local) : rule.name }</span>
                         </>
                     ),
                 })
             }
         })
         setItems(item);
-    },[menuSelectedKeys, rules])
+    },[menuSelectedKeys, rules, t])
 
     return (
         <Breadcrumb items={items}/>

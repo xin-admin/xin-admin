@@ -12,7 +12,7 @@ const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
         if (item.type === 'route') {
             menus.push({
                 label: item.name,
-                icon: IconFont({name: item.icon}),
+                icon: <IconFont name={item.icon}/>,
                 key: item.key!,
             })
             return;
@@ -21,14 +21,14 @@ const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
         if(children &&  children.length > 0) {
             menus.push({
                 label: item.name,
-                icon: IconFont({name: item.icon}),
+                icon: <IconFont name={item.icon}/>,
                 key: item.key!,
                 children
             })
         } else {
             menus.push({
                 label: item.name,
-                icon: IconFont({name: item.icon}),
+                icon: <IconFont name={item.icon}/>,
                 key: item.key!,
             })
         }
