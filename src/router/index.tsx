@@ -1,6 +1,6 @@
 import {createBrowserRouter, type DataRouteObject, Navigate} from "react-router"
 import Layout from "@/layout"
-import Login from "@/pages/Login"
+import Login from "@/pages/login"
 import { lazy, Suspense } from "react"
 import AuthRoute from "@/components/AuthRoute"
 import Loading from "@/components/Loading"
