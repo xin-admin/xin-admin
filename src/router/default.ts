@@ -161,7 +161,35 @@ const defaultRoute: IRule[] = [
         key: 'auth.button',
         path: '/auth/button',
         elementPath: '/auth/button',
-    }
+    },
+    {
+        rule_id: 16,
+        parent_id: 15,
+        type: 'rule',
+        name: '新增权限',
+        key: 'auth.button.create',
+    },
+    {
+        rule_id: 17,
+        parent_id: 15,
+        type: 'rule',
+        name: '编辑权限',
+        key: 'auth.button.update',
+    },
+    {
+        rule_id: 18,
+        parent_id: 15,
+        type: 'rule',
+        name: '删除权限',
+        key: 'auth.button.delete',
+    },
+    {
+        rule_id: 19,
+        parent_id: 15,
+        type: 'rule',
+        name: '新增权限',
+        key: 'auth.button.query',
+    },
 ]
 
 export default defaultRoute

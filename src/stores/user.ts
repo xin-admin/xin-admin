@@ -15,6 +15,8 @@ interface AuthState {
     login: (credentials: IAdminLoginParams) => Promise<boolean>
     getInfo: () => Promise<void>
     logout: () => Promise<void>
+    setRules: (rules: IRule[]) => Promise<void>
+    setAccess: (access: string[]) => Promise<void>
 }
 
 const useAuthStore = create<AuthState>()(
@@ -48,6 +50,18 @@ const useAuthStore = create<AuthState>()(
                     user_id: data.data.user_id,
                     user_name: data.data.username
                 });
+            },
+            setRules: async (rules: IRule[]) => {
+                const access = rules.map(rule => rule.key!);
+                set({
+                    access: access,
+                    rules: rules
+                });
+            },
+            setAccess: async (access: string[]) => {
+                set({
+                    access: access,
+                })
             },
             logout: async () => {
                 await logout()
