@@ -25,6 +25,12 @@ const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
                 key: item.key!,
                 children
             })
+        } else {
+            menus.push({
+                label: item.name,
+                icon: IconFont({name: item.icon}),
+                key: item.key!,
+            })
         }
     })
     return menus;
