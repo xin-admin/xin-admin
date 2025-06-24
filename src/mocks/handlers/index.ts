@@ -22,6 +22,15 @@ const adminLogin: HttpResponseResolver = async ({ request }) => {
     })
 }
 
+const adminLogout: HttpResponseResolver = async () => {
+    return HttpResponse.json<API.ResponseStructure<null>>({
+        success: true,
+        msg: "成功",
+        data: null
+    })
+}
+
+
 const getUserInfo: HttpResponseResolver = async () => {
     return HttpResponse.json<IAdminInfoResult>({
         success: true,
@@ -30,7 +39,7 @@ const getUserInfo: HttpResponseResolver = async () => {
             user_id: 1,
             username: 'admin',
             nickname: '管理员',
-            avatar_url: 'string',
+            avatar_url: 'https://xsgames.co/randomusers/assets/avatars/pixel/3.jpg',
             email: 'xinadmin@email.com',
             mobile: '1999999999',
             status: 1,
@@ -61,4 +70,5 @@ export const handlers = [
     http.post('/api/admin/login', adminLogin),
     http.get('/api/admin/info', withAuth(getUserInfo)),
     http.get('/api/admin/rules', withAuth(getRules)),
+    http.post('/api/admin/logout', withAuth(adminLogout)),
 ]
