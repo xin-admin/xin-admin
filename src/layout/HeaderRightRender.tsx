@@ -91,12 +91,13 @@ const HeaderLeftRender = () => {
                     <Input size="large" placeholder="Please enter the search content" prefix={<SearchOutlined />} />
                     <div className={'mt-5'}>
                         <Empty />
+                        {/* TODO 可以帮忙实现菜单栏搜索 */}
                     </div>
                 </div>
                 <Space className={'mt-5 flex align-center pl-5 pr-5 pt-2.5 pb-2.5'} style={{ borderTop: '1px solid ' + token.colorBorder }}>
                     <EnterOutlined /> <span className={'mr-4'}>Confirm</span>
                     <ArrowUpOutlined /><ArrowDownOutlined /> <span className={'mr-4'}>Switch</span>
-                    <span className={'mr-2'}>Close</span>
+                    Esc <span className={'mr-2'}>Close</span>
                 </Space>
             </Modal>
             <Space>
