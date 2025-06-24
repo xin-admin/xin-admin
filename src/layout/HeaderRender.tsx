@@ -128,7 +128,7 @@ const HeaderRender: React.FC = () => {
                             style={{ borderBottom: 'none' }}
                             mode="horizontal"
                             items={rules.filter(item => item.parent_id === 0).map(item => ({
-                                label: item.name,
+                                label: item.local ? t(item.local) : item.name,
                                 icon: <IconFont name={item.icon} />,
                                 key: item.key!,
                                 path: item.path,
