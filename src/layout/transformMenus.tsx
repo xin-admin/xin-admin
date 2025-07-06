@@ -8,7 +8,7 @@ const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
 
     rules.forEach((item) => {
         if (item.type === 'rule') return;
-        if (item.parent_id !== pid) return;
+        if (item.pid !== pid) return;
         if (item.type === 'route') {
             menus.push({
                 label: item.name,
@@ -17,7 +17,7 @@ const transformMenus = (rules: IRule[], pid: number = 0): MenuItem[] => {
             })
             return;
         }
-        const children = transformMenus(rules, item.rule_id);
+        const children = transformMenus(rules, item.id);
         if(children &&  children.length > 0) {
             menus.push({
                 label: item.name,

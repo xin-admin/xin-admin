@@ -32,7 +32,7 @@ const HeaderRender: React.FC = () => {
         const menus: MenuItem[] = []
         rules.forEach((item) => {
             if (item.type === 'rule') return;
-            if (item.parent_id !== pid) return;
+            if (item.pid !== pid) return;
             if (item.type === 'route') {
                 menus.push({
                     label: item.local ? t(item.local) : item.name,
@@ -41,7 +41,7 @@ const HeaderRender: React.FC = () => {
                 })
                 return;
             }
-            const children = transformMenus(rules, item.rule_id);
+            const children = transformMenus(rules, item.id);
             if(children &&  children.length > 0) {
                 menus.push({
                     label: item.local ? t(item.local) : item.name,
@@ -127,7 +127,7 @@ const HeaderRender: React.FC = () => {
                         <Menu
                             style={{ borderBottom: 'none' }}
                             mode="horizontal"
-                            items={rules.filter(item => item.parent_id === 0).map(item => ({
+                            items={rules.filter(item => item.pid === 0).map(item => ({
                                 label: item.local ? t(item.local) : item.name,
                                 icon: <IconFont name={item.icon} />,
                                 key: item.key!,
@@ -136,7 +136,7 @@ const HeaderRender: React.FC = () => {
                             selectedKeys={[parentKeys]}
                             onClick={(info) => {
                                 const rule = rules.find(item => item.key === info.key);
-                                if(rule && !rules.find(item => item.parent_id === rule.rule_id)) {
+                                if(rule && !rules.find(item => item.pid === rule.id)) {
                                     navigate(rule.path!)
                                 }
                                 setParentKeys(info.key)

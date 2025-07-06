@@ -24,7 +24,7 @@ const SiderRender: React.FC = () => {
         const menus: MenuItem[] = []
         rules.forEach((item) => {
             if (item.type === 'rule') return;
-            if (item.parent_id !== pid) return;
+            if (item.pid !== pid) return;
             if (item.type === 'route') {
                 menus.push({
                     label: item.local ? t(item.local) : item.name,
@@ -33,7 +33,7 @@ const SiderRender: React.FC = () => {
                 })
                 return;
             }
-            const children = transformMenus(rules, item.rule_id);
+            const children = transformMenus(rules, item.id);
             if(children &&  children.length > 0) {
                 menus.push({
                     label: item.local ? t(item.local) : item.name,
@@ -60,7 +60,7 @@ const SiderRender: React.FC = () => {
         if(layout === 'mix' && menuSelectedKeys) {
             const parentRule = rules.find(item => menuSelectedKeys[menuSelectedKeys.length-1] === item.key)
             if(parentRule) {
-                const menus = transformMenus(rules, parentRule.rule_id)
+                const menus = transformMenus(rules, parentRule.id)
                 setMenu(menus)
             }
         }
