@@ -20,4 +20,8 @@ export default {
     "menu.multi-menu.two.three": "三级菜单",
     "menu.multi-menu.two.second": "三级页面",
     "menu.multi-menu.two.three.third": "四级页面",
+    "menu.page-layout": "页面布局",
+    "menu.page-layout.base-layout": "基础布局",
+    "menu.page-layout.fix-header": "固定头部",
+    "menu.page-layout.descriptions": "页面描述",
 }
