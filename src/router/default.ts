@@ -316,7 +316,38 @@ const defaultRoute: IRule[] = [
         key: 'page-layout.descriptions',
         path: '/page-layout/descriptions',
         elementPath: '/page-layout/descriptions',
-    }
+    },
+    {
+        rule_id: 30,
+        parent_id: 0,
+        type: 'menu',
+        name: '个人中心',
+        local: "menu.user",
+        icon: "UserOutlined",
+        key: 'user',
+        path: '/user',
+    },
+    {
+        rule_id: 31,
+        parent_id: 30,
+        type: 'route',
+        name: '用户信息',
+        local: "menu.user.info",
+        icon: "AppstoreOutlined",
+        key: 'user.info',
+        elementPath: '/user/info',
+    },
+    {
+        rule_id: 32,
+        parent_id: 30,
+        type: 'route',
+        name: '用户设置',
+        local: "menu.user.setting",
+        icon: "AppstoreOutlined",
+        key: 'user.setting',
+        path: '/user/setting',
+        elementPath: '/user/setting',
+    },
 ]
 
 export default defaultRoute

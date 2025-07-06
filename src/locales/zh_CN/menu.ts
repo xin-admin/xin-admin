@@ -24,4 +24,7 @@ export default {
     "menu.page-layout.base-layout": "基础布局",
     "menu.page-layout.fix-header": "固定头部",
     "menu.page-layout.descriptions": "页面描述",
+    "menu.user": "个人中心",
+    "menu.user.info": "用户信息",
+    "menu.user.setting": "用户设置",
 }
