@@ -117,7 +117,7 @@ const suggestion = [
   'MinusCircle',
   'PlusSquare',
   'MinusSquare',
-  'Info',
+  'Article',
   'InfoCircle',
   'Exclamation',
   'ExclamationCircle',

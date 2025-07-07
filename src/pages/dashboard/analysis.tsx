@@ -351,7 +351,7 @@ const Index: React.FC = () => {
                         <Table
                             columns={[
                                 {
-                                    title: 'Name',
+                                    title: 'Article',
                                     dataIndex: 'name',
                                     key: 'name',
                                     render: (text) => <a>{text}</a>,
