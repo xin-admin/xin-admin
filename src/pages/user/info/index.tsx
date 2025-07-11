@@ -1,10 +1,14 @@
 import {Outlet, useNavigate} from "react-router";
-import {Card, Button, Segmented, Row, Col} from 'antd';
-import {useState} from "react";
+import {Card, Button, Row, Col} from 'antd';
+import useAuthStore from "@/stores/user.ts";
 
 const Info = () => {
     const navigate = useNavigate();
-    const [alignValue, setAlignValue] = useState('/user/info');
+    const userInfo = useAuthStore(state => state.user);
+
+    if (! userInfo) {
+        return <></>;
+    }
 
     return (
         <div>
@@ -16,10 +20,10 @@ const Info = () => {
                     }}
                 >
                     <div className="w-[50%] relative">
-                        <span className="w-14 h-14 absolute bottom-2 left-2 bg-white rounded-full p-1">
-                            <img src="/public/favicons.svg" alt="avatar" />
+                        <span className="w-14 h-14 absolute bottom-2 left-2 bg-white rounded-full p-2 overflow-hidden">
+                            <img src={userInfo.avatar_url} alt="avatar" />
                         </span>
-                        <span className="absolute bottom-8 left-20 font-bold text-white text-2xl">XinAdmin</span>
+                        <span className="absolute bottom-8 left-20 font-bold text-white text-2xl">{ userInfo.nickname }</span>
                         <span className="absolute bottom-2 left-20 text-white">山高路远，看世界也找自己 --- 小刘同学</span>
                     </div>
                     <div className="relative">
@@ -29,31 +33,24 @@ const Info = () => {
             </Card>
             <Row gutter={20}>
                 <Col span={16}>
-                    <Card variant={'borderless'} styles={{body: {padding: "5px"}}} style={{marginBottom: 10}}>
-                        <Segmented
-                            size={'middle'}
-                            value={alignValue}
-                            onChange={(value) => {
-                                setAlignValue(value)
-                                navigate(value);
-                            }}
-                            options={[
-                                {
-                                    label: "我的文章",
-                                    value: '/user/info'
-                                },
-                                {
-                                    label: "最新动态",
-                                    value: '/user/info/condition'
-                                },
-                                {
-                                    label: "站内通知",
-                                    value: '/user/info/notice'
-                                },
-                            ]}
-                        />
-                    </Card>
-                    <Card variant={"borderless"}>
+                    <Card
+                        tabProps={{type: 'line'}}
+                        onTabChange={key => navigate(key)}
+                        tabList={[
+                            {
+                                label: `我的文章`,
+                                key: '/user/info',
+                            },
+                            {
+                                label: "最新动态",
+                                key: '/user/info/condition'
+                            },
+                            {
+                                label: "站内通知",
+                                key: '/user/info/notice'
+                            },
+                        ]}
+                    >
                         <Outlet />
                     </Card>
                 </Col>
