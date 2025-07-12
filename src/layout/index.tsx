@@ -43,7 +43,6 @@ const LayoutRender = () => {
       colorWarning: themeConfig.colorWarning,
       borderRadius: themeConfig.borderRadius,
       controlHeight: themeConfig.controlHeight,
-      motion: false,
     },
     algorithm: themeConfig.themeScheme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm
   }), [themeConfig])
