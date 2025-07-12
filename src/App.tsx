@@ -3,13 +3,13 @@ import {RouterProvider} from "react-router";
 import useAuthStore from "@/stores/user.ts";
 
 const App = () => {
-    const { rules } = useAuthStore();
+  const { rules } = useAuthStore();
 
-    const router = createRouter(rules)
+  const router = createRouter(rules)
 
-    return (
-        <RouterProvider router={router} />
-    )
+  return (
+    <RouterProvider router={router} />
+  )
 }
 
 export default App

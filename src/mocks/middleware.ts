@@ -5,13 +5,13 @@ import {HttpResponse, type HttpResponseResolver} from 'msw'
 // the request authorization header before proceeding
 // with the actual response resolver.
 export function withAuth(resolver:  HttpResponseResolver): HttpResponseResolver {
-    return (input) => {
-        const { request } = input
+  return (input) => {
+    const { request } = input
 
-        if (!request.headers.get('Authorization')) {
-            return new HttpResponse(null, { status: 401 })
-        }
-
-        return resolver(input)
+    if (!request.headers.get('Authorization')) {
+      return new HttpResponse(null, { status: 401 })
     }
+
+    return resolver(input)
+  }
 }

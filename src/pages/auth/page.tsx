@@ -1,9 +1,8 @@
-import {Card, Space, Tag, Alert} from "antd";
+import {Alert, Card, Space, Tag} from "antd";
 import {CheckCard} from "@ant-design/pro-components"
 import useAuthStore from "@/stores/user.ts";
 import defaultRoute from "@/router/default.ts";
 import {useState} from "react";
-
 
 const PageAuth = () => {
     const access = useAuthStore(state => state.access)
@@ -41,11 +40,11 @@ const PageAuth = () => {
                         }
                         if(value === "B") {
                             setUserRule(value);
-                            setRules(defaultRoute.filter(value => value.rule_id !== 5 && value.parent_id !== 5))
+                          setRules(defaultRoute.filter(value => value.id !== 5 && value.pid !== 5))
                         }
                         if(value === "C") {
                             setUserRule(value);
-                            setRules(defaultRoute.filter(value => value.rule_id !== 1 && value.parent_id !== 1))
+                          setRules(defaultRoute.filter(value => value.id !== 1 && value.pid !== 1))
                         }
                     }}
                     defaultValue="A"

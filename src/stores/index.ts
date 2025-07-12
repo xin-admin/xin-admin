@@ -1,24 +1,24 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import {create} from 'zustand'
+import {createJSONStorage, persist} from 'zustand/middleware'
 import type {AppListProps} from "@ant-design/pro-components";
 import type {LayoutType, ThemeProps} from "@/layout/typing";
 import {configTheme, defaultColorTheme} from "@/layout/theme";
 
 interface GlobalState {
-    logo:  string;
-    title: string;
-    layout: LayoutType;
-    themeConfig: ThemeProps;
-    collapsed: boolean;
-    themeDrawer: boolean;
-    appList: AppListProps;
-    menuSelectedKeys:  string[];
-    setCollapsed: (collapsed: boolean) => void;
-    setThemeConfig: (themeConfig: ThemeProps) => void;
-    setThemeDrawer: (themeDrawer: boolean) => void;
-    setTheme: (theme: ThemeProps) => void;
-    setLayout:  (layout: LayoutType) => void;
-    setMenuSelectedKeys:  (menuSelectedKeys: string[]) => void;
+  logo: string;
+  title: string;
+  layout: LayoutType;
+  themeConfig: ThemeProps;
+  collapsed: boolean;
+  themeDrawer: boolean;
+  appList: AppListProps;
+  menuSelectedKeys: string[];
+  setCollapsed: (collapsed: boolean) => void;
+  setThemeConfig: (themeConfig: ThemeProps) => void;
+  setThemeDrawer: (themeDrawer: boolean) => void;
+  setTheme: (theme: ThemeProps) => void;
+  setLayout: (layout: LayoutType) => void;
+  setMenuSelectedKeys: (menuSelectedKeys: string[]) => void;
 }
 
 export const useGlobalStore = create<GlobalState>()(
