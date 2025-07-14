@@ -22,38 +22,38 @@ interface GlobalState {
 }
 
 export const useGlobalStore = create<GlobalState>()(
-    persist(
-        (setState) => ({
-            logo: "https://file.xinadmin.cn/file/favicons.ico",
-            title: "Xin Admin UI",
-            layout: "side",
-            themeConfig: {...defaultColorTheme, ...configTheme},
-            collapsed: false,
-            themeDrawer: false,
-            appList: [],
-            menuSelectedKeys: [],
-            setCollapsed: (collapsed: boolean) => {
-                setState({collapsed})
-            },
-            setThemeConfig: (themeConfig: ThemeProps) => {
-                setState({themeConfig})
-            },
-            setThemeDrawer: (themeDrawer: boolean) => {
-                setState({themeDrawer})
-            },
-            setTheme: (theme: ThemeProps) => {
-                setState({themeConfig: theme})
-            },
-            setLayout: (layout: LayoutType) => {
-                setState({layout})
-            },
-            setMenuSelectedKeys: (menuSelectedKeys: string[]) => {
-                setState({menuSelectedKeys})
-            }
-        }),
-        {
-            name: 'global-store-storage', // name of the item in the storage (must be unique)
-            storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
-        },
-    ),
+  persist(
+    (setState) => ({
+      logo: "https://file.xinadmin.cn/file/favicons.ico",
+      title: "Xin Admin UI",
+      layout: "side",
+      themeConfig: {...defaultColorTheme, ...configTheme},
+      collapsed: false,
+      themeDrawer: false,
+      appList: [],
+      menuSelectedKeys: [],
+      setCollapsed: (collapsed: boolean) => {
+        setState({collapsed})
+      },
+      setThemeConfig: (themeConfig: ThemeProps) => {
+        setState({themeConfig})
+      },
+      setThemeDrawer: (themeDrawer: boolean) => {
+        setState({themeDrawer})
+      },
+      setTheme: (theme: ThemeProps) => {
+        setState({themeConfig: theme})
+      },
+      setLayout: (layout: LayoutType) => {
+        setState({layout})
+      },
+      setMenuSelectedKeys: (menuSelectedKeys: string[]) => {
+        setState({menuSelectedKeys})
+      }
+    }),
+    {
+      name: 'global-store-storage', // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
+    },
+  ),
 )
