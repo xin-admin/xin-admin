@@ -32,7 +32,7 @@ const ColumnSiderRender: React.FC = () => {
       if (item.type === 'route') {
         menus.push({
           label: item.local ? t(item.local) : item.name,
-          icon: <IconFont name={item.icon}/>,
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
           key: item.key!,
         })
         return;
@@ -41,14 +41,14 @@ const ColumnSiderRender: React.FC = () => {
       if (children && children.length > 0) {
         menus.push({
           label: item.local ? t(item.local) : item.name,
-          icon: <IconFont name={item.icon}/>,
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
           key: item.key!,
           children
         })
       } else {
         menus.push({
           label: item.local ? t(item.local) : item.name,
-          icon: <IconFont name={item.icon}/>,
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
           key: item.key!,
         })
       }

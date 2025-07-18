@@ -26,7 +26,7 @@ const BreadcrumbRender = () => {
         item?.push({
           title: (
             <>
-              <IconFont name={rule.icon}/>
+              {rule.icon && <IconFont name={rule.icon}/> }
               <span>{ rule.local ? t(rule.local) : rule.name }</span>
             </>
           ),

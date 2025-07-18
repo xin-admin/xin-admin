@@ -36,7 +36,7 @@ const HeaderRender: React.FC = () => {
       if (item.type === 'route') {
         menus.push({
           label: item.local ? t(item.local) : item.name,
-          icon: <IconFont name={item.icon}/>,
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
           key: item.key!,
         })
         return;
@@ -45,14 +45,14 @@ const HeaderRender: React.FC = () => {
       if (children && children.length > 0) {
         menus.push({
           label: item.local ? t(item.local) : item.name,
-          icon: <IconFont name={item.icon}/>,
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
           key: item.key!,
           children
         })
       } else {
         menus.push({
           label: item.local ? t(item.local) : item.name,
-          icon: <IconFont name={item.icon}/>,
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
           key: item.key!,
         })
       }
@@ -129,7 +129,7 @@ const HeaderRender: React.FC = () => {
               mode="horizontal"
               items={rules.filter(item => item.pid === 0).map(item => ({
                 label: item.local ? t(item.local) : item.name,
-                icon: <IconFont name={item.icon}/>,
+                icon: item.icon ? <IconFont name={item.icon}/> : false,
                 key: item.key!,
                 path: item.path,
               }))}
