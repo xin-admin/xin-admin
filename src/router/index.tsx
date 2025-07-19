@@ -55,39 +55,6 @@ export default function createRouter(rules: IRule[]) {
     }
   })
 
-  // const transformRoutes = (pid: number = 0): DataRouteObject[] => {
-  //
-  //     rules.forEach((rule) => {
-  //
-  //         if (!rule.key || !rule.type || rule.pid != pid || !['route', 'menu'].includes(rule.type)) {
-  //             return;
-  //         }
-  //         const route: DataRouteObject = {
-  //             id: rule.key,
-  //             path: rule.path,
-  //         }
-  //         if(rule.elementPath && modules[`/src/pages${rule.elementPath}.tsx`]) {
-  //             route.element = lazyLoad(`/src/pages${rule.elementPath}.tsx`)
-  //         }
-  //         // 不能在索引路由上定义子路由
-  //         // TODO 需要优化嵌套路由
-  //         if(rule.index || rule.type === "route") {
-  //             routes.push(route);
-  //             return;
-  //         }
-  //
-  //         const children = transformRoutes(rule.rule_id)
-  //         if(children && children.length) {
-  //             route.children = children
-  //         }
-  //         routes.push(route);
-  //     })
-  //
-  //     return routes;
-  // }
-  //
-  // const routes  = transformRoutes()
-
   return createBrowserRouter([
     {
       Component: Layout,
