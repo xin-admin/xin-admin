@@ -38,19 +38,16 @@ const getUserInfo: HttpResponseResolver = async () => {
     data: {
       user_id: 1,
       username: 'admin',
-      nickname: '管理员',
-      avatar_url: 'https://xsgames.co/randomusers/assets/avatars/pixel/3.jpg',
-      email: 'xinadmin@email.com',
-      mobile: '1999999999',
-      status: 1,
-      group_id: 1,
-      sex: 1,
-      role_id: 1,
-      role_name: '系统管理员',
-      dept_id: 1,
-      dept_name: '总公司',
-      create_time: 'string',
-      update_time: 'string',
+      nickname: '张三',
+      avatar_url: 'https://randomuser.me/api/portraits/men/1.jpg',
+      email: 'zhangsan@example.com',
+      mobile: '138-1234-5678',
+      gender: 1,
+      role_name: '高级前端工程师',
+      dept_name: '技术研发部',
+      location: '北京市海淀区',
+      website: 'https://xinadmin.cn',
+      bio: '专注于前端技术开发，热爱开源，喜欢分享技术经验。'
     }
   })
 }
