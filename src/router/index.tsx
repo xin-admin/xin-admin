@@ -2,7 +2,6 @@ import {createBrowserRouter, type DataRouteObject, Navigate} from "react-router"
 import Layout from "@/layout"
 import Login from "@/pages/login"
 import { lazy, Suspense } from "react"
-import AuthRoute from "@/components/AuthRoute"
 import Loading from "@/components/Loading"
 import React from "react";
 import type {IRule} from "@/domain/iRule.ts"
@@ -14,9 +13,7 @@ function lazyLoad(path: string) {
     const Component = lazy(modules[path] as () => Promise<{ default: React.ComponentType }>)
     return (
       <Suspense fallback={<Loading />}>
-        <AuthRoute>
-          <Component />
-        </AuthRoute>
+        <Component />
       </Suspense>
     )
   }

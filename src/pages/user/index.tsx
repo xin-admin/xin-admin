@@ -211,15 +211,15 @@ const PersonalCenter = () => {
         </Card>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {apps.map((app) => (
-            <>
+            <div key={app.id}>
               { app.badge ?
-                <Badge.Ribbon text={app.badge} color={app.color} key={app.id}>
+                <Badge.Ribbon text={app.badge} color={app.color}>
                   <AppCard app={app}></AppCard>
                 </Badge.Ribbon>
                 :
-                <AppCard app={app}></AppCard>
+                <AppCard app={app} ></AppCard>
               }
-            </>
+            </div>
           ))}
         </div>
         <Card variant={'borderless'} defaultActiveTabKey="projects" tabList={tabList}>
