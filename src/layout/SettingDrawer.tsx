@@ -1,8 +1,9 @@
 import React from 'react';
 import {debounce} from 'lodash';
-import {Button, Col, ColorPicker, Divider, Drawer, InputNumber, Row, Switch, theme, Tooltip} from 'antd';
+import {Button, Col, ColorPicker, Divider, Drawer, InputNumber, Row, Select, Switch, theme, Tooltip} from 'antd';
 import {useGlobalStore} from "@/stores";
 import {configTheme, darkColorTheme, defaultColorTheme, greenColorTheme, pinkColorTheme} from "@/layout/theme.ts";
+import {algorithmOptions} from "@/layout/algorithm.ts";
 
 const {useToken} = theme;
 
@@ -194,6 +195,17 @@ const SettingDrawer: React.FC = () => {
             <div className={'text-center mt-1.5'}>{item.title}</div>
           </Col>
         ))}
+        <Col span={24} className={'mb-2.5'}>
+          <div className={'flex justify-between items-center'}>
+            <div>主题算法</div>
+            <Select
+              value={themeConfig.algorithm}
+              style={{ width: 160 }}
+              onChange={(value) => changeSetting('algorithm', value)}
+              options={algorithmOptions}
+            />
+          </div>
+        </Col>
       </Row>
       <Divider>主题颜色</Divider>
       <div className={'flex justify-between items-center mb-2.5'}>

@@ -1,3 +1,5 @@
+import type { algorithmType } from "@/layout/algorithm";
+
 export type ThemeScheme = "light" | "dark" | "pink" | "green";
 
 export type LayoutType = "side" | "top" | "mix" | "columns";
@@ -51,4 +53,6 @@ export interface ThemeProps {
   colorBorder?: string;
   // 开启布局边框
   layoutBorder?: boolean;
+  // 算法
+  algorithm?: algorithmType;
 }

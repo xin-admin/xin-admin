@@ -1,5 +1,6 @@
 import type {ThemeProps} from "@/layout/typing.ts";
 
+// 默认主题
 export const defaultColorTheme: ThemeProps = {
   themeScheme: "light",
   background: "transparent",
@@ -13,9 +14,11 @@ export const defaultColorTheme: ThemeProps = {
   headerColor: "#000",
   siderBg: "#fff",
   siderColor: "#000",
-  colorBorder: "#f0f0f0"
+  colorBorder: "#f0f0f0",
+  algorithm: "defaultAlgorithm",
 }
 
+// 暗黑模式主题
 export const darkColorTheme: ThemeProps = {
   themeScheme: "dark",
   background: "transparent",
@@ -30,8 +33,10 @@ export const darkColorTheme: ThemeProps = {
   siderBg: "#141414",
   siderColor: "#fff",
   colorBorder: "#282828",
+  algorithm: "darkAlgorithm",
 }
 
+// 粉色主题
 export const pinkColorTheme: ThemeProps = {
   themeScheme: "pink",
   background: "url(/theme/pink.webp)",
@@ -46,9 +51,11 @@ export const pinkColorTheme: ThemeProps = {
   siderBg: "rgba(255, 255, 255, 0.29)",
   siderColor: "#000",
   colorBorder: "#ffa8d1",
-  layoutBorder: false
+  layoutBorder: false,
+  algorithm: "defaultAlgorithm",
 }
 
+// 知识协作
 export const greenColorTheme: ThemeProps = {
   themeScheme: "green",
   colorPrimary: "#00B96B",
@@ -62,7 +69,8 @@ export const greenColorTheme: ThemeProps = {
   headerColor: "#000",
   siderBg: "rgba(255, 255, 255, 0.29)",
   siderColor: "#000",
-  colorBorder: "#f0f0f0"
+  colorBorder: "#f0f0f0",
+  algorithm: "defaultAlgorithm",
 }
 
 export const configTheme: ThemeProps = {

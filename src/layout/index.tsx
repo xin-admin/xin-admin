@@ -1,13 +1,14 @@
 import {Outlet} from 'react-router';
 import SettingDrawer from "@/layout/SettingDrawer.tsx";
 import {useGlobalStore} from "@/stores";
-import {ConfigProvider, Layout, theme as antTheme, type ThemeConfig} from "antd";
+import {ConfigProvider, Layout, type ThemeConfig} from "antd";
 import {useMemo} from "react";
 import HeaderRender from "@/layout/HeaderRender.tsx";
 import SiderRender from "@/layout/SiderRender.tsx";
 import FooterRender from "@/layout/FooterRender.tsx";
 import ColumnSiderRender from "@/layout/ColumnSiderRender.tsx";
 import {ProConfigProvider} from "@ant-design/pro-components";
+import algorithm from "@/layout/algorithm.ts";
 
 const {Content} = Layout;
 
@@ -44,7 +45,7 @@ const LayoutRender = () => {
       borderRadius: themeConfig.borderRadius,
       controlHeight: themeConfig.controlHeight,
     },
-    algorithm: themeConfig.themeScheme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm
+    algorithm: themeConfig.algorithm ? algorithm[themeConfig.algorithm] : undefined
   }), [themeConfig])
 
   return (
