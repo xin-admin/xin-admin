@@ -22,8 +22,8 @@ export interface IRule {
   icon?: string;
   // 多语言
   local?: string;
-  // 是否显示
-  show?: number;
+  // 是否隐藏
+  hidden?: boolean;
   // 是否外链
   link?: boolean;
   // 是否缓存

@@ -4,18 +4,19 @@ import {useGlobalStore} from "@/stores";
 import {ConfigProvider, Layout, type ThemeConfig} from "antd";
 import {useMemo} from "react";
 import HeaderRender from "@/layout/HeaderRender.tsx";
-import SiderRender from "@/layout/SiderRender.tsx";
 import FooterRender from "@/layout/FooterRender.tsx";
 import ColumnSiderRender from "@/layout/ColumnSiderRender.tsx";
 import {ProConfigProvider} from "@ant-design/pro-components";
 import algorithm from "@/layout/algorithm.ts";
+import MenuRender from "@/layout/MenuRender.tsx";
+import Sider from "antd/es/layout/Sider";
 
 const {Content} = Layout;
 
 const LayoutRender = () => {
   const themeConfig = useGlobalStore(state => state.themeConfig);
   const layout = useGlobalStore(state => state.layout);
-
+  const collapsed = useGlobalStore(state => state.collapsed);
   const theme: ThemeConfig = useMemo(() => ({
     components: {
       Layout: {
@@ -71,7 +72,20 @@ const LayoutRender = () => {
             <>
               <HeaderRender/>
               <Layout hasSider>
-                {(layout === "mix" || layout === "side") && <SiderRender/>}
+                {(layout === "mix" || layout === "side") && (
+                  <Sider
+                    collapsed={collapsed}
+                    width={themeConfig.siderWeight}
+                    className={"sticky overflow-auto bottom-0 backdrop-blur-xs"}
+                    style={{
+                      top: themeConfig.headerHeight,
+                      height: `calc(100vh - ${themeConfig.headerHeight}px)`,
+                      borderRight: themeConfig.layoutBorder ? '1px solid ' + themeConfig.colorBorder : 'none',
+                    }}
+                  >
+                    <MenuRender />
+                  </Sider>
+                )}
                 <Layout className={"relative"}>
                   <Content style={{padding: themeConfig.bodyPadding}}>
                     <Outlet/>

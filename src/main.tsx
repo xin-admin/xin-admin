@@ -9,16 +9,16 @@ const root = document.getElementById("root");
 // 配置请求拦截，确保只在生产环境中使用
 // Configure request interception to ensure it is only used in the production environment
 async function prepareApp() {
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'test'
-  ) {
+  // if (
+  //   process.env.NODE_ENV === 'development' ||
+  //   process.env.NODE_ENV === 'test'
+  // ) {
     const { worker } = await import('./mocks/browser')
     return worker.start({
       onUnhandledRequest: 'bypass'
     })
-  }
-  return Promise.resolve()
+  // }
+  // return Promise.resolve()
 }
 
 prepareApp().then(() => {

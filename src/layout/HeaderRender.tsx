@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {Button, ConfigProvider, Layout, Menu, type MenuProps} from "antd";
+import React, {useMemo} from "react";
+import {Button, ConfigProvider, Layout, Menu, type MenuProps, type ThemeConfig} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {useGlobalStore} from "@/stores";
 import HeaderLeftRender from "@/layout/HeaderLeftRender";
@@ -9,147 +9,92 @@ import IconFont from "@/components/IconFont";
 import {useNavigate} from "react-router";
 import BreadcrumbRender from "@/layout/BreadcrumbRender.tsx";
 import {useTranslation} from "react-i18next";
-import type {IRule} from "@/domain/iRule.ts";
-
-type MenuItem = Required<MenuProps>['items'][number];
+import MenuRender from "@/layout/MenuRender.tsx";
 
 const {Header} = Layout;
 
 const HeaderRender: React.FC = () => {
-  const navigate = useNavigate();
   const {t} = useTranslation();
-  const rules = useAuthStore(state => state.rules)
+  const navigate = useNavigate();
+  const rules = useAuthStore(state => state.rules);
+  const layout = useGlobalStore(state => state.layout);
+  const themeConfig = useGlobalStore(state => state.themeConfig);
   const collapsed = useGlobalStore(state => state.collapsed);
   const setCollapsed = useGlobalStore(state => state.setCollapsed);
   const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
   const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
-  const themeConfig = useGlobalStore(state => state.themeConfig);
-  const layout = useGlobalStore(state => state.layout);
-  const [headMenu, setHeadMenu] = useState<MenuItem[]>([]);
-  const [parentKeys, setParentKeys] = useState(menuSelectedKeys[menuSelectedKeys.length - 1]);
-
-  const transformMenus = useCallback((rules: IRule[], pid: number = 0): MenuItem[] => {
-    const menus: MenuItem[] = []
-    rules.forEach((item) => {
-      if (item.type === 'rule') return;
-      if (item.pid !== pid) return;
-      if (item.type === 'route') {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-        })
-        return;
+  const theme: ThemeConfig = {
+    cssVar: true,
+    token: { colorTextBase: themeConfig.headerColor },
+    components: {
+      Menu: {
+        activeBarBorderWidth: 0,
+        itemBg: 'transparent',
       }
-      const children = transformMenus(rules, item.id);
-      if (children && children.length > 0) {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-          children
-        })
-      } else {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-        })
-      }
-    })
-    return menus;
-  }, [t])
-
-  useEffect(() => {
-    if (layout == 'top') {
-      const menus = transformMenus(rules, 0)
-      setHeadMenu(menus)
     }
-  }, [rules, layout, transformMenus]);
+  }
 
-  const menuClick: MenuProps['onClick'] = (data) => {
-    const rule = rules.find(item => item.key === data.key)
-    if (rule && rule.path) {
+  // 一级菜单
+  const mixMenu = useMemo(() => {
+    const mixRule = rules.filter(item => {
+      return item.pid === 0 && !item.hidden && ['route', 'menu'].includes(item.type);
+    })
+    return mixRule.map(item => ({
+        label: item.local ? t(item.local) : item.name,
+        icon: item.icon ? <IconFont name={item.icon}/> : false,
+        key: item.key!,
+        path: item.path,
+      })
+    )
+  }, [rules, t]);
+
+  // mix 模式下顶部菜单栏点击事件
+  const mixMenuClick: MenuProps['onClick'] = (info) => {
+    const rule = rules.find(item => item.key === info.key);
+    if( !rule ) return;
+    if (rule.type === 'route') {
       if (rule.link) {
         window.open(rule.path,'_blank')
       } else {
         navigate(rule.path!)
       }
+    } else {
+      setMenuSelectedKeys([info.key]);
     }
-    setMenuSelectedKeys(data.keyPath)
   }
-
+  
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorTextBase: themeConfig.headerColor,
-        },
-        components: {
-          Menu: {
-            activeBarBorderWidth: 0,
-            itemBg: 'transparent',
-          }
-        },
-        cssVar: true
-      }}
-    >
+    <ConfigProvider theme={theme}>
       <Header
         className={"flex sticky z-1 top-0 backdrop-blur-xs"}
         style={{
           borderBottom: themeConfig.layoutBorder ? '1px solid ' + themeConfig.colorBorder : 'none',
         }}
       >
-        {layout !== 'columns' && <HeaderLeftRender/>}
+        { layout !== 'columns' && <HeaderLeftRender/> }
         <div className="flex-1 flex items-center">
+          {/* 侧边栏开关 */}
           {['mix', 'side'].includes(layout) && (
             <Button
               type={'text'}
               className={'text-[16px] mr-2'}
               onClick={() => setCollapsed(!collapsed)}
             >
-              {collapsed ?
-                <MenuUnfoldOutlined/>
-                :
-                <MenuFoldOutlined/>
-              }
+              { collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/> }
             </Button>
           )}
-          {['columns', 'side'].includes(layout) && (
-            <BreadcrumbRender/>
-          )}
-          {layout == 'top' && (
+          {/* 面包屑 */}
+          { ['columns', 'side'].includes(layout) && <BreadcrumbRender/> }
+          {/* 顶部菜单 */}
+          { layout == 'top' && <MenuRender /> }
+          {/* 混合布局模式下的顶部菜单 */}
+          { layout == 'mix' && (
             <Menu
-              style={{borderBottom: 'none'}}
+              style={{ borderBottom: 'none' }}
               mode="horizontal"
-              items={headMenu}
+              items={mixMenu}
               selectedKeys={menuSelectedKeys}
-              onClick={menuClick}
-            />
-          )}
-          {layout == 'mix' && (
-            <Menu
-              style={{borderBottom: 'none'}}
-              mode="horizontal"
-              items={rules.filter(item => item.pid === 0).map(item => ({
-                label: item.local ? t(item.local) : item.name,
-                icon: item.icon ? <IconFont name={item.icon}/> : false,
-                key: item.key!,
-                path: item.path,
-              }))}
-              selectedKeys={[parentKeys]}
-              onClick={(info) => {
-                const rule = rules.find(item => item.key === info.key);
-                if (rule && !rules.find(item => item.pid === rule.id)) {
-                  if (rule.link) {
-                    window.open(rule.path,'_blank')
-                  } else {
-                    navigate(rule.path!)
-                  }
-                }
-                setParentKeys(info.key)
-                setMenuSelectedKeys([info.key])
-              }}
+              onClick={mixMenuClick}
             />
           )}
         </div>

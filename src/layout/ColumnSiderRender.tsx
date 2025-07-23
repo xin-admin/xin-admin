@@ -1,15 +1,15 @@
-import {ConfigProvider, Layout, Menu, type MenuProps, theme} from "antd";
+import {ConfigProvider, Layout, theme} from "antd";
 import {useGlobalStore} from "@/stores";
-import React, {useCallback, useEffect, useState} from "react";
+import React from "react";
 import useAuthStore from "@/stores/user.ts";
 import IconFont from "@/components/IconFont";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
+import MenuRender from "@/layout/MenuRender.tsx";
 import type {IRule} from "@/domain/iRule.ts";
 
 const {Sider} = Layout;
-type MenuItem = Required<MenuProps>['items'][number];
-const {useToken} = theme
+const {useToken} = theme;
 
 const ColumnSiderRender: React.FC = () => {
   const navigate = useNavigate();
@@ -20,133 +20,63 @@ const ColumnSiderRender: React.FC = () => {
   const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
   const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
   const rules = useAuthStore(state => state.rules);
-  const [menu, setMenu] = useState<MenuItem[]>([]);
   const {token} = useToken();
-  const [parentKeys, setParentKeys] = useState(menuSelectedKeys[menuSelectedKeys.length - 1]);
 
-  const transformMenus = useCallback((rules: IRule[], pid: number = 0): MenuItem[] => {
-    const menus: MenuItem[] = []
-    rules.forEach((item) => {
-      if (item.type === 'rule') return;
-      if (item.pid !== pid) return;
-      if (item.type === 'route') {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-        })
-        return;
-      }
-      const children = transformMenus(rules, item.id);
-      if (children && children.length > 0) {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-          children
-        })
-      } else {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-        })
-      }
-    })
-    return menus;
-  }, [t])
-
-  useEffect(() => {
-    const parentRule = rules.find(item => parentKeys === item.key)
-    if (parentRule) {
-      const menus = transformMenus(rules, parentRule.id)
-      setMenu(menus)
-    }
-  }, [rules, parentKeys, transformMenus])
-
-  const menuClick: MenuProps['onClick'] = (data) => {
-    setMenuSelectedKeys([...data.keyPath, parentKeys])
-    const rule = rules.find(item => item.key === data.key)
-    if (rule && rule.path) {
+  const menuClick = (rule: IRule) => {
+    if (rule.type === 'route') {
       if (rule.link) {
         window.open(rule.path, '_blank')
       } else {
         navigate(rule.path!)
       }
+    } else {
+      setMenuSelectedKeys([rule.key])
     }
   }
 
   return (
     <ConfigProvider
       theme={{
-        token: {
-          colorTextBase: themeConfig.siderColor,
-        },
+        token: { colorTextBase: themeConfig.siderColor },
         cssVar: true
       }}
     >
-      <Sider width={menu.length > 0 ? themeConfig.siderWeight : '72px'}>
-        <div
-          className={"overflow-auto h-screen sticky top-0 bottom-0 flex w-full"}
-          style={{
-            borderRight: (themeConfig.layoutBorder && menu.length > 0) ? "1px solid " + themeConfig.colorBorder : 'none',
-            color: themeConfig.siderColor,
-          }}
-        >
+      <Sider
+        width={(themeConfig.siderWeight ? themeConfig.siderWeight : 226) + 72}
+        className={"h-screen sticky top-0 bottom-0"}
+        style={{color: themeConfig.siderColor}}
+      >
+        <div className={"w-full flex h-full"}>
           <div
-            className={'w-[72px]'}
+            className={'w-[72px] box-border h-full overflow-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'}
             style={{borderRight: "1px solid " + themeConfig.colorBorder}}
           >
-            <div
-              className={"w-full flex items-center justify-center font-semibold text-[20px] mb-2"}
-              style={{height: themeConfig.headerHeight}}
-            >
+            <div className={"w-full flex items-center justify-center pt-2.5 pb-2.5"}>
               <img className={"w-9"} src={logo} alt="logo"/>
             </div>
-            {rules.filter(item => item.pid === 0).map(menu => (
+            {/* 侧栏菜单 */}
+            {rules.filter(item => item.pid === 0 && !item.hidden && ['route', 'menu'].includes(item.type)).map(rule => (
               <div
-                key={menu.key}
+                key={rule.key}
                 style={{
-                  backgroundColor: parentKeys === menu.key ? token.colorPrimaryBg : 'transparent',
-                  color: parentKeys === menu.key ? token.colorPrimary : themeConfig.siderColor,
+                  backgroundColor: menuSelectedKeys.at(-1) === rule.key ? token.colorPrimaryBg : 'transparent',
+                  color: menuSelectedKeys.at(-1) === rule.key ? token.colorPrimary : themeConfig.siderColor,
                 }}
-                className={"flex flex-col p-2 items-center justify-center mb-2 pt-3 pb-3 cursor-pointer"}
-                onClick={() => {
-                  if (menu.key) {
-                    const rule = rules.find(item => item.key === menu.key);
-                    if (rule && !rules.find(item => item.pid === rule.id)) {
-                      if (rule.link) {
-                        window.open(rule.path, '_blank')
-                      } else {
-                        navigate(rule.path!)
-                      }
-                    }
-                    setParentKeys(menu.key)
-                    setMenuSelectedKeys([menu.key])
-                  }
-                }}
+                className={"flex items-center justify-center flex-col p-2 mb-2 pt-3 pb-3 cursor-pointer"}
+                onClick={() => menuClick(rule)}
               >
-                <IconFont name={menu.icon}/>
-                <span className={"mt-1 truncate w-full text-center"}>{menu.local ? t(menu.local) : menu.name}</span>
+                <IconFont name={rule.icon}/>
+                <span className={"mt-1 truncate w-full text-center"}>{rule.local ? t(rule.local) : rule.name}</span>
               </div>
             ))}
           </div>
-          {menu.length > 0 && (
-            <div className={"flex-auto w-full"}>
-              <div
-                className={"w-full flex items-center justify-center font-semibold text-[20px]"}
-                style={{height: themeConfig.headerHeight}}
-              >
-                {title}
-              </div>
-              <Menu
-                selectedKeys={menuSelectedKeys}
-                mode="inline"
-                items={menu}
-                onClick={menuClick}
-              />
+
+          <div style={{ width: themeConfig.siderWeight }}>
+            <div className={"font-semibold text-[20px] text-center pt-2.5 pb-2.5"}>
+              {title}
             </div>
-          )}
+            <MenuRender/>
+          </div>
         </div>
       </Sider>
     </ConfigProvider>
