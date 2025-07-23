@@ -70,7 +70,11 @@ const HeaderRender: React.FC = () => {
   const menuClick: MenuProps['onClick'] = (data) => {
     const rule = rules.find(item => item.key === data.key)
     if (rule && rule.path) {
-      navigate(rule.path!)
+      if (rule.link) {
+        window.open(rule.path,'_blank')
+      } else {
+        navigate(rule.path!)
+      }
     }
     setMenuSelectedKeys(data.keyPath)
   }
@@ -137,7 +141,11 @@ const HeaderRender: React.FC = () => {
               onClick={(info) => {
                 const rule = rules.find(item => item.key === info.key);
                 if (rule && !rules.find(item => item.pid === rule.id)) {
-                  navigate(rule.path!)
+                  if (rule.link) {
+                    window.open(rule.path,'_blank')
+                  } else {
+                    navigate(rule.path!)
+                  }
                 }
                 setParentKeys(info.key)
                 setMenuSelectedKeys([info.key])

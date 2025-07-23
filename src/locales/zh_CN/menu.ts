@@ -28,4 +28,5 @@ export default {
   "menu.user": "个人中心",
   "menu.user.index": "个人中心",
   "menu.user.setting": "用户设置",
+  "menu.xin-admin": "XinAdmin",
 }

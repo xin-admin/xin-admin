@@ -68,7 +68,11 @@ const ColumnSiderRender: React.FC = () => {
     setMenuSelectedKeys([...data.keyPath, parentKeys])
     const rule = rules.find(item => item.key === data.key)
     if (rule && rule.path) {
-      navigate(rule.path!)
+      if (rule.link) {
+        window.open(rule.path, '_blank')
+      } else {
+        navigate(rule.path!)
+      }
     }
   }
 
@@ -111,7 +115,11 @@ const ColumnSiderRender: React.FC = () => {
                   if (menu.key) {
                     const rule = rules.find(item => item.key === menu.key);
                     if (rule && !rules.find(item => item.pid === rule.id)) {
-                      navigate(rule.path!)
+                      if (rule.link) {
+                        window.open(rule.path, '_blank')
+                      } else {
+                        navigate(rule.path!)
+                      }
                     }
                     setParentKeys(menu.key)
                     setMenuSelectedKeys([menu.key])

@@ -24,6 +24,10 @@ export default function createRouter(rules: IRule[]) {
   const routes: DataRouteObject[] = [];
   // 构建路由，只循环路由确保附加嵌套路由的时候父路由存在
   rules.forEach(rule => {
+    if(rule.link) {
+      // 如果是外链，则退出
+      return;
+    }
     if(rule.type === "route" && rule.elementPath) {
       const route: DataRouteObject = {
         id: rule.key,

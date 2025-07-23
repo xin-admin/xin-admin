@@ -69,7 +69,11 @@ const SiderRender: React.FC = () => {
   const menuClick: MenuProps['onClick'] = (data) => {
     const rule = rules.find(item => item.key === data.key)
     if (rule && rule.path) {
-      navigate(rule.path!)
+      if (rule.link) {
+        window.open(rule.path, '_blank')
+      } else {
+        navigate(rule.path!)
+      }
     }
     if (layout === 'mix') {
       setMenuSelectedKeys([...data.keyPath, menuSelectedKeys[menuSelectedKeys.length - 1]])

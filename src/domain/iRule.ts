@@ -22,12 +22,10 @@ export interface IRule {
   icon?: string;
   // 多语言
   local?: string;
-  // 状态
-  status?: number;
   // 是否显示
   show?: number;
-  // 创建时间
-  created_at?: string;
-  // 更新时间
-  updated_at?: string;
+  // 是否外链
+  link?: boolean;
+  // 是否缓存
+  cache?: boolean;
 }

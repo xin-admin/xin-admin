@@ -357,6 +357,17 @@ const defaultRoute: IRule[] = [
     path: '/user/setting/verification',
     elementPath: '/user/setting/verification',
   },
+  {
+    id: 35,
+    pid: 0,
+    type: 'route',
+    name: 'XinAdmin',
+    local: "menu.xin-admin",
+    key: "xin-admin",
+    icon: "LinkOutlined",
+    link: true,
+    path: 'https://xinadmin.cn',
+  },
 ]
 
 export default defaultRoute

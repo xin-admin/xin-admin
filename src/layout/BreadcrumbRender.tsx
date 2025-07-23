@@ -22,16 +22,15 @@ const BreadcrumbRender = () => {
 
     menuSelectedKeys.slice().reverse().forEach(i => {
       const rule = rules.find(rule => rule.key === i);
-      if(rule) {
-        item?.push({
-          title: (
-            <>
-              {rule.icon && <IconFont name={rule.icon}/> }
-              <span>{ rule.local ? t(rule.local) : rule.name }</span>
-            </>
-          ),
-        })
-      }
+      if(!rule) return;
+      item?.push({
+        title: (
+          <>
+            {rule.icon && <IconFont name={rule.icon}/> }
+            <span>{ rule.local ? t(rule.local) : rule.name }</span>
+          </>
+        )
+      })
     })
     setItems(item);
   },[menuSelectedKeys, rules, t])
