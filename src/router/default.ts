@@ -376,6 +376,16 @@ const defaultRoute: IRule[] = [
     path: "/system/info",
     elementPath: "/system/info",
   },
+  {
+    id: 37,
+    pid: 35,
+    type: "route",
+    name: "系统监控",
+    local: "menu.system.monitor",
+    key: "system.monitor",
+    path: "/system/monitor",
+    elementPath: "/system/monitor",
+  },
 
   {
     id: 100,
