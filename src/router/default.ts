@@ -360,6 +360,26 @@ const defaultRoute: IRule[] = [
   {
     id: 35,
     pid: 0,
+    type: "menu",
+    name: "系统设置",
+    local: "menu.system",
+    icon: "SettingOutlined",
+    key: "system",
+  },
+  {
+    id: 36,
+    pid: 35,
+    type: "route",
+    name: "系统信息",
+    local: "menu.system.info",
+    key: "system.info",
+    path: "/system/info",
+    elementPath: "/system/info",
+  },
+
+  {
+    id: 100,
+    pid: 0,
     type: 'route',
     name: 'XinAdmin',
     local: "menu.xin-admin",
