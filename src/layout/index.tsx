@@ -76,8 +76,10 @@ const LayoutRender = () => {
                   <Sider
                     collapsed={collapsed}
                     width={themeConfig.siderWeight}
-                    className={"sticky overflow-auto bottom-0 backdrop-blur-xs"}
+                    className={"sticky backdrop-blur-xs [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"}
                     style={{
+                      bottom: 0,
+                      overflow: 'auto',
                       top: themeConfig.headerHeight,
                       height: `calc(100vh - ${themeConfig.headerHeight}px)`,
                       borderRight: themeConfig.layoutBorder ? '1px solid ' + themeConfig.colorBorder : 'none',
