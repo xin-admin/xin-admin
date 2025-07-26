@@ -6,7 +6,7 @@ import { Button, Divider, message, Popconfirm, Space } from 'antd';
 import ButtonAccess from 'src/components/AuthButton';
 import type { XinTableProps } from './typings.ts';
 
-function XinTable<T extends Record<string, never>>(props: XinTableProps<T>) {
+function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
   /** 表格参数 */
   const {
     api,
