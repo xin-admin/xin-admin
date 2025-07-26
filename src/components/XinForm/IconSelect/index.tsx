@@ -1,6 +1,6 @@
 import { Input, Modal, Tabs, theme } from 'antd';
 import type { FormInstance, TabsProps } from 'antd';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import type { CSSProperties, FC } from 'react';
 import { categories, type CategoriesKeys } from '@/utils/iconFields';
 import IconFont from '@/components/IconFont';
@@ -14,15 +14,9 @@ export interface IconsItemProps {
 
 const IconSelect: FC<IconsItemProps> = (props) => {
   const { value, form, dataIndex } = props;
-  // 当前选中图标
-  const [selected, setSelected] = useState<string>('');
   // 选择菜单显示
   const [iconShow, setIconShow] = useState<boolean>(false);
   const { token } = useToken();
-
-  useEffect(() => {
-    setSelected(form.getFieldValue(dataIndex));
-  }, [dataIndex, form]);
 
   // 打开选择窗口
   const openModel = () => { setIconShow(true) }
@@ -39,19 +33,16 @@ const IconSelect: FC<IconsItemProps> = (props) => {
       <div style={IconListCss}>
         {categories[props.type].map((item) => (
           <div
+            className={'cursor-pointer p-[5px_10px] mr-2.5 flex items-center justify-center mb-2.5'}
             style={{
-              padding: '5px 10px',
-              marginRight: '10px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 8,
-              borderWidth: 1,
-              borderStyle: 'solid',
-              borderColor: selected === item ? token.colorPrimary : token.colorBorder,
+              border: '1px solid ' + token.colorBorder,
+              borderRadius: token.borderRadius
             }}
             key={item}
-            onClick={() => setSelected(item)}
+            onClick={() => {
+              form.setFieldValue(dataIndex, item);
+              setIconShow(false);
+            }}
           >
             <IconFont name={item} />
           </div>
@@ -98,11 +89,6 @@ const IconSelect: FC<IconsItemProps> = (props) => {
     },
   ];
 
-  const onChange = () => {
-    form.setFieldValue(dataIndex, selected);
-    setIconShow(false);
-  };
-
   return (
     <>
       <Input
@@ -110,14 +96,14 @@ const IconSelect: FC<IconsItemProps> = (props) => {
         addonAfter={
           <>
             { categories.allIcons.includes(value) ?
-              <span onClick={openModel}><IconFont name={value} /></span>
+              <span className={'cursor-pointer'} onClick={openModel}><IconFont name={value} /></span>
               :
-              <span onClick={openModel}>请选择</span>
+              <span className={'cursor-pointer'} onClick={openModel}>请选择</span>
             }
           </>
         }
       />
-      <Modal open={iconShow} onCancel={() => setIconShow(false)} width={800} onOk={onChange}>
+      <Modal open={iconShow} onCancel={() => setIconShow(false)} width={800} footer={false}>
         <Tabs defaultActiveKey="all" items={items} />
       </Modal>
     </>
