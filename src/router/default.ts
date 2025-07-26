@@ -349,7 +349,7 @@ const defaultRoute: IRule[] = [
     elementPath: '/user/setting/security',
   },
   {
-    id: 34,
+    id: 35,
     pid: 32,
     type: 'nested-route',
     name: '实名认证',
@@ -358,7 +358,7 @@ const defaultRoute: IRule[] = [
     elementPath: '/user/setting/verification',
   },
   {
-    id: 35,
+    id: 36,
     pid: 0,
     type: "menu",
     name: "系统设置",
@@ -367,8 +367,8 @@ const defaultRoute: IRule[] = [
     key: "system",
   },
   {
-    id: 36,
-    pid: 35,
+    id: 37,
+    pid: 36,
     type: "route",
     name: "系统信息",
     local: "menu.system.info",
@@ -377,8 +377,8 @@ const defaultRoute: IRule[] = [
     elementPath: "/system/info",
   },
   {
-    id: 37,
-    pid: 35,
+    id: 38,
+    pid: 36,
     type: "route",
     name: "系统监控",
     local: "menu.system.monitor",
@@ -386,7 +386,37 @@ const defaultRoute: IRule[] = [
     path: "/system/monitor",
     elementPath: "/system/monitor",
   },
-
+  {
+    id: 39,
+    pid: 36,
+    type: "route",
+    name: "菜单权限",
+    local: "menu.system.rule",
+    key: "system.rule",
+    path: "/system/rule",
+    elementPath: "/system/rule",
+  },
+  {
+    id: 40,
+    pid: 39,
+    type: 'rule',
+    name: '菜单权限新增',
+    key: 'system.rule.create',
+  },
+  {
+    id: 41,
+    pid: 39,
+    type: 'rule',
+    name: '菜单权限编辑',
+    key: 'system.rule.update',
+  },
+  {
+    id: 42,
+    pid: 39,
+    type: 'rule',
+    name: '菜单权限删除',
+    key: 'system.rule.delete',
+  },
   {
     id: 100,
     pid: 0,

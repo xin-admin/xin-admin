@@ -31,5 +31,6 @@ export default {
   "menu.system": "系统设置",
   "menu.system.info": "系统信息",
   "menu.system.monitor": "系统监控",
+  "menu.system.rule": "菜单权限",
   "menu.xin-admin": "XinAdmin",
 }
