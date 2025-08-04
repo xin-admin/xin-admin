@@ -1,4 +1,4 @@
-import {request} from "@/utils/request.ts";
+import createAxios from "@/utils/request.ts";
 
 export interface ParentNodeType {
   label: string;
@@ -6,6 +6,9 @@ export interface ParentNodeType {
   children?: ParentNodeType[];
 }
 
-export async function selectParentNode() {
-  return request.post<API.ResponseStructure<ParentNodeType[]>>('/system/rule/parent');
+export function selectParentNode() {
+  return createAxios<ParentNodeType[]>({
+    url: '/system/rule/parent',
+    method: 'get',
+  });
 }

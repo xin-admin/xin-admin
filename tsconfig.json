@@ -27,6 +27,9 @@
       "@/*": ["./src/*"],
       "~/*": ["./*"]
     },
+
+    "types": ["vite/client", "node"]
   },
-  "include": ["types", "src"]
+  "include": ["./**/*.ts", "./**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
 }

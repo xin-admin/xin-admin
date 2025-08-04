@@ -27,7 +27,7 @@ export interface IAdminLoginParams {
 
 export type IAdminInfoResult = API.ResponseStructure<IAdminUser>
 
-export type IAdminLoginResult = API.ResponseStructure<{
+export type IAdminLoginResult = {
   plainTextToken: string;
   accessToken?: {
     created_at: string;
@@ -36,4 +36,4 @@ export type IAdminLoginResult = API.ResponseStructure<{
     name: string;
     abilities: string[];
   }
-}>
+}

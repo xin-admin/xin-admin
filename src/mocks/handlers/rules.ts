@@ -88,7 +88,7 @@ const selectRules: HttpResponseResolver = async () => {
     return result;
   }
 
-  return HttpResponse.json<API.ListResponse<RulesTree>>({
+  return HttpResponse.json<API.ResponseStructure<API.ListResponse<RulesTree>>>({
     success: true,
     msg: "成功",
     data: {
@@ -105,6 +105,6 @@ const selectRules: HttpResponseResolver = async () => {
 // all the domain-based handlers into a single
 // network description array.
 export const rules = [
-  http.post('/api/system/rule/parent', withAuth(selectRulesParent)),
+  http.get('/api/system/rule/parent', withAuth(selectRulesParent)),
   http.get('/api/system/rule', withAuth(selectRules)),
 ]

@@ -13,7 +13,7 @@ const adminLogin: HttpResponseResolver = async ({ request }) => {
       showType: 2
     })
   }
-  return HttpResponse.json<IAdminLoginResult>({
+  return HttpResponse.json<API.ResponseStructure<IAdminLoginResult>>({
     success: true,
     msg: "成功",
     data: {

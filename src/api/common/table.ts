@@ -1,5 +1,5 @@
 /** Xin Table 公共接口 */
-import { request } from '@/utils/request';
+import createAxios from '@/utils/request';
 import type { AxiosRequestConfig } from "axios";
 
 type IListParams = {
@@ -19,9 +19,11 @@ export function Get<T,>(
     id: number | string,
     options?: AxiosRequestConfig | undefined
 ){
-  return request.get<
-      API.ResponseStructure<T>
-  >(url + '/' + id, options || {});
+  return createAxios<T>({
+    url: url + '/' + id,
+    method: 'get',
+    ...(options || {}),
+  })
 }
 
 /**
@@ -35,12 +37,12 @@ export function List<T,>(
     params?: IListParams,
     options?: AxiosRequestConfig | undefined
 ){
-  return request.get<
-      API.ListResponse<T>
-  >(url, {
+  return createAxios<T>({
+    url: url,
+    method: 'get',
     params,
     ...(options || {}),
-  });
+  })
 }
 
 /**
@@ -54,15 +56,12 @@ export function Create<T,>(
     data?: { [key: string]: unknown },
     options?: AxiosRequestConfig | undefined
 ){
-  return request.post<
-      API.ResponseStructure<T>
-  >(url, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: data,
+  return createAxios<T>({
+    url: url,
+    method: 'post',
+    data,
     ...(options || {}),
-  });
+  })
 }
 
 /**
@@ -76,12 +75,12 @@ export function Update<T,>(
     data?: { [key: string]: unknown },
     options?: AxiosRequestConfig | undefined
 ){
-  return request.put<
-      API.ResponseStructure<T>
-  >(url, {
+  return createAxios<T>({
+    url: url,
+    method: 'put',
     data,
     ...(options || {}),
-  });
+  })
 }
 
 /**
@@ -95,10 +94,10 @@ export function Delete<T,>(
     params?: { [key: string]: unknown },
     options?: AxiosRequestConfig | undefined
 ){
-  return request.delete<
-      API.ResponseStructure<T>
-  >(url, {
+  return createAxios<T>({
+    url: url,
+    method: 'delete',
     params,
     ...(options || {}),
-  });
+  })
 }

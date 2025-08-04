@@ -1,6 +1,53 @@
-import axios from "axios";
-import type {AxiosResponse, AxiosInstance} from "axios";
-import {message, notification, type NotificationArgsProps} from "antd";
+import axios, {type AxiosRequestConfig, type AxiosResponse} from "axios";
+import type {AxiosInstance} from "axios";
+import type {NotificationArgsProps} from "antd";
+
+window.requests = [];
+window.tokenRefreshing = false;
+const pendingMap = new Map();
+
+/**
+ * 储存每个请求的唯一cancel回调, 以此为标识
+ */
+function addPending(config: AxiosRequestConfig) {
+  const pendingKey = getPendingKey(config)
+  config.cancelToken =
+    config.cancelToken ||
+    new axios.CancelToken((cancel) => {
+      if (!pendingMap.has(pendingKey)) {
+        pendingMap.set(pendingKey, cancel)
+      }
+    })
+}
+
+/**
+ * 删除重复的请求
+ */
+function removePending(config: AxiosRequestConfig) {
+  const pendingKey = getPendingKey(config)
+  if (pendingMap.has(pendingKey)) {
+    const cancelToken = pendingMap.get(pendingKey)
+    cancelToken(pendingKey)
+    pendingMap.delete(pendingKey)
+  }
+}
+
+/**
+ * 生成每个请求的唯一key
+ */
+function getPendingKey(config: AxiosRequestConfig) {
+  let { data } = config
+  const { url, method, params, headers } = config
+  if (typeof data === 'string') data = JSON.parse(data) // response里面返回的config.data是个字符串对象
+  return [
+    url,
+    method,
+    headers && (headers as anyObj).batoken ? (headers as anyObj).batoken : '',
+    headers && (headers as anyObj)['ba-user-token'] ? (headers as anyObj)['ba-user-token'] : '',
+    JSON.stringify(params),
+    JSON.stringify(data),
+  ].join('&')
+}
 
 // 请求错误处理
 const handleNetworkError = async (errStatus?: number): Promise<void> => {
@@ -22,9 +69,9 @@ const handleNetworkError = async (errStatus?: number): Promise<void> => {
       case 505: messageString = 'HTTP版本不受支持！'; break;
       default: messageString = `其他连接错误 -- ${errStatus}`; break
     }
-    message.error(messageString);
+    window.$message?.error(messageString);
   } else {
-    message.error("无法连接到服务器！");
+    window.$message?.error("无法连接到服务器！");
   }
 };
 
@@ -38,53 +85,57 @@ const handleBusinessError = async (data: API.ResponseStructure<any>) => {
   }
   switch (showType) {
     case 99: break;
-    case 0: message.success(msg); break;
-    case 1: message.warning(msg); break;
-    case 2: message.error(msg); break;
-    case 3: notification.success(NProps); break;
-    case 4: notification.warning(NProps); break;
-    case 5: notification.error(NProps); break;
-    default: message.error(msg);
+    case 0: window.$message?.success(msg); break;
+    case 1: window.$message?.warning(msg); break;
+    case 2: window.$message?.error(msg); break;
+    case 3: window.$notification?.success(NProps); break;
+    case 4: window.$notification?.warning(NProps); break;
+    case 5: window.$notification?.error(NProps); break;
+    default: window.$message?.error(msg);
   }
 }
 
-// 创建 axios 实例
-const instance: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  timeout: 10000,
-  headers: {
-    "X-Requested-With": "XMLHttpRequest",
-  }
-});
+function createAxios<Data, T = API.ResponseStructure<Data>>(axiosConfig: AxiosRequestConfig) {
+  // 创建 axios 实例
+  const instance: AxiosInstance = axios.create({
+    baseURL: import.meta.env.VITE_BASE_URL,
+    timeout: 10000,
+    responseType: 'json',
+  });
 
-// 请求拦截
-instance.interceptors.request.use((config) => {
-  config.headers = config.headers || {};
-  let token: string = "";
-  if(localStorage.getItem("token")) {
-    token = `Bearer ${localStorage.getItem("token")}`
-  }
-  config.headers["Authorization"] = token;
-  return config;
-});
+  // 请求拦截
+  instance.interceptors.request.use((config) => {
+    removePending(config);
+    addPending(config);
 
-// 响应拦截
-instance.interceptors.response.use(
-  async (response: AxiosResponse<API.ResponseStructure<any>>) => {
-    const { data } = response;
-    if(data.success) return Promise.resolve(response);
-    await handleBusinessError(data);
-    return Promise.reject(response);
-  },
-  async (err) => {
-    if(err.response) {
-      await handleNetworkError(err.response.status);
-      return Promise.reject(err.response);
-    }else {
-      message.error("网络链接错误：" + err.message);
-      return Promise.reject(err);
+    config.headers = config.headers || {};
+    let token: string = "";
+    if(localStorage.getItem("token")) {
+      token = `Bearer ${localStorage.getItem("token")}`
     }
-  }
-);
+    config.headers["Authorization"] = token;
+    return config;
+  });
 
-export const request = instance;
+  // 响应拦截
+  instance.interceptors.response.use(
+    async (response) => {
+      const { data } = response;
+      if(data.success) return Promise.resolve(response);
+      await handleBusinessError(data);
+      return Promise.reject(response);
+    },
+    async (err) => {
+      if(err.response) {
+        await handleNetworkError(err.response.status);
+        return Promise.reject(err.response);
+      }else {
+        window.$message?.error("网络链接错误：" + err.message);
+        return Promise.reject(err);
+      }
+    }
+  );
+  return instance(axiosConfig) as Promise<AxiosResponse<T>>;
+}
+
+export default createAxios;
