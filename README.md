@@ -68,4 +68,4 @@ If you encounter issues, you can seek help through the following channels. We al
 - Submit [GitHub Issues](https://github.com/xin-admin/xin-admin/issues)
 - Join the official QQ group: [Xin Admin Official Community](https://qm.qq.com/q/4hxyJo0Oly)
 
-目前项目正处于快速更新迭代阶段，正式开发时如更新版本请先备份项目
+The project is currently in rapid iteration. Before updating for production use, please back up your project.
