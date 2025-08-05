@@ -1,5 +1,5 @@
 import createAxios from '@/utils/request';
-import type {IAdminInfoResult, IAdminLoginParams, IAdminLoginResult} from '@/domain/iAdmin';
+import type {IAdminLoginParams, IAdminLoginResult, IAdminUser} from '@/domain/iAdmin';
 import type {IRule} from "@/domain/iRule.ts";
 
 // 管理端用户登录
@@ -13,7 +13,7 @@ export async function login(data: IAdminLoginParams) {
 
 // 获取管理员用户信息
 export async function info() {
-  return createAxios<IAdminInfoResult>({
+  return createAxios<IAdminUser>({
     url: '/admin/info',
     method: 'get',
   });
