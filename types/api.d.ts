@@ -21,9 +21,9 @@ declare namespace API {
   /** The response data format agreed upon with the back end */
   interface ResponseStructure<T> {
     success: boolean
-    data: T
+    msg: string
+    data?: T
     errorCode?: number
-    msg?: string
     showType?: ErrorShowType
     status?: number
     description?: string

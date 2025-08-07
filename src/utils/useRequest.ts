@@ -3,25 +3,25 @@ import type { AxiosResponse, AxiosError } from 'axios';
 
 interface UseRequestOptions<T> {
   manual?: boolean;
-  onSuccess?: (data: T, response: AxiosResponse<T>) => void;
+  onSuccess?: (data: T | undefined, response: AxiosResponse<API.ResponseStructure<T>>) => void;
   onError?: (error: AxiosError) => void;
   onFinally?: () => void;
 }
 
 interface UseRequestResult<T> {
-  data: T | null;
+  data: T | undefined;
   loading: boolean;
   success: boolean | null;
   error: AxiosError | null;
-  run: (...args: any[]) => Promise<AxiosResponse<T> | undefined>;
+  run: (...args: any[]) => Promise<AxiosResponse<API.ResponseStructure<T>> | undefined>;
 }
 
 function useRequest<T = any>(
-  apiFunction: (...args: any[]) => Promise<AxiosResponse<T>>,
+  apiFunction: (...args: any[]) => Promise<AxiosResponse<API.ResponseStructure<T>>>,
   options: UseRequestOptions<T> = {}
 ): UseRequestResult<T> {
   const { manual = false, onSuccess, onError, onFinally } = options;
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T>();
   const [loading, setLoading] = useState(!manual);
   const [success, setSuccess] = useState<boolean | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
@@ -35,11 +35,11 @@ function useRequest<T = any>(
 
         const response = await apiFunction(...args);
 
-        setData(response.data);
+        setData(response.data.data);
         setSuccess(true);
 
         if (onSuccess) {
-          onSuccess(response.data, response);
+          onSuccess(response.data.data, response);
         }
 
         return response;
