@@ -2,10 +2,16 @@ import { useImperativeHandle, useRef, useState } from 'react';
 import { BetaSchemaForm, ProTable } from '@ant-design/pro-components';
 import type {ProTableProps, ProFormInstance, ProColumns, ActionType,} from '@ant-design/pro-components';
 import { Create, Delete, Update, List } from '@/api/common/table';
-import { Button, Divider, message, Popconfirm, Space } from 'antd';
+import { Button, message, Popconfirm, Space } from 'antd';
 import ButtonAccess from '@/components/AuthButton';
 import type { XinTableProps } from './typings.ts';
+import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 
+/**
+ * XinTable CRUD 表格
+ * @param props
+ * https://xinadmin.cn/ui/table/intro
+ */
 function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
   /** 表格参数 */
   const {
@@ -85,11 +91,11 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
         align: 'center',
         hideInDescriptions: true,
         render: (_, record) => (
-          <Space split={<Divider type="vertical" />} size={0}>
+          <Space>
             {beforeOperateRender?.(record)}
             {(typeof editShow === 'function' ? editShow(record) : editShow) &&
               <ButtonAccess auth={props.accessName + '.update'} key={'update'}>
-                <a children={'编辑'} type={'link'} onClick={() => editButtonClick(record)} />
+                <Button type="primary" icon={<EditOutlined />} size={'small'} onClick={() => editButtonClick(record)}/>
               </ButtonAccess>
             }
             {(typeof deleteShow === 'function' ? deleteShow(record) : deleteShow) !== false &&
@@ -101,7 +107,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
                   description="你确定要删除这条数据吗？"
                   onConfirm={() => deleteButtonClick(record)}
                 >
-                  <a>删除</a>
+                  <Button type="primary" icon={<DeleteOutlined />} size={'small'} danger/>
                 </Popconfirm>
               </ButtonAccess>
             }
@@ -142,8 +148,12 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
         onFinish={onFinish}
         columns={columns}
         formRef={formRef}
-        modalProps={{ onCancel: () => setFormOpen(false), forceRender: true }}
         {...props.formProps}
+        modalProps={{
+          onCancel: () => setFormOpen(false),
+          forceRender: true,
+          ...props.modalProps,
+        }}
       />
       <ProTable<T> {...tableProps} />
     </>

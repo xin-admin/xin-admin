@@ -7,7 +7,7 @@ import type {
   ProTableProps,
 } from '@ant-design/pro-components';
 import React, {type Ref } from 'react';
-import type {ColProps, RowProps} from 'antd';
+import type {ColProps, ModalProps, RowProps} from 'antd';
 
 export type XinTableColumn<T> = ProFormColumnsType<T> & ProColumns<T>;
 
@@ -76,4 +76,6 @@ export type XinTableProps<T> = {
   };
   /** 表格扩展配置 */
   tableProps?: ProTableProps<T, {[key: string]: unknown}>;
+  /** 表单弹窗配置 */
+  modalProps?: Omit<ModalProps, "visible">;
 }
