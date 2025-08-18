@@ -102,7 +102,7 @@ const RuleTable: FC = () => {
     },
     {
       title: '排序',
-      dataIndex: 'sort',
+      dataIndex: 'order',
       valueType: 'digit',
       tooltip: '数字越小排序越靠前',
       align: 'center',
@@ -124,7 +124,7 @@ const RuleTable: FC = () => {
       align: 'center',
       colProps: { span: 6 },
       render: (_, data) => {
-        if (data.type !== 'route') { return '-' }
+        if (data.type === 'nested-route' || data.type === 'rule') { return '-' }
         return (
           <Switch
             checkedChildren='显示'

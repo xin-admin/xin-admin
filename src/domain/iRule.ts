@@ -11,7 +11,7 @@ export interface IRule {
   // 权限的唯一标识
   key: string;
   // 排序
-  sort?: number;
+  order?: number;
   // 名称
   name?: string;
   // 菜单的路径，menu 的路径会被当作前缀路由

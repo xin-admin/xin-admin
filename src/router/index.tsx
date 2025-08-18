@@ -36,7 +36,7 @@ export default function createRouter(rules: IRule[]) {
       }
       const childrenRules = rules.filter(item => item.elementPath && item.type === "nested-route" && item.pid === rule.id)
       if (childrenRules.length) {
-        route.children = childrenRules.sort((a, b) => (b.sort || 0) - (a.sort || 0)).map((item, key) => {
+        route.children = childrenRules.sort((a, b) => (b.order || 0) - (a.order || 0)).map((item, key) => {
           if(key === 0) {
             return {
               id: item.key,
