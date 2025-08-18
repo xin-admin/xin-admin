@@ -262,6 +262,8 @@ export const categories = {
 };
 
 // 阿里iconfont链接，也可以按需要指定
-export const oauthScriptUrl = '//at.alicdn.com/t/c/font_4413039_6ow46w95lhw.js';
+export const oauthScriptUrl = [
+  '//at.alicdn.com/t/c/font_4413039_6ow46w95lhw.js'
+];
 export type Categories = typeof categories;
 export type CategoriesKeys = keyof Categories;
