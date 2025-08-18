@@ -31,7 +31,7 @@ const useAuthStore = create<AuthState>()(
       rules: [],
       login: async (params) => {
         const {data} = await login(params);
-        if (!data.success) {
+        if (!data.success || !data.data) {
           return false;
         }
         set({token: data.data.plainTextToken})
@@ -42,13 +42,13 @@ const useAuthStore = create<AuthState>()(
         const {data} = await info();
         const rulesRes = await rules();
         const rulesData = rulesRes.data.data;
-        const access = rulesData.map(rule => rule.key!);
+        const access = rulesData!.map(rule => rule.key!);
         set({
           user: data.data,
           rules: rulesData,
           access: access,
-          user_id: data.data.user_id,
-          user_name: data.data.username
+          user_id: data.data!.user_id,
+          user_name: data.data!.username
         });
       },
       setRules: async (rules: IRule[]) => {
