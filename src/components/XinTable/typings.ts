@@ -23,6 +23,25 @@ export interface XinTableRef {
   tableRef?: React.RefObject<ActionType | undefined>;
 }
 
+export interface XinFromProps {
+  // 表单 layout
+  layout?: FormProps['layout'];
+  // 表单项 label Align
+  labelAlign?: FormProps['labelAlign'];
+  // 表单项 Label Warp
+  labelWrap?: FormProps['labelWrap'];
+  // 表单项 Label Col
+  labelCol?: FormProps['labelCol'];
+  // 表单项 Wrapper Col
+  wrapperCol?: FormProps['wrapperCol'];
+  // Grid 布局
+  grid?: boolean;
+  // Row Props
+  rowProps?: RowProps;
+  // Col Props
+  colProps?: ColProps;
+}
+
 // CRUD 表格
 export type XinTableProps<T> = {
   /** 表单 columns */
@@ -56,24 +75,7 @@ export type XinTableProps<T> = {
    */
   onFinish?: (formData: T, initValue: T | false) => Promise<boolean>
   /** 表单扩展配置 */
-  formProps?: {
-    // 表单 layout
-    layout?: FormProps['layout'];
-    // 表单项 label Align
-    labelAlign?: FormProps['labelAlign'];
-    // 表单项 Label Warp
-    labelWrap?: FormProps['labelWrap'];
-    // 表单项 Label Col
-    labelCol?: FormProps['labelCol'];
-    // 表单项 Wrapper Col
-    wrapperCol?: FormProps['wrapperCol'];
-    // Grid 布局
-    grid?: boolean;
-    // Row Props
-    rowProps?: RowProps;
-    // Col Props
-    colProps?: ColProps;
-  };
+  formProps?: XinFromProps;
   /** 表格扩展配置 */
   tableProps?: ProTableProps<T, {[key: string]: unknown}>;
   /** 表单弹窗配置 */
