@@ -4,21 +4,32 @@ import type {AppListProps} from "@ant-design/pro-components";
 import type {LayoutType, ThemeProps} from "@/layout/typing";
 import {configTheme, defaultColorTheme} from "@/layout/theme";
 
+type BreadcrumbType = {
+  href?: string;
+  title?: string;
+  icon?: string;
+  local?: string;
+};
+
 interface GlobalState {
   logo: string;
   title: string;
+  headTitle: string;
   layout: LayoutType;
   themeConfig: ThemeProps;
   collapsed: boolean;
   themeDrawer: boolean;
   appList: AppListProps;
-  menuSelectedKeys: string[];
+  breadcrumb: BreadcrumbType[];
+  menuParentKey: string | null;
+  setHeadTitle: (title: string) => void;
   setCollapsed: (collapsed: boolean) => void;
   setThemeConfig: (themeConfig: ThemeProps) => void;
   setThemeDrawer: (themeDrawer: boolean) => void;
   setTheme: (theme: ThemeProps) => void;
   setLayout: (layout: LayoutType) => void;
-  setMenuSelectedKeys: (menuSelectedKeys: string[]) => void;
+  setBreadcrumb: (breadcrumb: BreadcrumbType[]) => void;
+  setMenuParentKey: (menuParentKey: string) => void;
 }
 
 export const useGlobalStore = create<GlobalState>()(
@@ -26,12 +37,17 @@ export const useGlobalStore = create<GlobalState>()(
     (setState) => ({
       logo: "https://file.xinadmin.cn/file/favicons.ico",
       title: "Xin Admin",
+      headTitle: "Xin Admin",
       layout: "side",
       themeConfig: {...defaultColorTheme, ...configTheme},
       collapsed: false,
       themeDrawer: false,
       appList: [],
-      menuSelectedKeys: [],
+      breadcrumb: [],
+      menuParentKey: null,
+      setHeadTitle: (headTitle: string) => {
+        setState({headTitle})
+      },
       setCollapsed: (collapsed: boolean) => {
         setState({collapsed})
       },
@@ -47,8 +63,11 @@ export const useGlobalStore = create<GlobalState>()(
       setLayout: (layout: LayoutType) => {
         setState({layout})
       },
-      setMenuSelectedKeys: (menuSelectedKeys: string[]) => {
-        setState({menuSelectedKeys})
+      setBreadcrumb: (breadcrumb: BreadcrumbType[]) => {
+        setState({breadcrumb})
+      },
+      setMenuParentKey: (menuParentKey: string) => {
+        setState({menuParentKey})
       }
     }),
     {

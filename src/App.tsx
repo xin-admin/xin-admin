@@ -6,8 +6,8 @@ import PageTitle from "@/components/PageTitle";
 import AntdProvider from "@/components/AntdProvider";
 
 const App = () => {
-  const { rules } = useAuthStore();
-  const router = createRouter(rules)
+  const { menus } = useAuthStore();
+  const router = createRouter(menus)
 
   return (
     <AntdProvider>

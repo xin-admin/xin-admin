@@ -13,7 +13,7 @@ import {type CSSProperties, useEffect} from 'react';
 import React from 'react';
 import useAuthStore from "@/stores/user.ts";
 import {useNavigate} from "react-router";
-import type {IAdminLoginParams} from "@/domain/iAdmin.ts";
+import type {IAdminLoginParams} from "@/domain/iSysUser.ts";
 
 const iconStyle: CSSProperties = {
   color: 'rgba(0, 0, 0, 0.2)',

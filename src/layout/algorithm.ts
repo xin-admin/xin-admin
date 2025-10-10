@@ -1,18 +1,18 @@
 import {type SelectProps, theme as antTheme} from "antd";
 
-// AntDesign 算法，你可以在此自定义你的算法
+/** AntDesign 算法，你可以在此自定义你的算法 */
 const algorithm = {
-  // 默认算法
+  /** 默认算法 */
   defaultAlgorithm: antTheme.defaultAlgorithm,
-  // 暗黑模式算法
+  /** 暗黑模式算法 */
   darkAlgorithm: antTheme.darkAlgorithm,
-  // 默认 + 紧凑算法
+  /** 默认 + 紧凑算法 */
   defaultCompactAlgorithm: [antTheme.defaultAlgorithm, antTheme.compactAlgorithm],
-  // 暗黑 + 紧凑算法
+  /** 暗黑 + 紧凑算法 */
   darkCompactAlgorithm: [antTheme.darkAlgorithm, antTheme.compactAlgorithm],
 };
 
-// 算法切换选择器的 Options
+/** 算法切换选择器的 Options */
 export const algorithmOptions:  SelectProps['options'] = [
   {
     label: '默认',

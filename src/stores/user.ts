@@ -1,22 +1,32 @@
 import {create} from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
-import type {IAdminLoginParams, IAdminUser} from "@/domain/iAdmin.ts";
-import {info, login, logout, rules} from "@/api";
-import type {IRule} from "@/domain/iRule.ts";
+import type ISysUser from "@/domain/iSysUser.ts";
+import {info, login, logout} from "@/api/admin.ts";
+import type {LoginParams, InfoResponse} from "@/api/admin.ts";
+import type {IMenus} from "@/domain/iSysRule.ts";
+
+type BreadcrumbType = {
+  href?: string;
+  title?: string;
+  icon?: string;
+  local?: string;
+};
 
 interface AuthState {
-  token: string | null
-  refresh_token: string | null
-  user: IAdminUser | null
-  user_id: number | null
-  user_name: string | null
-  access: string[]
-  rules: IRule[]
-  login: (credentials: IAdminLoginParams) => Promise<boolean>
-  getInfo: () => Promise<void>
-  logout: () => Promise<void>
-  setRules: (rules: IRule[]) => Promise<void>
-  setAccess: (access: string[]) => Promise<void>
+  token: string | null;
+  refresh_token: string | null;
+  user: ISysUser | null;
+  user_id: number | null;
+  user_name: string | null;
+  access: string[];
+  menus: IMenus[];
+  menuMap: {[key: string]: IMenus };
+  breadcrumbMap: {[key: string]: BreadcrumbType[] };
+  login: (credentials: LoginParams) => Promise<boolean>;
+  getInfo: () => Promise<void>;
+  logout: () => Promise<void>;
+  setMenus: (rules: IMenus[]) => Promise<void>;
+  setAccess: (access: string[]) => Promise<void>;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -28,7 +38,9 @@ const useAuthStore = create<AuthState>()(
       user_id: null,
       user_name: null,
       access: [],
-      rules: [],
+      menus: [],
+      menuMap: {},
+      breadcrumbMap: {},
       login: async (params) => {
         const {data} = await login(params);
         if (!data.success || !data.data) {
@@ -39,24 +51,39 @@ const useAuthStore = create<AuthState>()(
         return true;
       },
       getInfo: async () => {
-        const {data} = await info();
-        const rulesRes = await rules();
-        const rulesData = rulesRes.data.data;
-        const access = rulesData!.map(rule => rule.key!);
+        const result = await info();
+        const data: InfoResponse = result.data.data!;
+        const menuMap: {[key: string]: IMenus } = {};
+        const breadcrumbMap: {[key: string]: BreadcrumbType[] } = {};
+        const buildMenuIndexes = (menus: IMenus[], parentBreadcrumb: IMenus[] = []) => {
+          for (const menu of menus) {
+            if (!menu.key) continue;
+            menuMap[menu.key] = menu;
+            const currentBreadcrumb = [
+              ...parentBreadcrumb,
+              { href: menu.path, title: menu.name, icon: menu.icon, local: menu.local }
+            ];
+            breadcrumbMap[menu.key] = currentBreadcrumb;
+            if (menu.children?.length) {
+              buildMenuIndexes(menu.children, currentBreadcrumb);
+            }
+          }
+        };
+        buildMenuIndexes(data.menus);
         set({
-          user: data.data,
-          rules: rulesData,
-          access: access,
-          user_id: data.data!.user_id,
-          user_name: data.data!.username
+          menuMap,
+          breadcrumbMap,
+          user: data.info,
+          menus: data.menus,
+          access: data.access,
+          user_id: data.info.id,
+          user_name: data.info.username,
         });
       },
-      setRules: async (rules: IRule[]) => {
-        const access = rules.map(rule => rule.key!);
+      setMenus: async (menus: IMenus[]) => {
         set({
-          access: access,
-          rules: rules
-        });
+            menus: menus,
+        })
       },
       setAccess: async (access: string[]) => {
         set({
@@ -72,7 +99,7 @@ const useAuthStore = create<AuthState>()(
           refresh_token: null,
           user: null,
           access: [],
-          rules: []
+          menus: []
         })
       }
     }),

@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, ConfigProvider, Layout, Menu, type MenuProps, type ThemeConfig} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {useGlobalStore} from "@/stores";
@@ -16,13 +16,13 @@ const {Header} = Layout;
 const HeaderRender: React.FC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const rules = useAuthStore(state => state.rules);
+  const menus = useAuthStore(state => state.menus);
   const layout = useGlobalStore(state => state.layout);
   const themeConfig = useGlobalStore(state => state.themeConfig);
   const collapsed = useGlobalStore(state => state.collapsed);
   const setCollapsed = useGlobalStore(state => state.setCollapsed);
-  const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
-  const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
+  const menuParentKey = useGlobalStore(state => state.menuParentKey);
+  const setMenuParentKey = useGlobalStore(state => state.setMenuParentKey);
   const theme: ThemeConfig = {
     cssVar: true,
     token: { colorTextBase: themeConfig.headerColor },
@@ -33,35 +33,46 @@ const HeaderRender: React.FC = () => {
       }
     }
   }
+  const [mixMenu, setMixMenu] = useState<MenuProps['items']>([]);
 
-  // 一级菜单
-  const mixMenu = useMemo(() => {
-    const mixRule = rules.filter(item => {
-      return item.pid === 0 && !item.hidden && ['route', 'menu'].includes(item.type);
-    })
-    return mixRule.map(item => ({
-        label: item.local ? t(item.local) : item.name,
+  useEffect(() => {
+    setMixMenu(menus.filter(item => item.hidden).map(item => {
+      if (item.type === "menu") {
+        return {
+          label: (
+            <a onClick={() => setMenuParentKey(item.key!)}>
+              {item.local ? t(item.local) : item.name}
+            </a>
+          ),
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
+          key: item.key!,
+          path: item.path,
+        }
+      }
+      if (item.link) {
+        return {
+          label: (
+            <a onClick={() => window.open(item.path, '_blank')}>
+              { item.local ? t(item.local) : item.name }
+            </a>
+          ),
+          icon: item.icon ? <IconFont name={item.icon}/> : false,
+          key: item.key!,
+          path: item.path,
+        }
+      }
+      return {
+        label: (
+          <a onClick={() => navigate(item.path!)}>
+            { item.local ? t(item.local) : item.name }
+          </a>
+        ),
         icon: item.icon ? <IconFont name={item.icon}/> : false,
         key: item.key!,
         path: item.path,
-      })
-    )
-  }, [rules, t]);
-
-  // mix 模式下顶部菜单栏点击事件
-  const mixMenuClick: MenuProps['onClick'] = (info) => {
-    const rule = rules.find(item => item.key === info.key);
-    if( !rule ) return;
-    if (rule.type === 'route') {
-      if (rule.link) {
-        window.open(rule.path,'_blank')
-      } else {
-        navigate(rule.path!)
-      }
-    } else {
-      setMenuSelectedKeys([info.key]);
-    }
-  }
+      };
+    }));
+  }, [menus, navigate, setMenuParentKey, t]);
   
   return (
     <ConfigProvider theme={theme}>
@@ -93,8 +104,7 @@ const HeaderRender: React.FC = () => {
               style={{ borderBottom: 'none' }}
               mode="horizontal"
               items={mixMenu}
-              selectedKeys={menuSelectedKeys}
-              onClick={mixMenuClick}
+              selectedKeys={[menuParentKey!]}
             />
           )}
         </div>

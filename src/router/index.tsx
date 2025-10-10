@@ -4,7 +4,8 @@ import Login from "@/pages/login"
 import { lazy, Suspense } from "react"
 import Loading from "@/components/Loading"
 import React from "react";
-import type {IRule} from "@/domain/iRule.ts"
+import type {IMenus} from "@/domain/iSysRule.ts"
+import defaultRoute from "@/router/default.ts";
 
 const modules = import.meta.glob('/src/pages/**/*')
 
@@ -20,42 +21,66 @@ function lazyLoad(path: string) {
   return <></>;
 }
 
-export default function createRouter(rules: IRule[]) {
+function generateReactRoutes(menuData: IMenus[]): DataRouteObject[] {
   const routes: DataRouteObject[] = [];
-  // 构建路由，只循环路由确保附加嵌套路由的时候父路由存在
-  rules.forEach(rule => {
-    if(rule.link) {
-      // 如果是外链，则退出
-      return;
-    }
-    if(rule.type === "route" && rule.elementPath) {
-      const route: DataRouteObject = {
-        id: rule.key,
-        path: rule.path,
-        element: lazyLoad(`/src/pages${rule.elementPath}.tsx`),
-      }
-      const childrenRules = rules.filter(item => item.elementPath && item.type === "nested-route" && item.pid === rule.id)
-      if (childrenRules.length) {
-        route.children = childrenRules.sort((a, b) => (b.order || 0) - (a.order || 0)).map((item, key) => {
-          if(key === 0) {
-            return {
-              id: item.key,
-              index: true,
-              element: lazyLoad(`/src/pages${item.elementPath}.tsx`),
-            }
-          }else {
-            return {
-              id: item.key,
-              path: item.path,
-              element: lazyLoad(`/src/pages${item.elementPath}.tsx`)
-            }
-          }
-        })
-      }
-      routes.push(route)
-    }
-  })
 
+  function traverse(nodes: IMenus[]) {
+    for (const node of nodes) {
+      // 处理 route 类型
+      if (node.type === 'route') {
+        // 检查是否有 nested-route 子节点
+        const nestedChildren = node.children?.filter(child => child.type === 'nested-route') || [];
+        if (nestedChildren.length > 0) {
+          // 创建父路由
+          const parentRoute: DataRouteObject = {
+            id: node.key!,
+            path: node.path,
+            element: lazyLoad(`/src/pages${node.elementPath}.tsx`),
+            children: []
+          };
+          // 添加 nested-route 子路由
+          nestedChildren.forEach((child, index) => {
+            if (index === 0) {
+              parentRoute.children!.push({
+                id: child.key,
+                index: true,
+                element: lazyLoad(`/src/pages${child.elementPath}.tsx`)
+              });
+            } else {
+              parentRoute.children!.push({
+                id: child.key,
+                path: child.path,
+                element: lazyLoad(`/src/pages${child.elementPath}.tsx`)
+              });
+            }
+          });
+          routes.push(parentRoute);
+        } else {
+          // 普通路由
+          routes.push({
+            id: node.key!,
+            path: node.path,
+            element: lazyLoad(`/src/pages${node.elementPath}.tsx`)
+          });
+        }
+      }
+      // 递归处理子节点
+      if (node.children && node.children.length > 0) {
+        traverse(node.children);
+      }
+    }
+  }
+  traverse(menuData);
+  return routes;
+}
+
+export default function createRouter(rules?: IMenus[]) {
+  let routes: DataRouteObject[];
+  if(rules) {
+    routes = generateReactRoutes(rules);
+  } else {
+    routes = generateReactRoutes(defaultRoute);
+  }
   return createBrowserRouter([
     {
       Component: Layout,

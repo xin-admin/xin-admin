@@ -6,7 +6,7 @@ import IconFont from "@/components/IconFont";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import MenuRender from "@/layout/MenuRender.tsx";
-import type {IRule} from "@/domain/iRule.ts";
+import type {ISysRule} from "@/domain/iSysRule.ts";
 
 const {Sider} = Layout;
 const {useToken} = theme;
@@ -17,12 +17,12 @@ const ColumnSiderRender: React.FC = () => {
   const themeConfig = useGlobalStore(state => state.themeConfig);
   const logo = useGlobalStore(state => state.logo);
   const title = useGlobalStore(state => state.title);
-  const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
-  const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
-  const rules = useAuthStore(state => state.rules);
+  const menuParentKey = useGlobalStore(state => state.menuParentKey);
+  const setMenuParentKey = useGlobalStore(state => state.setMenuParentKey);
+  const menus = useAuthStore(state => state.menus);
   const {token} = useToken();
 
-  const menuClick = (rule: IRule) => {
+  const menuClick = (rule: ISysRule) => {
     if (rule.type === 'route') {
       if (rule.link) {
         window.open(rule.path, '_blank')
@@ -30,7 +30,7 @@ const ColumnSiderRender: React.FC = () => {
         navigate(rule.path!)
       }
     } else {
-      setMenuSelectedKeys([rule.key])
+      setMenuParentKey(rule.key!)
     }
   }
 
@@ -55,12 +55,12 @@ const ColumnSiderRender: React.FC = () => {
               <img className={"w-9"} src={logo} alt="logo"/>
             </div>
             {/* 侧栏菜单 */}
-            {rules.filter(item => item.pid === 0 && !item.hidden && ['route', 'menu'].includes(item.type)).map(rule => (
+            {menus.filter(item => item.hidden).map(rule => (
               <div
                 key={rule.key}
                 style={{
-                  backgroundColor: menuSelectedKeys.at(-1) === rule.key ? token.colorPrimaryBg : 'transparent',
-                  color: menuSelectedKeys.at(-1) === rule.key ? token.colorPrimary : themeConfig.siderColor,
+                  backgroundColor: menuParentKey === rule.key ? token.colorPrimaryBg : 'transparent',
+                  color: menuParentKey === rule.key ? token.colorPrimary : themeConfig.siderColor,
                 }}
                 className={"flex items-center justify-center flex-col p-2 mb-2 pt-3 pb-3 cursor-pointer"}
                 onClick={() => menuClick(rule)}

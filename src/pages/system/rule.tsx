@@ -1,6 +1,6 @@
 import type {FC} from "react";
 import XinTable from "@/components/XinTable";
-import type {IRule} from "@/domain/iRule";
+import type {ISysRule} from "@/domain/iSysRule.ts";
 import type {XinTableColumn} from "@/components/XinTable/typings";
 import {useTranslation} from "react-i18next";
 import IconFont from "@/components/IconFont";
@@ -11,18 +11,18 @@ import IconSelect from "@/components/XinForm/IconSelect";
 const RuleTable: FC = () => {
 
   const {t} = useTranslation();
-  const iconColumn: XinTableColumn<IRule> = {
+  const iconColumn: XinTableColumn<ISysRule> = {
     title: '图标',
     dataIndex: 'icon',
     valueType: 'text',
     renderFormItem: (form, config, schema) => <IconSelect dataIndex={form.key} form={schema} value={config.value}></IconSelect>,
   }
-  const localeColumn: XinTableColumn<IRule> = {
+  const localeColumn: XinTableColumn<ISysRule> = {
     title: '多语言标识',
     dataIndex: 'local',
     valueType: 'text',
   }
-  const pathColumn: XinTableColumn<IRule> = {
+  const pathColumn: XinTableColumn<ISysRule> = {
     title: '路由地址',
     dataIndex: 'path',
     valueType: 'text',
@@ -30,7 +30,7 @@ const RuleTable: FC = () => {
     tooltip: '项目文件系统路径，忽略：pages 或 index.(ts|tsx)',
   }
 
-  const columns: XinTableColumn<IRule>[] = [
+  const columns: XinTableColumn<ISysRule>[] = [
     {
       title: '父节点',
       dataIndex: 'pid',
@@ -89,7 +89,7 @@ const RuleTable: FC = () => {
       valueType: 'dependency',
       name: ['type'],
       hideInTable: true,
-      columns: ({ type }: IRule): XinTableColumn<IRule>[] => {
+      columns: ({ type }: ISysRule): XinTableColumn<ISysRule>[] => {
         if (type === 'menu') {
           return [iconColumn, localeColumn];
         } else if (type === 'route') {
@@ -155,7 +155,7 @@ const RuleTable: FC = () => {
   ];
 
   return (
-    <XinTable<IRule>
+    <XinTable<ISysRule>
       columns={columns}
       api={'/system/rule'}
       accessName={'system.rule'}

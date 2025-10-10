@@ -1,42 +1,52 @@
 import {Breadcrumb, type BreadcrumbProps} from "antd";
 import {useGlobalStore} from "@/stores";
-import useAuthStore from "@/stores/user.ts";
 import {useEffect, useState} from "react";
 import {HomeOutlined} from "@ant-design/icons";
 import IconFont from "@/components/IconFont";
 import {useTranslation} from "react-i18next";
 
 const BreadcrumbRender = () => {
-  const { t } = useTranslation();
-  const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
-  const rules = useAuthStore(state => state.rules);
-  const [items, setItems] = useState<BreadcrumbProps['items']>([]);
-
+  const {t} = useTranslation();
+  const breadcrumb = useGlobalStore(state => state.breadcrumb);
+  const [breadcrumbItems, setBreadcrumbItems] = useState<BreadcrumbProps['items']>([
+    {
+      href: '/',
+      title: <HomeOutlined />,
+    }
+  ])
   useEffect(() => {
-    const item: BreadcrumbProps['items'] = [
+    setBreadcrumbItems([
       {
         href: '/',
         title: <HomeOutlined />,
       },
-    ];
-
-    menuSelectedKeys.slice().reverse().forEach(i => {
-      const rule = rules.find(rule => rule.key === i);
-      if(!rule) return;
-      item?.push({
-        title: (
-          <>
-            {rule.icon && <IconFont name={rule.icon}/> }
-            <span>{ rule.local ? t(rule.local) : rule.name }</span>
-          </>
-        )
+      ...breadcrumb.map(item => {
+        if(item.href) {
+          return {
+            href: item.href,
+            title: (
+              <>
+                {item.icon && <IconFont name={item.icon} />}
+                <span>{item.local ? t(item.local) : item.title}</span>
+              </>
+            ),
+          }
+        }else {
+          return {
+            title: (
+              <>
+                {item.icon && <IconFont name={item.icon} />}
+                <span>{item.local ? t(item.local) : item.title}</span>
+              </>
+            ),
+          }
+        }
       })
-    })
-    setItems(item);
-  },[menuSelectedKeys, rules, t])
+    ])
+  }, [breadcrumb, t]);
 
   return (
-    <Breadcrumb items={items}/>
+    <Breadcrumb items={breadcrumbItems}/>
   )
 }
 

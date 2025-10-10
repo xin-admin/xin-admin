@@ -1,4 +1,4 @@
-import type {IRule} from "@/domain/iRule.ts";
+import type {IMenus} from "@/domain/iSysRule.ts";
 import IconFont from "@/components/IconFont";
 import {useTranslation} from "react-i18next";
 import useAuthStore from "@/stores/user.ts";
@@ -10,80 +10,75 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 const MenuRender = () => {
   const {t} = useTranslation();
-  const navigate = useNavigate();
-  const rules = useAuthStore(state => state.rules);
+  const menus = useAuthStore(state => state.menus);
+  const menuMap = useAuthStore(state => state.menuMap);
+  const breadcrumbMap = useAuthStore(state => state.breadcrumbMap);
   const layout = useGlobalStore(state => state.layout);
-  // 菜单栏相关状态
+  const menuParentKey = useGlobalStore(state => state.menuParentKey);
+  const title = useGlobalStore(state => state.title);
+  const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
+  const setBreadcrumb = useGlobalStore(state => state.setBreadcrumb);
   const [menu, setMenu] = useState<MenuItem[]>([]);
-  const menuSelectedKeys = useGlobalStore(state => state.menuSelectedKeys);
-  const setMenuSelectedKeys = useGlobalStore(state => state.setMenuSelectedKeys);
+  const navigate = useNavigate();
 
-  const transformMenus = useCallback((rules: IRule[], pid: number = 0): MenuItem[] => {
-    const menus: MenuItem[] = []
-    rules.forEach((item) => {
-      if (item.type === 'rule') return;
-      if (item.pid !== pid) return;
-      if (item.hidden) return;
-      if (item.type === 'route') {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-        })
-        return;
-      }
-      const children = transformMenus(rules, item.id);
-      if (children && children.length > 0) {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-          children
+  const transformMenus = useCallback((nodes: IMenus[]): MenuItem[] => {
+    const menusItems: MenuItem[] = [];
+    nodes.forEach(node => {
+      if (!['route', 'menu'].includes(node.type!)) return;
+      if (!node.hidden) return;
+      if (node.type === 'route') {
+        menusItems.push({
+          label: node.local ? t(node.local) : node.name,
+          icon: node.icon ? <IconFont name={node.icon}/> : false,
+          key: node.key!,
         })
       } else {
-        menus.push({
-          label: item.local ? t(item.local) : item.name,
-          icon: item.icon ? <IconFont name={item.icon}/> : false,
-          key: item.key!,
-        })
+        if (node.children) {
+          const children = transformMenus(node.children);
+          menusItems.push({
+            label: node.local ? t(node.local) : node.name,
+            icon: node.icon ? <IconFont name={node.icon}/> : false,
+            key: node.key!,
+            children
+          })
+        } else {
+          menusItems.push({
+            label: node.local ? t(node.local) : node.name,
+            icon: node.icon ? <IconFont name={node.icon}/> : false,
+            key: node.key!,
+          })
+        }
       }
     })
-    return menus;
+    return menusItems;
   }, [t])
 
-  const menuClick: MenuProps['onClick'] = (data) => {
-    // 记录选中的菜单项 key 数组
-    if(layout === 'top' || layout === 'side') {
-      setMenuSelectedKeys(data.keyPath)
+  const menuClick: MenuProps['onClick'] = (info) => {
+    const menu = menuMap[info.key];
+    setBreadcrumb(breadcrumbMap[info.key]);
+    const headTitle = menu.local ? t(menu.local) : menu.name;
+    setHeadTitle(title + ' - ' + headTitle);
+    if(! menu.path) return;
+    if (menu.link) {
+      window.open(menu.path, '_blank');
     } else {
-      setMenuSelectedKeys([...data.keyPath, menuSelectedKeys[menuSelectedKeys.length - 1]])
-    }
-    // 跳转路由
-    const rule = rules.find(item => item.key === data.key)
-    if (rule && rule.path) {
-      if (rule.link) {
-        window.open(rule.path, '_blank')
-      } else {
-        navigate(rule.path!)
-      }
+      navigate(menu.path);
     }
   }
 
   useEffect(() => {
     if(layout === 'mix' || layout === 'columns') {
-      const rule = rules.find(item => item.key === menuSelectedKeys.at(-1))
-      if (rule) {
-        setMenu(transformMenus(rules, rule.id))
+      const rule = menus.find(item => item.key === menuParentKey!)
+      if (rule && rule.children) {
+        setMenu(transformMenus(rule.children))
       }
     } else {
-      setMenu(transformMenus(rules))
+      setMenu(transformMenus(menus))
     }
-  }, [rules, transformMenus, layout, menuSelectedKeys]);
+  }, [menus, transformMenus, layout, menuParentKey]);
 
   return (
     <Menu
-      selectedKeys={menuSelectedKeys}
-      defaultOpenKeys={menuSelectedKeys}
       mode={ layout === 'top' ? 'horizontal' : 'inline' }
       items={menu}
       onClick={menuClick}

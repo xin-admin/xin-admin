@@ -7,183 +7,171 @@ import {algorithmOptions} from "@/layout/algorithm.ts";
 
 const {useToken} = theme;
 
-const SettingDrawer: React.FC = () => {
-  const themeDrawer = useGlobalStore(state => state.themeDrawer);
-  const setThemeDrawer = useGlobalStore(state => state.setThemeDrawer);
-  const setTheme = useGlobalStore(state => state.setTheme);
-  const themeConfig = useGlobalStore(state => state.themeConfig);
-  const layout = useGlobalStore(state => state.layout);
-  const setLayout = useGlobalStore(state => state.setLayout);
+// 主题配置项
+const THEME_CONFIGS = [
+  {key: 'colorPrimary', label: '主色'},
+  {key: 'colorText', label: '基础文字颜色'},
+  {key: 'colorBg', label: '基础背景颜色'},
+  {key: 'colorSuccess', label: '成功色'},
+  {key: 'colorWarning', label: '警告色'},
+  {key: 'colorError', label: '错误色'},
+  {key: 'bodyBg', label: '内容区域背景色'},
+  {key: 'footerBg', label: '页脚背景色'},
+  {key: 'headerBg', label: '头部背景色'},
+  {key: 'headerColor', label: '头部文字颜色'},
+  {key: 'siderBg', label: '侧边栏背景色'},
+  {key: 'siderColor', label: '侧边栏文字颜色'},
+  {key: 'colorBorder', label: '布局边框颜色'},
+];
 
-  const onClose = () => {
-    setThemeDrawer(false);
+// 风格配置项
+const STYLE_CONFIGS = [
+  {key: 'fixedFooter', label: '固定页脚', type: 'switch'},
+  {key: 'motion', label: '开启动画', type: 'switch'},
+  {key: 'layoutBorder', label: '开启边框', type: 'switch'},
+  {key: 'borderRadius', label: '圆角大小', type: 'number', min: 0, max: 30},
+  {key: 'controlHeight', label: '基础控件高度', type: 'number', min: 0},
+  {key: 'headerPadding', label: '头部两侧内边距', type: 'number', min: 0},
+  {key: 'headerHeight', label: '头部高度', type: 'number', min: 0},
+  {key: 'siderWeight', label: '侧边栏宽度', type: 'number', min: 0},
+  {key: 'bodyPadding', label: '内容区域内边距', type: 'number', min: 0},
+];
+
+// 预设主题列表
+const THEME_LIST = [
+  {background: '/theme/default.svg', name: 'light', title: '默认'},
+  {background: '/theme/dark.svg', name: 'dark', title: '暗黑'},
+  {background: '/theme/pink.svg', name: 'pink', title: '桃花缘'},
+  {background: '/theme/green.svg', name: 'green', title: '知识协作'},
+];
+
+// 布局配置
+const LAYOUT_CONFIGS = [
+  {
+    key: 'side', title: '左侧导航', render: (token: any) => (
+      <>
+        <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimaryBorder}}/>
+        <div className="flex">
+          <div className="rounded-sm h-16 w-6" style={{background: token.colorPrimary}}/>
+          <div className="rounded-sm flex-1 ml-1.5" style={{background: token.colorPrimaryBg}}/>
+        </div>
+      </>
+    )
+  },
+  {
+    key: 'top', title: '顶部导航', render: (token: any) => (
+      <>
+        <div className="rounded-sm h-6 w-full mb-1.5" style={{background: token.colorPrimary}}/>
+        <div className="rounded-sm h-16" style={{background: token.colorPrimaryBg}}/>
+      </>
+    )
+  },
+  {
+    key: 'mix', title: '混合导航', render: (token: any) => (
+      <>
+        <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimary}}/>
+        <div className="flex">
+          <div className="rounded-sm h-16 w-6" style={{background: token.colorPrimary}}/>
+          <div className="rounded-sm flex-1 ml-1.5" style={{background: token.colorPrimaryBg}}/>
+        </div>
+      </>
+    )
+  },
+  {
+    key: 'columns', title: '双栏导航', render: (token: any) => (
+      <div className="flex">
+        <div className="rounded-sm mr-1.5 w-3 h-24" style={{background: token.colorPrimary}}/>
+        <div className="rounded-sm mr-1.5 w-6 h-24" style={{background: token.colorPrimaryHover}}/>
+        <div className="rounded-sm flex-auto h-24" style={{background: token.colorPrimaryBg}}/>
+      </div>
+    )
+  },
+];
+
+const SettingDrawer: React.FC = () => {
+  const {token} = useToken();
+  const {
+    themeDrawer,
+    setThemeDrawer,
+    setTheme,
+    themeConfig,
+    layout,
+    setLayout,
+  } = useGlobalStore();
+
+  // 防抖更新主题配置
+  const changeSetting = debounce((key: string, value: any) => {
+    setTheme({...themeConfig, [key]: value});
+  }, 300, {leading: true, trailing: false});
+
+  // 处理主题切换
+  const handleThemeChange = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = (e.target as HTMLElement).closest('[data-theme]');
+    if (!target) return;
+
+    const themeName = (target as HTMLElement).dataset.theme;
+    const themeMap = {
+      dark: darkColorTheme,
+      light: defaultColorTheme,
+      pink: pinkColorTheme,
+      green: greenColorTheme,
+    };
+
+    if (themeMap[themeName as keyof typeof themeMap]) {
+      setTheme({...themeConfig, ...themeMap[themeName as keyof typeof themeMap]});
+    }
   };
 
-  const {token} = useToken();
-
-  const themeChange = (e: React.MouseEvent<HTMLDivElement>) => {
-    // 检查点击的是否是带有 data-theme 的子元素
-    const target = (e.target as HTMLElement).closest('[data-theme]');
-    if (!target) {
-      return;
-    }
-    const theme = (target as HTMLElement).dataset.theme;
-
-    if (theme === 'dark') {
-      setTheme({...themeConfig, ...darkColorTheme});
-    }
-    if (theme === 'light') {
-      setTheme({...themeConfig, ...defaultColorTheme});
-    }
-    if (theme === 'pink') {
-      setTheme({...themeConfig, ...pinkColorTheme})
-    }
-    if (theme === 'green') {
-      setTheme({...themeConfig, ...greenColorTheme})
-    }
-  }
-
-  const themeList = [
-    {
-      background: '/theme/default.svg',
-      name: 'light',
-      title: '默认',
-    },
-    {
-      background: '/theme/dark.svg',
-      name: 'dark',
-      title: '暗黑',
-    },
-    {
-      background: '/theme/pink.svg',
-      name: 'pink',
-      title: '桃花缘',
-    },
-    {
-      background: '/theme/green.svg',
-      name: 'green',
-      title: '知识协作',
-    }
-  ]
-
-  const changeSetting = debounce((key: string, value: string | boolean | number | null) => {
-    setTheme({
-      ...themeConfig,
-      [key]: value,
-    });
-  }, 300, {
-    leading: true,
-    trailing: false
-  });
-
   // 重置主题
-  const rechangeSetting = () => {
-    setTheme({
-      ...configTheme,
-      ...defaultColorTheme,
-    });
-  }
+  const resetTheme = () => {
+    setTheme({...configTheme, ...defaultColorTheme});
+  };
 
   return (
     <Drawer
       styles={{body: {paddingTop: 10}}}
-      placement={'right'}
+      placement="right"
       closable={false}
-      onClose={onClose}
+      onClose={() => setThemeDrawer(false)}
       open={themeDrawer}
       width={392}
       footer={(
-        <div className={'flex w-full justify-between'}>
-          <Button onClick={rechangeSetting}>重置主题</Button>
-          <Button type={"primary"}>保存主题</Button>
+        <div className="flex w-full justify-between">
+          <Button onClick={resetTheme}>重置主题</Button>
+          <Button type="primary">保存主题</Button>
         </div>
       )}
     >
+      {/* 布局样式 */}
       <Divider>布局样式</Divider>
       <Row gutter={[20, 20]}>
-        <Col span={12}>
-          <Tooltip title="左侧导航">
-            <div
-              className="p-2 rounded-lg cursor-pointer"
-              style={{
-                boxShadow: token.boxShadow,
-                borderRadius: token.borderRadius,
-                border: layout === 'side' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
-              }}
-              onClick={() => setLayout('side')}
-            >
-              <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimaryBorder}}></div>
-              <div className="flex">
-                <div className="rounded-sm h-16 w-6" style={{background: token.colorPrimary}}></div>
-                <div className="rounded-sm flex-1 ml-1.5"
-                     style={{background: token.colorPrimaryBg}}>
-                </div>
+        {LAYOUT_CONFIGS.map(({key, title, render}) => (
+          <Col span={12} key={key}>
+            <Tooltip title={title}>
+              <div
+                className="p-2 rounded-lg cursor-pointer"
+                style={{
+                  boxShadow: token.boxShadow,
+                  borderRadius: token.borderRadius,
+                  border: layout === key ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
+                }}
+                onClick={() => setLayout(key as any)}
+              >
+                {render(token)}
               </div>
-            </div>
-          </Tooltip>
-        </Col>
-        <Col span={12}>
-          <Tooltip title="顶部导航">
-            <div
-              className="p-2 rounded-lg cursor-pointer"
-              style={{
-                boxShadow: token.boxShadow,
-                borderRadius: token.borderRadius,
-                border: layout === 'top' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
-              }}
-              onClick={() => setLayout('top')}
-            >
-              <div className={"rounded-sm h-6 w-full mb-1.5"} style={{background: token.colorPrimary}}></div>
-              <div className={"rounded-sm h-16"} style={{background: token.colorPrimaryBg}}></div>
-            </div>
-          </Tooltip>
-        </Col>
-        <Col span={12}>
-          <Tooltip title="混合导航">
-            <div
-              className="p-2 rounded-lg cursor-pointer"
-              style={{
-                boxShadow: token.boxShadow,
-                borderRadius: token.borderRadius,
-                border: layout === 'mix' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
-              }}
-              onClick={() => setLayout('mix')}
-            >
-              <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimary}}></div>
-              <div className="flex">
-                <div className="rounded-sm h-16 w-6" style={{background: token.colorPrimary}}></div>
-                <div className="rounded-sm flex-1 ml-1.5"
-                     style={{background: token.colorPrimaryBg}}>
-                </div>
-              </div>
-            </div>
-          </Tooltip>
-        </Col>
-        <Col span={12}>
-          <Tooltip title="双栏导航">
-            <div
-              className="p-2 rounded-lg cursor-pointer flex"
-              style={{
-                boxShadow: token.boxShadow,
-                borderRadius: token.borderRadius,
-                border: layout === 'columns' ? `2px solid ${token.colorPrimary}` : '2px solid transparent',
-              }}
-              onClick={() => setLayout('columns')}
-            >
-              <div className={"rounded-sm mr-1.5 w-3 h-24"} style={{background: token.colorPrimary}}></div>
-              <div className={"rounded-sm mr-1.5 w-6 h-24"} style={{background: token.colorPrimaryHover}}></div>
-              <div className={"rounded-sm flex-auto h-24"} style={{background: token.colorPrimaryBg}}></div>
-            </div>
-          </Tooltip>
-        </Col>
+            </Tooltip>
+          </Col>
+        ))}
       </Row>
+
+      {/* 预设主题 */}
       <Divider>预设主题</Divider>
-      <Row gutter={20} onClick={themeChange}>
-        {themeList.map((item) => (
-          <Col span={8} key={item.name} className={'mb-2.5'}>
+      <Row gutter={20} onClick={handleThemeChange}>
+        {THEME_LIST.map((item) => (
+          <Col span={8} key={item.name} className="mb-2.5">
             <div
               data-theme={item.name}
-              className={'cursor-pointer overflow-hidden border-solid'}
+              className="cursor-pointer overflow-hidden border-solid"
               style={{
                 borderRadius: token.borderRadius,
                 borderWidth: themeConfig.themeScheme === item.name ? '2px' : '0px',
@@ -192,11 +180,11 @@ const SettingDrawer: React.FC = () => {
             >
               <img src={item.background} alt={item.name}/>
             </div>
-            <div className={'text-center mt-1.5'}>{item.title}</div>
+            <div className="text-center mt-1.5">{item.title}</div>
           </Col>
         ))}
-        <Col span={24} className={'mb-2.5'}>
-          <div className={'flex justify-between items-center'}>
+        <Col span={24} className="mb-2.5">
+          <div className="flex justify-between items-center">
             <div>主题算法</div>
             <Select
               value={themeConfig.algorithm}
@@ -207,182 +195,39 @@ const SettingDrawer: React.FC = () => {
           </div>
         </Col>
       </Row>
+
+      {/* 主题颜色 */}
       <Divider>主题颜色</Divider>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>主色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.colorPrimary}
-          onChange={(value) => changeSetting('colorPrimary', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>基础文字颜色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.colorText}
-          onChange={(value) => changeSetting('colorText', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>基础背景颜色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.colorBg}
-          onChange={(value) => changeSetting('colorBg', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>成功色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.colorSuccess}
-          onChange={(value) => changeSetting('colorSuccess', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>警告色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.colorWarning}
-          onChange={(value) => changeSetting('colorWarning', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>错误色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.colorError}
-          onChange={(value) => changeSetting('colorError', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>内容区域背景色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.bodyBg}
-          onChange={(value) => changeSetting('bodyBg', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>页脚背景色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.footerBg}
-          onChange={(value) => changeSetting('footerBg', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>头部背景色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.headerBg}
-          onChange={(value) => changeSetting('headerBg', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>头部文字颜色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.headerColor}
-          onChange={(value) => changeSetting('headerColor', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>侧边栏背景色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.siderBg}
-          onChange={(value) => changeSetting('siderBg', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>侧边栏文字颜色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.siderColor}
-          onChange={(value) => changeSetting('siderColor', value.toCssString())}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>布局边框颜色</div>
-        <ColorPicker
-          showText
-          value={themeConfig.colorBorder}
-          onChange={(value) => changeSetting('colorBorder', value.toCssString())}
-        />
-      </div>
+      {THEME_CONFIGS.map(({key, label}) => (
+        <div key={key} className="flex justify-between items-center mb-2.5">
+          <div>{label}</div>
+          <ColorPicker
+            showText
+            value={themeConfig[key as keyof typeof themeConfig] as string}
+            onChange={(value) => changeSetting(key, value.toCssString())}
+          />
+        </div>
+      ))}
+
+      {/* 风格配置 */}
       <Divider>风格配置</Divider>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>固定页脚</div>
-        <Switch
-          value={themeConfig.fixedFooter}
-          onChange={(value) => changeSetting('fixedFooter', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>开启动画</div>
-        <Switch
-          value={themeConfig.motion}
-          onChange={(value) => changeSetting('motion', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>开启边框</div>
-        <Switch
-          value={themeConfig.layoutBorder}
-          onChange={(value) => changeSetting('layoutBorder', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>圆角大小</div>
-        <InputNumber
-          min={0}
-          max={30}
-          value={themeConfig.borderRadius}
-          onChange={(value) => changeSetting('borderRadius', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>基础控件高度</div>
-        <InputNumber
-          min={0}
-          value={themeConfig.controlHeight}
-          onChange={(value) => changeSetting('controlHeight', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>头部两侧内边距</div>
-        <InputNumber
-          min={0}
-          value={themeConfig.headerPadding}
-          onChange={(value) => changeSetting('headerPadding', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>头部高度</div>
-        <InputNumber
-          min={0}
-          value={themeConfig.headerHeight}
-          onChange={(value) => changeSetting('headerHeight', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>侧边栏宽度</div>
-        <InputNumber
-          min={0}
-          value={themeConfig.siderWeight}
-          onChange={(value) => changeSetting('siderWeight', value)}
-        />
-      </div>
-      <div className={'flex justify-between items-center mb-2.5'}>
-        <div>内容区域内边距</div>
-        <InputNumber
-          min={0}
-          value={themeConfig.bodyPadding}
-          onChange={(value) => changeSetting('bodyPadding', value)}
-        />
-      </div>
+      {STYLE_CONFIGS.map(({key, label, type, ...rest}) => (
+        <div key={key} className="flex justify-between items-center mb-2.5">
+          <div>{label}</div>
+          {type === 'switch' ? (
+            <Switch
+              value={themeConfig[key as keyof typeof themeConfig] as boolean}
+              onChange={(value) => changeSetting(key, value)}
+            />
+          ) : (
+            <InputNumber
+              value={themeConfig[key as keyof typeof themeConfig] as number}
+              onChange={(value) => changeSetting(key, value)}
+              {...rest}
+            />
+          )}
+        </div>
+      ))}
     </Drawer>
   );
 };
