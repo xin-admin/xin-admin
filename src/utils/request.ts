@@ -109,11 +109,9 @@ function createAxios<Data, T = API.ResponseStructure<Data>>(axiosConfig: AxiosRe
     addPending(config);
 
     config.headers = config.headers || {};
-    let token: string = "";
     if(localStorage.getItem("token")) {
-      token = `Bearer ${localStorage.getItem("token")}`
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
     }
-    config.headers["Authorization"] = token;
     return config;
   });
 
