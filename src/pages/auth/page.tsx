@@ -2,12 +2,10 @@ import {Alert, Card, Space, Tag} from "antd";
 import {CheckCard} from "@ant-design/pro-components"
 import useAuthStore from "@/stores/user.ts";
 import defaultRoute from "@/router/default.ts";
-import {useState} from "react";
 
 const PageAuth = () => {
   const access = useAuthStore(state => state.access)
-  const setRules = useAuthStore(state => state.setRules)
-  const [userRule, setUserRule] = useState<'A' | 'B' | 'C'>('A');
+  const setRules = useAuthStore(state => state.setMenus)
 
   return (
     <Card variant={"borderless"} title={'路由权限'}>
@@ -35,24 +33,20 @@ const PageAuth = () => {
         <CheckCard.Group
           onChange={(value) => {
             if (value === "A") {
-              setUserRule(value);
               setRules(defaultRoute)
             }
             if (value === "B") {
-              setUserRule(value);
-              setRules(defaultRoute.filter(value => value.id !== 5 && value.pid !== 5))
+              setRules(defaultRoute.filter(value => value.key !== 'page-layout'))
             }
             if (value === "C") {
-              setUserRule(value);
-              setRules(defaultRoute.filter(value => value.id !== 1 && value.pid !== 1))
+              setRules(defaultRoute.filter(value => value.key !== 'multi-menu'))
             }
           }}
           defaultValue="A"
-          value={userRule}
         >
           <CheckCard title="管理员" description="管理员拥有所有的权限" value="A"/>
-          <CheckCard title="运营人员" description="运营人员看不到 `结果页` 菜单" value="B"/>
-          <CheckCard title="测试人员" description="测试人员看不到 `仪表盘` 菜单" value="C"/>
+          <CheckCard title="运营人员" description="运营人员看不到 `页面布局` 菜单" value="B"/>
+          <CheckCard title="测试人员" description="测试人员看不到 `多级菜单` 菜单" value="C"/>
         </CheckCard.Group>
 
         <div className={"mb-2.5"}>当前拥有的权限:</div>
