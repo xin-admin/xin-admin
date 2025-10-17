@@ -23,6 +23,8 @@ export default interface ISysUser {
   nickname?: string;
   /** 性别 */
   sex?: number;
+  /** 个人简介 */
+  bio: string;
   /** 用户状态 */
   status?: number;
   /** 创建时间 */

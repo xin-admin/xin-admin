@@ -32,6 +32,8 @@ export interface InfoResponse {
 }
 
 export interface InfoParams {
+  /** 个人简介 */
+  bio: string;
   /** 邮箱 */
   email: string;
   /** 手机号 */
