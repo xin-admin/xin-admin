@@ -4,6 +4,7 @@ import type ISysUser from "@/domain/iSysUser.ts";
 import {info, login, logout} from "@/api/admin.ts";
 import type {LoginParams, InfoResponse} from "@/api/admin.ts";
 import type {IMenus} from "@/domain/iSysRule.ts";
+import defaultRoute from "@/router/default.ts";
 
 type BreadcrumbType = {
   href?: string;
@@ -21,6 +22,7 @@ interface AuthState {
   access: string[];
   menus: IMenus[];
   menuMap: {[key: string]: IMenus };
+  localRoute: boolean;
   breadcrumbMap: {[key: string]: BreadcrumbType[] };
   login: (credentials: LoginParams) => Promise<boolean>;
   getInfo: () => Promise<void>;
@@ -31,7 +33,7 @@ interface AuthState {
 
 const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, getState) => ({
       token: null,
       refresh_token: null,
       user: null,
@@ -41,6 +43,7 @@ const useAuthStore = create<AuthState>()(
       menus: [],
       menuMap: {},
       breadcrumbMap: {},
+      localRoute: true,
       login: async (params) => {
         const {data} = await login(params);
         if (!data.success || !data.data) {
@@ -69,12 +72,18 @@ const useAuthStore = create<AuthState>()(
             }
           }
         };
-        buildMenuIndexes(data.menus);
+        let menus: IMenus[];
+        if (getState().localRoute) {
+          menus = defaultRoute;
+        }else {
+          menus = data.menus;
+        }
+        buildMenuIndexes(menus);
         set({
+          menus,
           menuMap,
           breadcrumbMap,
           user: data.info,
-          menus: data.menus,
           access: data.access,
           user_id: data.info.id,
           user_name: data.info.username,

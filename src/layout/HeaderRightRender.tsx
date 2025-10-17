@@ -9,26 +9,36 @@ import {
   HomeOutlined,
   SearchOutlined,
   SettingOutlined,
-  TranslationOutlined
+  TranslationOutlined,
+  UserOutlined,
+  VerticalLeftOutlined
 } from "@ant-design/icons";
 import {useGlobalStore} from "@/stores";
 import {useTranslation} from "react-i18next";
 import useAuthStore from "@/stores/user";
 import {useNavigate} from "react-router";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const {useToken} = theme;
 
 const HeaderLeftRender = () => {
+  const {token} = useToken();
+  const {t, i18n} = useTranslation();
   const navigate = useNavigate()
   const themeDrawer = useGlobalStore(state => state.themeDrawer);
   const setThemeDrawer = useGlobalStore(state => state.setThemeDrawer);
-  const userInfo = useAuthStore(state => state.user)
-  const logout = useAuthStore(state => state.logout)
-  const {i18n} = useTranslation();
+  const userInfo = useAuthStore(state => state.user);
+  const getInfo = useAuthStore(state => state.getInfo);
+  const logout = useAuthStore(state => state.logout);
+  const menuMap = useAuthStore(state => state.menuMap);
+  const breadcrumbMap = useAuthStore(state => state.breadcrumbMap);
+  const title = useGlobalStore(state => state.title);
+  const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
+  const setBreadcrumb = useGlobalStore(state => state.setBreadcrumb);
+
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [searchOpen, setSearch] = useState<boolean>(false);
-  const {token} = useToken();
+
   const onFullscreenClick = () => {
     /* 获取 documentElement (<html>) 以全屏显示页面 */
     const elem = document.documentElement;
@@ -43,8 +53,7 @@ const HeaderLeftRender = () => {
       });
     }
   };
-
-
+  
   const localesItems: MenuProps['items'] = [
     {
       key: '1',
@@ -62,11 +71,25 @@ const HeaderLeftRender = () => {
       onClick: () => i18n.changeLanguage('jp'),
     },
   ];
+
   const userItems: MenuProps['items'] = [
     {
       key: '1',
-      label: '退出登录',
+      label: '用户设置',
+      icon: <UserOutlined/> ,
       onClick: () => {
+        const menu = menuMap['user.setting'];
+        setBreadcrumb(breadcrumbMap['user.setting']);
+        const headTitle = menu.local ? t(menu.local) : menu.name;
+        setHeadTitle(title + ' - ' + headTitle);
+        navigate('/user/setting')
+      },
+    },
+    {
+      key: '2',
+      label: '退出登录',
+      icon: <VerticalLeftOutlined />,
+      onClick: async () => {
         logout().then(() => {
           message.success("退出成功，正在跳转")
           navigate('/login', {replace: true})
@@ -76,6 +99,8 @@ const HeaderLeftRender = () => {
       },
     },
   ]
+
+  useEffect(() => { getInfo() }, [getInfo]);
 
   return (
     <>
