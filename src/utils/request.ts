@@ -109,7 +109,15 @@ function createAxios<Data, T = API.ResponseStructure<Data>>(axiosConfig: AxiosRe
     addPending(config);
 
     config.headers = config.headers || {};
+
+    // 获取当前语言并设置到 Header
+    if(localStorage.getItem("i18nextLng")) {
+      // 设置 User-Language header
+      config.headers['User-Language'] = localStorage.getItem("i18nextLng");
+    }
+    // 附带 token
     if(localStorage.getItem("token")) {
+      // 设置 Authorization header
       config.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
     }
     return config;

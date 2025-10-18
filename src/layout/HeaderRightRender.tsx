@@ -39,6 +39,7 @@ const HeaderLeftRender = () => {
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [searchOpen, setSearch] = useState<boolean>(false);
 
+  /** 全屏按钮操作事件 */
   const onFullscreenClick = () => {
     /* 获取 documentElement (<html>) 以全屏显示页面 */
     const elem = document.documentElement;
@@ -53,22 +54,30 @@ const HeaderLeftRender = () => {
       });
     }
   };
-  
+
+  /** 语言切换按钮事件 */
+  const onLocationClick = async (lng: string) => {
+    // 设置 i18n 语言
+    await i18n.changeLanguage(lng);
+    // 存储到 localStorage
+    localStorage.setItem('i18nextLng', lng);
+  }
+
   const localesItems: MenuProps['items'] = [
     {
       key: '1',
       label: '简体中文',
-      onClick: () => i18n.changeLanguage('zh'),
+      onClick: () => onLocationClick('zh'),
     },
     {
       key: '2',
       label: 'English',
-      onClick: () => i18n.changeLanguage('en'),
+      onClick: () => onLocationClick('en'),
     },
     {
       key: '3',
       label: '日本語です',
-      onClick: () => i18n.changeLanguage('jp'),
+      onClick: () => onLocationClick('jp'),
     },
   ];
 
