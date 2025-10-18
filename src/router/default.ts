@@ -376,7 +376,19 @@ const defaultRoute: IMenus[] = [
         local: "",
         hidden: 1,
         link: 0
-      }
+      },
+      {
+        type: "nested-route",
+        key: "user.setting.loginlog",
+        name: "登录日志",
+        path: "/user/setting/loginlog",
+        icon: "",
+        elementPath: "/user/setting/loginlog",
+        order: 3,
+        local: "",
+        hidden: 1,
+        link: 0
+      },
     ]
   },
   {

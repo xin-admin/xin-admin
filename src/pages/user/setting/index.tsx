@@ -40,6 +40,15 @@ const UserSettingsPage = () => {
       ),
       key: '/user/setting/verification',
     },
+    {
+      label: (
+        <span className="flex items-center">
+          <IdcardOutlined className="mr-2" />
+          登录日志
+        </span>
+      ),
+      key: '/user/setting/loginlog',
+    },
   ]
 
   return (
