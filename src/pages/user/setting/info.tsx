@@ -4,12 +4,14 @@ import useAuthStore from "@/stores/user";
 import type {FormProps} from "@ant-design/pro-components";
 import {type InfoParams, updateInfo} from "@/api/admin.ts";
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
 const Info = () => {
   const userInfo = useAuthStore(state => state.user);
   const getInfo = useAuthStore(state => state.getInfo);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
+  const {t} = useTranslation();
 
   /** 上传头像 */
   const uploadChange: UploadProps['onChange'] = async () => {
@@ -30,19 +32,18 @@ const Info = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 px-6 py-4 max-w-4xl w-full">
-      <div className="w-full md:w-1/3 flex flex-col items-center">
-        <Avatar size={120} src={userInfo?.avatar_url} className="mb-4 border-2 border-gray-200" />
-        <Upload
-          name="avatar"
-          showUploadList={false}
-          onChange={uploadChange}
-        >
-          <Button icon={ <UploadOutlined /> }>更换头像</Button>
-        </Upload>
-        <p className="text-gray-500 text-sm mt-2">支持 JPG/PNG 格式，大小不超过 2MB</p>
-      </div>
-      <div className="w-full md:w-2/3">
+      <div className="w-full px-6 py-4">
+        <div className={'flex flex-col items-center mb-3'}>
+          <Avatar size={120} src={userInfo?.avatar_url} className="mb-4 border-2 border-gray-200" />
+          <Upload
+            name="avatar"
+            showUploadList={false}
+            onChange={uploadChange}
+          >
+            <Button icon={ <UploadOutlined /> }>{t("userSetting.baseInfo.updateAvatar")}</Button>
+          </Upload>
+          <p className="text-gray-500 text-sm mt-2">{t("userSetting.baseInfo.updateAvatarDesc")}</p>
+        </div>
         <Form<InfoParams>
           form={form}
           layout="vertical"
@@ -57,53 +58,52 @@ const Info = () => {
           }}
         >
           <Form.Item
-            label="用户名"
+            label={t("userSetting.baseInfo.username")}
             name="username"
-            rules={[{ required: true, message: '请输入用户名!' }]}
+            rules={[{ required: true, message: t("userSetting.baseInfo.username.message") }]}
           >
             <Input className="w-full" disabled />
           </Form.Item>
           <Form.Item
-            label="昵称"
+            label={t("userSetting.baseInfo.nickname")}
             name="nickname"
-            rules={[{ required: true, message: '请输入昵称!' }]}
+            rules={[{ required: true, message: t("userSetting.baseInfo.nickname.message") }]}
           >
             <Input className="w-full" />
           </Form.Item>
-          <Form.Item label="性别" name="sex">
-            <Radio.Group options={[{ value: 0, label: '男' }, { value: 1, label: '女' }]}/>
+          <Form.Item label={t("userSetting.baseInfo.sex")} name="sex">
+            <Radio.Group options={[{ value: 0, label: t("userSetting.baseInfo.sex.0") }, { value: 1, label: t("userSetting.baseInfo.sex.1") }]}/>
           </Form.Item>
-          <Form.Item label="个人简介" name="bio">
+          <Form.Item label={t("userSetting.baseInfo.bio")} name="bio">
             <Input.TextArea rows={4} />
           </Form.Item>
           <Form.Item
-            label="邮箱"
+            label={t("userSetting.baseInfo.email")}
             name="email"
             rules={[
-              { type: 'email', message: '请输入有效的邮箱地址!' },
-              { required: true, message: '请输入邮箱!' }
+              { type: 'email', message: t("userSetting.baseInfo.email.typeMessage") },
+              { required: true, message: t("userSetting.baseInfo.email.requiredMessage") }
             ]}
           >
             <Input className="w-full" />
           </Form.Item>
           <Form.Item
-            label="手机号"
+            label={t("userSetting.baseInfo.mobile")}
             name="mobile"
             rules={[
-              { required: true, message: '请输入手机号!' }
+              { required: true, message: t("userSetting.baseInfo.mobile.message") }
             ]}
           >
             <Input className="w-full" />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading} className="w-full md:w-auto">
-              保存设置
+            <Button type="primary" htmlType="submit" size="large" loading={loading} block>
+              {t("userSetting.baseInfo.submit")}
             </Button>
           </Form.Item>
         </Form>
       </div>
-    </div>
   );
 };
 

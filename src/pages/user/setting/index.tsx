@@ -1,12 +1,14 @@
 import { Tabs, Card } from 'antd';
-import { UserOutlined, LockOutlined, IdcardOutlined } from '@ant-design/icons';
+import {UserOutlined, LockOutlined, IdcardOutlined, SnippetsOutlined} from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router';
 import {useEffect, useState} from 'react';
+import {useTranslation} from "react-i18next";
 
 const UserSettingsPage = () => {
   const [activeTab, setActiveTab] = useState('/user/setting');
   const navigate = useNavigate();
   const location = useLocation();
+  const {t} = useTranslation();
 
   useEffect(() => {
     setActiveTab(location.pathname);
@@ -17,7 +19,7 @@ const UserSettingsPage = () => {
       label: (
         <span className="flex items-center">
           <UserOutlined className="mr-2" />
-          基本信息
+          {t("userSetting.baseInfo")}
         </span>
       ),
       key: '/user/setting',
@@ -26,7 +28,7 @@ const UserSettingsPage = () => {
       label: (
         <span className="flex items-center">
           <LockOutlined className="mr-2" />
-          安全设置
+          {t("userSetting.changePassword")}
         </span>
       ),
       key: '/user/setting/security',
@@ -35,7 +37,7 @@ const UserSettingsPage = () => {
       label: (
         <span className="flex items-center">
           <IdcardOutlined className="mr-2" />
-          实名认证
+          {t("userSetting.userVerification")}
         </span>
       ),
       key: '/user/setting/verification',
@@ -43,8 +45,8 @@ const UserSettingsPage = () => {
     {
       label: (
         <span className="flex items-center">
-          <IdcardOutlined className="mr-2" />
-          登录日志
+          <SnippetsOutlined className="mr-2" />
+          {t("userSetting.loginLog")}
         </span>
       ),
       key: '/user/setting/loginlog',
@@ -52,7 +54,12 @@ const UserSettingsPage = () => {
   ]
 
   return (
-    <Card variant={"borderless"} title={'用户设置'} styles={{ body: {paddingInline: 0, display: "flex"} }}>
+    <Card
+      title={t("userSetting.title")}
+      variant={"borderless"}
+      style={{ maxWidth: 800, width: '100%'}}
+      styles={{ body: {paddingInline: 0, paddingRight: 25, display: "flex"}}}
+    >
       <Tabs
         activeKey={activeTab}
         onChange={(key) => {
