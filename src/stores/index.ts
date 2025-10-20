@@ -26,7 +26,6 @@ interface GlobalState {
   setCollapsed: (collapsed: boolean) => void;
   setThemeConfig: (themeConfig: ThemeProps) => void;
   setThemeDrawer: (themeDrawer: boolean) => void;
-  setTheme: (theme: ThemeProps) => void;
   setLayout: (layout: LayoutType) => void;
   setBreadcrumb: (breadcrumb: BreadcrumbType[]) => void;
   setMenuParentKey: (menuParentKey: string) => void;
@@ -56,9 +55,6 @@ export const useGlobalStore = create<GlobalState>()(
       },
       setThemeDrawer: (themeDrawer: boolean) => {
         setState({themeDrawer})
-      },
-      setTheme: (theme: ThemeProps) => {
-        setState({themeConfig: theme})
       },
       setLayout: (layout: LayoutType) => {
         setState({layout})

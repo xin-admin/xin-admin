@@ -93,7 +93,7 @@ const SettingDrawer: React.FC = () => {
   const {
     themeDrawer,
     setThemeDrawer,
-    setTheme,
+    setThemeConfig,
     themeConfig,
     layout,
     setLayout,
@@ -101,7 +101,7 @@ const SettingDrawer: React.FC = () => {
 
   // 防抖更新主题配置
   const changeSetting = debounce((key: string, value: any) => {
-    setTheme({...themeConfig, [key]: value});
+    setThemeConfig({...themeConfig, [key]: value});
   }, 300, {leading: true, trailing: false});
 
   // 处理主题切换
@@ -118,13 +118,13 @@ const SettingDrawer: React.FC = () => {
     };
 
     if (themeMap[themeName as keyof typeof themeMap]) {
-      setTheme({...themeConfig, ...themeMap[themeName as keyof typeof themeMap]});
+      setThemeConfig({...themeConfig, ...themeMap[themeName as keyof typeof themeMap]});
     }
   };
 
   // 重置主题
   const resetTheme = () => {
-    setTheme({...configTheme, ...defaultColorTheme});
+    setThemeConfig({...configTheme, ...defaultColorTheme});
   };
 
   return (
