@@ -4,6 +4,7 @@ import {Button, Col, ColorPicker, Divider, Drawer, InputNumber, Row, Select, Swi
 import {useGlobalStore} from "@/stores";
 import {configTheme, darkColorTheme, defaultColorTheme, greenColorTheme, pinkColorTheme} from "@/layout/theme.ts";
 import {algorithmOptions} from "@/layout/algorithm.ts";
+import useAuthStore from "@/stores/user.ts";
 
 const {useToken} = theme;
 
@@ -90,19 +91,26 @@ const LAYOUT_CONFIGS = [
 
 const SettingDrawer: React.FC = () => {
   const {token} = useToken();
-  const {
-    themeDrawer,
-    setThemeDrawer,
-    setThemeConfig,
-    themeConfig,
-    layout,
-    setLayout,
-  } = useGlobalStore();
+  const themeDrawer = useGlobalStore(state => state.themeDrawer);
+  const setThemeDrawer = useGlobalStore(state => state.setThemeDrawer);
+  const setThemeConfig = useGlobalStore(state => state.setThemeConfig);
+  const themeConfig = useGlobalStore(state => state.themeConfig);
+  const layout = useGlobalStore(state => state.layout);
+  const setLayout = useGlobalStore(state => state.setLayout);
+  const localRoute = useAuthStore(state => state.localRoute);
+  const setLocalRoute = useAuthStore(state => state.setLocalRoute);
+  const getUserInfo = useAuthStore(state => state.getInfo);
 
   // 防抖更新主题配置
   const changeSetting = debounce((key: string, value: any) => {
     setThemeConfig({...themeConfig, [key]: value});
   }, 300, {leading: true, trailing: false});
+
+  // 切换路由
+  const changeLocaleRoute = async (value: boolean) => {
+    await setLocalRoute(value)
+    await getUserInfo()
+  }
 
   // 处理主题切换
   const handleThemeChange = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -228,6 +236,16 @@ const SettingDrawer: React.FC = () => {
           )}
         </div>
       ))}
+
+      {/* 系统配置 */}
+      <Divider>系统配置</Divider>
+      <div className="flex justify-between items-center mb-2.5">
+        <div>本地菜单路由</div>
+        <Switch
+          value={localRoute}
+          onChange={changeLocaleRoute}
+        />
+      </div>
     </Drawer>
   );
 };
