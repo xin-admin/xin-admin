@@ -55,7 +55,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
   };
   /** 删除按钮点击事件 */
   const deleteButtonClick = async (record: T) => {
-    await Delete(api, { [rowKey]: record[rowKey] });
+    await Delete(api + `/${record[rowKey]}`);
     message.success('删除成功！');
     actionRef.current?.reset?.();
   };
