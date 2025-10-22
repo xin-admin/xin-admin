@@ -32,8 +32,13 @@ export default interface ISysUser {
   // 下面是附加数据
   /** 头像Url */
   avatar_url?: string;
-  /** 角色名称 */
-  role_name?: string;
+  /** 角色 */
+  roles_field?: {
+    /** 角色ID */
+    role_id: number;
+    /** 角色名称 */
+    name: string;
+  }[];
   /** 部门名称 */
   dept_name?: string;
 

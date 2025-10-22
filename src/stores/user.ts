@@ -29,6 +29,7 @@ interface AuthState {
   logout: () => Promise<void>;
   setMenus: (rules: IMenus[]) => Promise<void>;
   setAccess: (access: string[]) => Promise<void>;
+  setLocalRoute: (isLocal: boolean) => Promise<void>;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -110,6 +111,9 @@ const useAuthStore = create<AuthState>()(
           access: [],
           menus: []
         })
+      },
+      setLocalRoute: async (isLocal: boolean) => {
+        set({ localRoute: isLocal })
       }
     }),
     {
