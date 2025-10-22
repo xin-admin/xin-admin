@@ -70,8 +70,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
       return;
     }
     if (formInitValue && formInitValue[rowKey]) {
-      const data: T = Object.assign(formInitValue, formData);
-      await Update(api, data);
+      await Update(api + `/${formInitValue[rowKey]}`, formData);
     } else {
       await Create(api, formData);
     }
