@@ -5,13 +5,17 @@ import {type ProTableProps} from '@ant-design/pro-components';
 import type {XinTableColumn, XinTableRef} from "@/components/XinTable/typings.ts";
 import type ISysUser from "@/domain/iSysUser.ts";
 import AuthButton from "@/components/AuthButton";
-import {deptField, roleField, type DeptFieldType, type RoleFieldType} from "@/api/sysUserList.ts";
+import {
+  deptField,
+  roleField,
+  type DeptFieldType,
+  type RoleFieldType
+} from "@/api/sysUserList.ts";
 
 const Table: React.FC = () => {
   const tableRef = useRef<XinTableRef>(null);
   const [roles, setRoles] = useState<RoleFieldType[]>([]);
   const [depts, setDepts] = useState<DeptFieldType[]>([]);
-  const colorList = ["magenta", "red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
   useEffect(() => {
     deptField().then(res => setDepts(res.data.data!));
     roleField().then(res => setRoles(res.data.data!));
@@ -47,10 +51,16 @@ const Table: React.FC = () => {
       filters: true,
       align: 'center',
       hideInSearch: true,
+      fieldProps: {
+        options: [
+          { value: 0, label: '男' },
+          { value: 1, label: '女' },
+        ]
+      },
       valueEnum: {
         0: {text: '男'},
         1: {text: '女'},
-      },
+      }
     },
     {
       title: '邮箱',
@@ -69,13 +79,7 @@ const Table: React.FC = () => {
       formItemProps: {
         rules: [{required: true, message: '该项为必填'}],
       },
-      render: (_, record) => {
-        return record.roles_field?.map((item, index) => (
-          <Tag key={item.role_id || index} color={colorList[index % colorList.length]}>
-            {item.name}
-          </Tag>
-        ))
-      },
+      render: (dom) => <Tag color={'magenta'}>{dom}</Tag>,
       fieldProps: {
         mode: 'multiple',
         options: roles,
@@ -88,6 +92,7 @@ const Table: React.FC = () => {
       valueType: 'treeSelect',
       align: 'center',
       hideInSearch: true,
+      render: (dom) => <Tag color={'volcano'}>{dom}</Tag>,
       fieldProps: {
         options: depts,
         fieldNames: {label: 'name', value: 'dept_id'}
@@ -97,6 +102,12 @@ const Table: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       valueType: 'radioButton',
+      fieldProps: {
+        options: [
+          { value: 0, label: '禁用' },
+          { value: 1, label: '启用' },
+        ]
+      },
       valueEnum: {
         0: {text: '禁用', status: 'Error'},
         1: {text: '启用', status: 'Success'},
