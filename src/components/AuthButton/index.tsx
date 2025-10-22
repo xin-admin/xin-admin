@@ -12,7 +12,7 @@ const ButtonAccess =  ( props: PropsTypes ) => {
 
   const buttonAccess = (name?: string) => {
     if( name) {
-      return access.includes(name.toLowerCase())
+      return access.includes(name)
     }else {
       return true;
     }
