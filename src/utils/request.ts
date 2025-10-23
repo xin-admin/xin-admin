@@ -4,20 +4,20 @@ import type {NotificationArgsProps} from "antd";
 
 window.requests = [];
 window.tokenRefreshing = false;
-const pendingMap = new Map();
+const pendingMap = new Map<string, AbortController>();
 
 /**
  * 储存每个请求的唯一cancel回调, 以此为标识
  */
 function addPending(config: AxiosRequestConfig) {
   const pendingKey = getPendingKey(config)
-  config.cancelToken =
-    config.cancelToken ||
-    new axios.CancelToken((cancel) => {
-      if (!pendingMap.has(pendingKey)) {
-        pendingMap.set(pendingKey, cancel)
-      }
-    })
+  if(! config.signal) {
+    const controller = new AbortController();
+    config.signal = controller.signal;
+    if (!pendingMap.has(pendingKey)) {
+      pendingMap.set(pendingKey, controller)
+    }
+  }
 }
 
 /**
@@ -26,8 +26,8 @@ function addPending(config: AxiosRequestConfig) {
 function removePending(config: AxiosRequestConfig) {
   const pendingKey = getPendingKey(config)
   if (pendingMap.has(pendingKey)) {
-    const cancelToken = pendingMap.get(pendingKey)
-    cancelToken(pendingKey)
+    const controller = pendingMap.get(pendingKey)
+    controller?.abort();
     pendingMap.delete(pendingKey)
   }
 }
@@ -42,8 +42,8 @@ function getPendingKey(config: AxiosRequestConfig) {
   return [
     url,
     method,
-    headers && (headers as anyObj).batoken ? (headers as anyObj).batoken : '',
-    headers && (headers as anyObj)['ba-user-token'] ? (headers as anyObj)['ba-user-token'] : '',
+    headers && (headers as anyObj)['i18nextLng'] ? (headers as anyObj)['i18nextLng'] : '',
+    headers && (headers as anyObj)['Authorization'] ? (headers as anyObj)['Authorization'] : '',
     JSON.stringify(params),
     JSON.stringify(data),
   ].join('&')
@@ -132,10 +132,13 @@ function createAxios<Data, T = API.ResponseStructure<Data>>(axiosConfig: AxiosRe
       return Promise.reject(response);
     },
     async (err) => {
-      if(err.response) {
+      if (axios.isCancel(err)) {
+        console.log('Request canceled', err.message);
+        return Promise.reject(err);
+      } else if(err.response) {
         await handleNetworkError(err.response.status);
         return Promise.reject(err.response);
-      }else {
+      } else {
         window.$message?.error("网络链接错误：" + err.message);
         return Promise.reject(err);
       }
