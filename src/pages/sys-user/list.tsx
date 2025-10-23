@@ -94,7 +94,6 @@ const Table: React.FC = () => {
       dataIndex: 'dept_id',
       valueType: 'treeSelect',
       align: 'center',
-      hideInSearch: true,
       formItemProps: {
         rules: [{required: true, message: t("sysUserList.dept.required")}],
       },
