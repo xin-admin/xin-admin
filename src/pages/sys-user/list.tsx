@@ -93,6 +93,9 @@ const Table: React.FC = () => {
       valueType: 'treeSelect',
       align: 'center',
       hideInSearch: true,
+      formItemProps: {
+        rules: [{required: true, message: t("sysUserList.role.required")}],
+      },
       render: (dom) => <Tag color={'volcano'}>{dom}</Tag>,
       fieldProps: {
         options: depts,
