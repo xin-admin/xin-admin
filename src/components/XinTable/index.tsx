@@ -2,10 +2,16 @@ import { useImperativeHandle, useRef, useState } from 'react';
 import { BetaSchemaForm, ProTable } from '@ant-design/pro-components';
 import type {ProTableProps, ProFormInstance, ProColumns, ActionType,} from '@ant-design/pro-components';
 import { Create, Delete, Update, List } from '@/api/common/table';
-import { Button, message, Popconfirm, Space } from 'antd';
+import {Button, message, Popconfirm, Space, Tooltip} from 'antd';
 import ButtonAccess from '@/components/AuthButton';
 import type { XinTableProps } from './typings.ts';
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {
+  CaretDownOutlined,
+  CaretUpOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
 
 /**
  * XinTable CRUD 表格
@@ -28,6 +34,8 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
     afterOperateRender,
     toolBarRender = [],
   } = props;
+  /** 多语言 */
+  const {t} = useTranslation();
   /** 表格 Ref */
   const actionRef = useRef<ActionType>(undefined);
   /** 表单 Ref */
@@ -56,7 +64,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
   /** 删除按钮点击事件 */
   const deleteButtonClick = async (record: T) => {
     await Delete(api + `/${record[rowKey]}`);
-    message.success('删除成功！');
+    message.success(t('xin-table.deleteSuccess'));
     actionRef.current?.reset?.();
   };
   /** 提交表单 */
@@ -75,7 +83,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
       await Create(api, formData);
     }
     actionRef.current?.reset?.();
-    message.success('提交成功');
+    message.success(t('xin-table.finishSuccess'));
     setFormOpen(false);
   };
   /** 表格操作列 */
@@ -83,7 +91,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
     if (operateShow === false) return [];
     return [
       {
-        title: '操作',
+        title: t('xin-table.options'),
         hideInForm: true,
         hideInSearch: true,
         key: 'operate',
@@ -94,19 +102,23 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
             {beforeOperateRender?.(record)}
             {(typeof editShow === 'function' ? editShow(record) : editShow) &&
               <ButtonAccess auth={props.accessName + '.update'} key={'update'}>
-                <Button type="primary" icon={<EditOutlined />} size={'small'} onClick={() => editButtonClick(record)}/>
+                <Tooltip title={t('xin-table.editButton')}>
+                  <Button type="primary" icon={<EditOutlined />} size={'small'} onClick={() => editButtonClick(record)}/>
+                </Tooltip>
               </ButtonAccess>
             }
             {(typeof deleteShow === 'function' ? deleteShow(record) : deleteShow) !== false &&
               <ButtonAccess auth={props.accessName + '.delete'} key={'delete '}>
                 <Popconfirm
-                  okText="确认"
-                  cancelText="取消"
-                  title="Delete the task"
-                  description="你确定要删除这条数据吗？"
+                  okText={t('xin-table.deleteButton.ok')}
+                  cancelText={t('xin-table.deleteButton.cancel')}
+                  title={t('xin-table.deleteButton.title')}
+                  description={t('xin-table.deleteButton.description')}
                   onConfirm={() => deleteButtonClick(record)}
                 >
-                  <Button type="primary" icon={<DeleteOutlined />} size={'small'} danger/>
+                  <Tooltip title={t('xin-table.deleteButton')}>
+                    <Button type="primary" icon={<DeleteOutlined />} size={'small'} danger/>
+                  </Tooltip>
                 </Popconfirm>
               </ButtonAccess>
             }
@@ -126,7 +138,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
         <>
           {addShow &&
             <ButtonAccess auth={accessName + '.create'} key={'create'}>
-              <Button children={'新增'} type={'primary'} onClick={addButtonClick} />
+              <Button children={t('xin-table.createButton')} type={'primary'} onClick={addButtonClick} />
             </ButtonAccess>
           }
         </>,
@@ -138,6 +150,28 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
       return { ...data.data, success: data.success };
     },
     ...props.tableProps,
+    search: {
+      searchText: t('xin-table.searchText'),
+      resetText: t('xin-table.resetText'),
+      collapseRender: (collapsed) => {
+        if (collapsed) {
+          return (
+            <Space>
+              { t('xin-table.collapse.open') }
+              <CaretDownOutlined />
+            </Space>
+          )
+        } else {
+          return (
+            <Space>
+              { t('xin-table.collapse.clock') }
+              <CaretUpOutlined />
+            </Space>
+          )
+        }
+      },
+      ...props.tableProps?.search,
+    },
   };
   return (
     <>
