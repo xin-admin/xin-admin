@@ -1,26 +1,27 @@
-import {Avatar, Tag} from 'antd';
+import {Avatar, Button, Form, Input, message, Modal, Tag, Tooltip} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
 import XinTable from '@/components/XinTable';
 import {type ProTableProps} from '@ant-design/pro-components';
 import type {XinTableColumn, XinTableRef} from "@/components/XinTable/typings.ts";
 import type ISysUser from "@/domain/iSysUser.ts";
 import AuthButton from "@/components/AuthButton";
-import {
-  deptField,
-  roleField,
-  type DeptFieldType,
-  type RoleFieldType
-} from "@/api/sysUserList.ts";
+import type {DeptFieldType, ResetPasswordType, RoleFieldType} from "@/api/sysUserList.ts";
+import {deptField, resetPassword, roleField} from "@/api/sysUserList.ts";
+import {RedoOutlined} from "@ant-design/icons";
+
+interface TableParams {
+  keywordSearch?: string;
+  dept_id?: string | number | bigint;
+}
 
 const Table: React.FC = () => {
+  /** 表格 REF */
   const tableRef = useRef<XinTableRef>(null);
+  /** 角色选项数据 */
   const [roles, setRoles] = useState<RoleFieldType[]>([]);
+  /** 部门选项数据 */
   const [depts, setDepts] = useState<DeptFieldType[]>([]);
-  useEffect(() => {
-    deptField().then(res => setDepts(res.data.data!));
-    roleField().then(res => setRoles(res.data.data!));
-  },[])
-
+  /** 高级表格列配置 */
   const columns: XinTableColumn<ISysUser>[] = [
     {
       title: 'ID',
@@ -175,12 +176,9 @@ const Table: React.FC = () => {
       align: 'center',
     },
   ];
-
-  const [tableParams, setParams] = useState<{
-    keywordSearch?: string;
-    dept_id?: string | number | bigint;
-  }>();
-
+  /** 表格查询参数 */
+  const [tableParams, setParams] = useState<TableParams>();
+  /** 表格参数 */
   const tableProps: ProTableProps<ISysUser, any> = {
     params: tableParams,
     toolbar: {
@@ -199,31 +197,93 @@ const Table: React.FC = () => {
     },
     search: {}
   }
+  /** 修改密码相关状态 */
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resetUserId, setResetUserId] = useState<number>();
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  /** 打开重置密码框 */
+  const showRedoModal = (id: number) => {
+    setIsModalOpen(true);
+    setResetUserId(id);
+  };
+  /** 提交重置密码 */
+  const handleRedoSubmit = async (values: ResetPasswordType) => {
+    try {
+      setButtonLoading(true);
+      await resetPassword({...values, id: resetUserId!});
+      setIsModalOpen(false);
+      message.success("重置成功！");
+    } finally {
+      setButtonLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    deptField().then(res => setDepts(res.data.data!));
+    roleField().then(res => setRoles(res.data.data!));
+  }, [])
 
   return (
-    <XinTable<ISysUser>
-      api={'/sys-user/list'}
-      columns={columns}
-      rowKey={'id'}
-      tableRef={tableRef}
-      accessName={'sys-user.list'}
-      afterOperateRender={(record) => (
-        <>
-          {record.id !== 1 &&
-            <AuthButton auth={'sys-user.list.resetPassword'}>
-              修改密码
-            </AuthButton>
-          }
-        </>
-      )}
-      editShow={(i) => i.id !== 1}
-      deleteShow={(i) => i.id !== 1}
-      tableProps={tableProps}
-      formProps={{
-        grid: true,
-        colProps: {span: 12},
-      }}
-    />
+    <>
+      <XinTable<ISysUser>
+        api={'/sys-user/list'}
+        columns={columns}
+        rowKey={'id'}
+        tableRef={tableRef}
+        accessName={'sys-user.list'}
+        beforeOperateRender={(record) => (
+          <>
+            {record.id !== 1 &&
+              <AuthButton auth={'sys-user.list.resetPassword'}>
+                <Tooltip title={"重置密码"}>
+                  <Button
+                    variant={'solid'}
+                    color={'pink'}
+                    icon={<RedoOutlined/>}
+                    size={'small'}
+                    onClick={() => showRedoModal(record.id!)}
+                  />
+                </Tooltip>
+              </AuthButton>
+            }
+          </>
+        )}
+        editShow={(i) => i.id !== 1}
+        deleteShow={(i) => i.id !== 1}
+        tableProps={tableProps}
+        formProps={{grid: true, colProps: {span: 12}}}
+      />
+      <Modal
+        title="重置密码"
+        closable={{'aria-label': 'Custom Close Button'}}
+        open={isModalOpen}
+        footer={null}
+        styles={{body: {paddingTop: 20}}}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <Form<ResetPasswordType> autoComplete="off" layout={'vertical'} onFinish={handleRedoSubmit}>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{required: true, message: 'Please input your password!'}]}
+          >
+            <Input.Password/>
+          </Form.Item>
+          <Form.Item
+            label="Confirm Password"
+            name="rePassword"
+            rules={[{required: true, message: 'Please input your password!'}]}
+          >
+            <Input.Password/>
+          </Form.Item>
+          <Form.Item label={null} style={{marginTop: 30}}>
+            <Button type="primary" block size={'large'} htmlType="submit" loading={buttonLoading}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
   );
 };
 
