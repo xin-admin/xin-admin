@@ -8,6 +8,7 @@ import AuthButton from "@/components/AuthButton";
 import type {DeptFieldType, ResetPasswordType, RoleFieldType} from "@/api/sysUserList.ts";
 import {deptField, resetPassword, roleField} from "@/api/sysUserList.ts";
 import {RedoOutlined} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
 
 interface TableParams {
   keywordSearch?: string;
@@ -15,6 +16,7 @@ interface TableParams {
 }
 
 const Table: React.FC = () => {
+  const {t} = useTranslation();
   /** 表格 REF */
   const tableRef = useRef<XinTableRef>(null);
   /** 角色选项数据 */
@@ -24,29 +26,29 @@ const Table: React.FC = () => {
   /** 高级表格列配置 */
   const columns: XinTableColumn<ISysUser>[] = [
     {
-      title: 'ID',
+      title: t("sysUserList.id"),
       dataIndex: 'id',
       hideInForm: true,
       sorter: true,
       align: 'center',
     },
     {
-      title: '用户名',
+      title: t("sysUserList.username"),
       dataIndex: 'username',
       valueType: 'text',
       align: 'center',
-      formItemProps: {rules: [{required: true, message: '该项为必填'}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserList.username.required")}]},
     },
     {
-      title: '昵称',
+      title: t("sysUserList.nickname"),
       dataIndex: 'nickname',
       valueType: 'text',
       colProps: {md: 7},
       align: 'center',
-      formItemProps: {rules: [{required: true, message: '该项为必填'}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserList.nickname.required")}]},
     },
     {
-      title: '性别',
+      title: t("sysUserList.sex"),
       dataIndex: 'sex',
       valueType: 'radio',
       filters: true,
@@ -54,31 +56,31 @@ const Table: React.FC = () => {
       hideInSearch: true,
       fieldProps: {
         options: [
-          { value: 0, label: '男' },
-          { value: 1, label: '女' },
+          { value: 0, label: t("sysUserList.sex.0") },
+          { value: 1, label: t("sysUserList.sex.1") },
         ]
       },
       valueEnum: {
-        0: {text: '男'},
-        1: {text: '女'},
+        0: {text: t("sysUserList.sex.0")},
+        1: {text: t("sysUserList.sex.1")},
       }
     },
     {
-      title: '邮箱',
+      title: t("sysUserList.email"),
       dataIndex: 'email',
       valueType: 'text',
       colProps: {md: 6},
       align: 'center',
-      formItemProps: {rules: [{required: true, message: '该项为必填'}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserList.email.required")}]},
     },
     {
-      title: '管理员角色',
+      title: t("sysUserList.role"),
       dataIndex: 'role_id',
       valueType: 'select',
       align: 'center',
       hideInSearch: true,
       formItemProps: {
-        rules: [{required: true, message: '该项为必填'}],
+        rules: [{required: true, message: t("sysUserList.role.required")}],
       },
       render: (dom) => <Tag color={'magenta'}>{dom}</Tag>,
       fieldProps: {
@@ -88,13 +90,13 @@ const Table: React.FC = () => {
       },
     },
     {
-      title: '管理员部门',
+      title: t("sysUserList.dept"),
       dataIndex: 'dept_id',
       valueType: 'treeSelect',
       align: 'center',
       hideInSearch: true,
       formItemProps: {
-        rules: [{required: true, message: t("sysUserList.role.required")}],
+        rules: [{required: true, message: t("sysUserList.dept.required")}],
       },
       render: (dom) => <Tag color={'volcano'}>{dom}</Tag>,
       fieldProps: {
@@ -103,33 +105,33 @@ const Table: React.FC = () => {
       }
     },
     {
-      title: '状态',
+      title: t("sysUserList.status"),
       dataIndex: 'status',
       valueType: 'radioButton',
       fieldProps: {
         options: [
-          { value: 0, label: '禁用' },
-          { value: 1, label: '启用' },
+          { value: 0, label: t("sysUserList.status.0") },
+          { value: 1, label: t("sysUserList.status.1") },
         ]
       },
       valueEnum: {
-        0: {text: '禁用', status: 'Error'},
-        1: {text: '启用', status: 'Success'},
+        0: {text: t("sysUserList.status.0"), status: 'Error'},
+        1: {text: t("sysUserList.status.1"), status: 'Success'},
       },
-      formItemProps: {rules: [{required: true, message: '该项为必填'}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserList.status.required")}]},
       filters: true,
       hideInSearch: true,
       align: 'center',
     },
     {
-      title: '手机号',
+      title: t("sysUserList.mobile"),
       dataIndex: 'mobile',
       valueType: 'text',
-      formItemProps: {rules: [{required: true, message: '该项为必填'}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserList.mobile.required")}]},
       align: 'center',
     },
     {
-      title: '头像',
+      title: t("sysUserList.avatar"),
       dataIndex: 'avatar_url',
       hideInSearch: true,
       valueType: 'avatar',
@@ -146,17 +148,17 @@ const Table: React.FC = () => {
         if (! id) {
           return [
             {
-              title: '密码',
+              title: t("sysUserList.password"),
               dataIndex: 'password',
               valueType: 'password',
-              formItemProps: {rules: [{required: true, message: '该项为必填'}]},
+              formItemProps: {rules: [{required: true, message: t("sysUserList.password.required")}]},
               fieldProps: {autoComplete: ''},
             },
             {
-              title: '确认密码',
+              title: t("sysUserList.rePassword"),
               dataIndex: 'rePassword',
               valueType: 'password',
-              formItemProps: {rules: [{required: true, message: '该项为必填'}]},
+              formItemProps: {rules: [{required: true, message: t("sysUserList.rePassword.required")}]},
               fieldProps: {autoComplete: ''},
             },
           ];
@@ -166,14 +168,14 @@ const Table: React.FC = () => {
     },
     {
       valueType: 'fromNow',
-      title: '创建时间',
+      title: t("sysUserList.created_at"),
       hideInForm: true,
       dataIndex: 'created_at',
       align: 'center',
     },
     {
       valueType: 'fromNow',
-      title: '更新时间',
+      title: t("sysUserList.updated_at"),
       hideInForm: true,
       dataIndex: 'updated_at',
       align: 'center',
@@ -186,7 +188,7 @@ const Table: React.FC = () => {
     params: tableParams,
     toolbar: {
       search: {
-        placeholder: '请输入昵称、账户、手机号搜索',
+        placeholder: t("sysUserList.searchPlaceholder"),
         style: {width: 304},
         onSearch: (value: string) => {
           setParams({keywordSearch: value});
@@ -215,7 +217,7 @@ const Table: React.FC = () => {
       setButtonLoading(true);
       await resetPassword({...values, id: resetUserId!});
       setIsModalOpen(false);
-      message.success("重置成功！");
+      message.success(t("sysUserList.resetSuccess"));
     } finally {
       setButtonLoading(false);
     }
@@ -238,7 +240,7 @@ const Table: React.FC = () => {
           <>
             {record.id !== 1 &&
               <AuthButton auth={'sys-user.list.resetPassword'}>
-                <Tooltip title={"重置密码"}>
+                <Tooltip title={t("sysUserList.resetPassword")}>
                   <Button
                     variant={'solid'}
                     color={'pink'}
@@ -257,7 +259,7 @@ const Table: React.FC = () => {
         formProps={{grid: true, colProps: {span: 12}}}
       />
       <Modal
-        title="重置密码"
+        title={t("sysUserList.resetPassword")}
         closable={{'aria-label': 'Custom Close Button'}}
         open={isModalOpen}
         footer={null}
@@ -266,22 +268,22 @@ const Table: React.FC = () => {
       >
         <Form<ResetPasswordType> autoComplete="off" layout={'vertical'} onFinish={handleRedoSubmit}>
           <Form.Item
-            label="Password"
+            label={t("sysUserList.password")}
             name="password"
-            rules={[{required: true, message: 'Please input your password!'}]}
+            rules={[{required: true, message: t("sysUserList.password.required")}]}
           >
             <Input.Password/>
           </Form.Item>
           <Form.Item
-            label="Confirm Password"
+            label={t("sysUserList.rePassword")}
             name="rePassword"
-            rules={[{required: true, message: 'Please input your password!'}]}
+            rules={[{required: true, message: t("sysUserList.rePassword.required")}]}
           >
             <Input.Password/>
           </Form.Item>
           <Form.Item label={null} style={{marginTop: 30}}>
             <Button type="primary" block size={'large'} htmlType="submit" loading={buttonLoading}>
-              Submit
+              {t("sysUserList.resetButton")}
             </Button>
           </Form.Item>
         </Form>
