@@ -9,7 +9,7 @@ import type {
 import React, {type Ref } from 'react';
 import type {ColProps, ModalProps, RowProps} from 'antd';
 
-export type XinTableColumn<T> = ProFormColumnsType<T> & ProColumns<T>;
+export type XinTableColumn<T = any> = ProFormColumnsType<T> & ProColumns<T>;
 
 export interface BooleanActions {
   setTrue: () => void;
