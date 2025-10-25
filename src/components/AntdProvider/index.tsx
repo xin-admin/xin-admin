@@ -1,11 +1,19 @@
-import {App, ConfigProvider, type ThemeConfig} from 'antd';
+import {App, ConfigProvider, type ConfigProviderProps, type ThemeConfig} from 'antd';
 import {type PropsWithChildren, useEffect, useMemo, useState} from 'react';
 import '@ant-design/v5-patch-for-react-19';
 import algorithm from "@/layout/algorithm.ts";
 import {useGlobalStore} from "@/stores";
-import {ProConfigProvider} from "@ant-design/pro-components";
 import {useTranslation} from "react-i18next";
+import {ProConfigProvider} from "@ant-design/pro-components";
+import en_US from 'antd/es/locale/en_US';
+import ja_JP from 'antd/es/locale/ja_JP';
+import zh_CN from 'antd/es/locale/zh_CN';
+import 'dayjs/locale/en';
+import 'dayjs/locale/ja';
+import 'dayjs/locale/zh-cn';
 import dayjs from "dayjs";
+
+type Locale = ConfigProviderProps['locale'];
 
 function ContextHolder() {
   const { message, modal, notification } = App.useApp();
@@ -49,59 +57,24 @@ const AppProvider = ({ children }: PropsWithChildren) => {
     algorithm: themeConfig.algorithm ? algorithm[themeConfig.algorithm] : undefined
   }), [themeConfig])
 
+  const [locale, setLocal] = useState<Locale>(zh_CN);
   const { i18n } = useTranslation();
-  const [antdLocale, setAntdLocale] = useState<any>(null);
 
   useEffect(() => {
-    const loadAntdLocale = async () => {
-      try {
-        switch (i18n.language) {
-          case 'zh-CN':
-          case 'zh':
-            {
-              const zhCN = await import('antd/locale/zh_CN');
-              await import('dayjs/locale/zh-cn');
-              dayjs.locale('zh-cn');
-              setAntdLocale(zhCN.default);
-              break;
-            }
-          case 'en-US':
-          case 'en':
-            {
-              const enUS = await import('antd/locale/en_US');
-              await import('dayjs/locale/en');
-              dayjs.locale('en');
-              setAntdLocale(enUS.default);
-              break;
-            }
-          case 'ja-JP':
-          case 'jp':
-            {
-              const jaJP = await import('antd/locale/ja_JP');
-              await import('dayjs/locale/ja');
-              dayjs.locale('ja');
-              setAntdLocale(jaJP.default);
-              break;
-            }
-          // 添加更多语言...
-          default:
-            {
-              const defaultLocale = await import('antd/locale/zh_CN');
-              await import('dayjs/locale/zh-cn');
-              dayjs.locale('zh-cn');
-              setAntdLocale(defaultLocale.default);
-            }
-        }
-      } catch (error) {
-        console.error('Failed to load antd locale:', error);
-      }
-    };
-
-    loadAntdLocale();
+    if( i18n.language === 'en') {
+      dayjs.locale('en');
+      setLocal(en_US);
+    } else if (i18n.language === 'jp') {
+      dayjs.locale('ja');
+      setLocal(ja_JP);
+    } else {
+      dayjs.locale('zh-cn');
+      setLocal(zh_CN);
+    }
   }, [i18n.language]);
 
   return (
-    <ConfigProvider theme={{...theme, cssVar: true}} locale={antdLocale}>
+    <ConfigProvider theme={{...theme, cssVar: true}} locale={locale}>
       <App>
         <ContextHolder />
         <ProConfigProvider dark={themeConfig.themeScheme === 'dark'}>
