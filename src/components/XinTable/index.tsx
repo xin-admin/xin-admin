@@ -129,7 +129,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
     ];
   };
   /** 表格参数 */
-  const tableProps: ProTableProps<T, {[key: string]: unknown}> = {
+  const tableProps: ProTableProps<T, {[key: string]: any}> = {
     actionRef,
     rowKey,
     columns: [...props.columns, ...operate()],
@@ -150,7 +150,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
       return { ...data.data, success: data.success };
     },
     ...props.tableProps,
-    search: {
+    search: props.tableProps?.search !== false ? {
       searchText: t('xin-table.searchText'),
       resetText: t('xin-table.resetText'),
       collapseRender: (collapsed) => {
@@ -171,7 +171,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
         }
       },
       ...props.tableProps?.search,
-    },
+    } : false,
   };
   return (
     <>
