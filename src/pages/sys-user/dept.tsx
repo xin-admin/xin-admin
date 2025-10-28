@@ -19,6 +19,7 @@ import {isArray, omit} from 'lodash';
 import type {XinTableColumn} from "@/components/XinTable/typings.ts";
 import {BetaSchemaForm, type ProFormInstance} from "@ant-design/pro-components";
 import * as React from "react";
+import {useTranslation} from "react-i18next";
 
 const deptMap = new Map<string, ISysDept>();
 
@@ -29,6 +30,7 @@ interface TableParams {
 }
 
 const Dept = () => {
+  const {t} = useTranslation();
   /** 部门信息表单 */
   const formRef = useRef<ProFormInstance>(null);
   /** 新增表单 */
@@ -45,11 +47,11 @@ const Dept = () => {
   const tabList: CardProps['tabList'] = [
     {
       key: 'info',
-      label: '基本信息'
+      label: t("sysUserDept.tab.info")
     },
     {
       key: 'users',
-      label: '用户列表'
+      label: t("sysUserDept.tab.users")
     },
   ];
   /** 部门数据 */
@@ -80,7 +82,7 @@ const Dept = () => {
       return depts.map(dept => {
         deptMap.set(dept.id!.toString(), omit(dept, 'children'));
         return {
-          title: dept.name || '未命名部门',
+          title: dept.name || t("sysUserDept.tab.users"),
           key: dept.id?.toString() || '',
           icon: dept.type === 0 ? <BankOutlined /> : dept.type === 1 ? <TeamOutlined /> : <UserOutlined />,
           children: convertDeptToTreeData(dept.children || [])
@@ -134,11 +136,11 @@ const Dept = () => {
       setLoading(true);
       if(!update) {
         await addDept(data);
-        message.success("新增部门成功！");
+        message.success(t("sysUserDept.createSuccess"));
         setFormOpen(false);
       }else {
         await updateDept(Number(selectKey), data);
-        message.success("编辑部门成功！");
+        message.success(t("sysUserDept.updateSuccess"));
       }
       await refreshDept();
     }finally {
@@ -152,7 +154,7 @@ const Dept = () => {
       await deleteDept(checkedKeys);
       await refreshDept();
       setCheckedKeys([]);
-      message.success('批量删除成功');
+      message.success(t("sysUserDept.deleteSuccess"));
     }finally {
       setLoading(false);
     }
@@ -160,38 +162,38 @@ const Dept = () => {
   /** 表单列数据 */
   const columns: XinTableColumn[] = [
     {
-      title: "部门名称",
+      title: t("sysUserDept.column.name"),
       valueType: 'text',
       dataIndex: 'name',
-      formItemProps: {rules: [{required: true, message: "部门名称必填！"}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserDept.column.name.required")}]},
     },
     {
-      title: "部门编码",
+      title: t("sysUserDept.column.code"),
       valueType: 'text',
       dataIndex: 'code',
-      formItemProps: {rules: [{required: true, message: "部门编码必填！"}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserDept.column.code.required")}]},
     },
     {
-      title: "部门类型",
+      title: t("sysUserDept.column.type"),
       valueType: 'radioButton',
       dataIndex: 'type',
       fieldProps: {
         options: [
-          { value: 0, label: "公司" },
-          { value: 1, label: "部门" },
-          { value: 2, label: "岗位" },
+          { value: 0, label: t("sysUserDept.column.type.0") },
+          { value: 1, label: t("sysUserDept.column.type.1") },
+          { value: 2, label: t("sysUserDept.column.type.2") },
         ],
       },
-      formItemProps: {rules: [{required: true, message: "部门类型必填！"}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserDept.column.type.required")}]},
     },
     {
-      title: "上级部门",
+      title: t("sysUserDept.column.parent"),
       valueType: 'treeSelect',
       dataIndex: 'parent_id',
       fieldProps: {
         options: [
           {
-            title: '顶级',
+            title: t("sysUserDept.column.parent.0"),
             key: 0,
             children: deptData
           }
@@ -199,43 +201,43 @@ const Dept = () => {
         fieldNames: { label: 'title', value: 'key' },
         disabled: true
       },
-      formItemProps: {rules: [{required: true, message: "上级部门必填！"}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserDept.column.parent.required")}]},
     },
     {
-      title: "邮箱",
+      title: t("sysUserDept.column.email"),
       valueType: 'text',
       dataIndex: 'email',
     },
     {
-      title: "地址",
+      title: t("sysUserDept.column.address"),
       valueType: 'text',
       dataIndex: 'address',
     },
     {
-      title: "电话",
+      title: t("sysUserDept.column.phone"),
       valueType: 'text',
       dataIndex: 'phone',
     },
     {
-      title: "排序",
+      title: t("sysUserDept.column.sort"),
       valueType: 'digit',
       dataIndex: 'sort',
-      formItemProps: {rules: [{required: true, message: "排序必填！"}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserDept.column.sort.required")}]},
     },
     {
-      title: "状态",
+      title: t("sysUserDept.column.status"),
       valueType: 'radioButton',
       dataIndex: 'status',
       fieldProps: {
         options: [
-          { value: 0, label: "正常" },
-          { value: 1, label: "停用" },
+          { value: 0, label: t("sysUserDept.column.status.0") },
+          { value: 1, label: t("sysUserDept.column.status.1") },
         ]
       },
-      formItemProps: {rules: [{required: true, message: "状态必填！"}]},
+      formItemProps: {rules: [{required: true, message: t("sysUserDept.column.status.required")}]},
     },
     {
-      title: "备注",
+      title: t("sysUserDept.column.remark"),
       valueType: 'textarea',
       dataIndex: 'remark',
     },
@@ -243,44 +245,44 @@ const Dept = () => {
   /** 部门用户列表表格列 */
   const usersColumns: TableProps['columns'] = [
     {
-      title: '用户ID',
+      title: t("sysUserDept.users.column.id"),
       dataIndex: 'id',
       key: 'id',
       align: 'center',
     },
     {
-      title: '用户名',
+      title: t("sysUserDept.users.column.username"),
       dataIndex: 'username',
       key: 'username',
       align: 'center',
     },
     {
-      title: '用户昵称',
+      title: t("sysUserDept.users.column.nickname"),
       dataIndex: 'nickname',
       key: 'nickname',
       align: 'center',
     },
     {
-      title: '邮箱',
+      title: t("sysUserDept.users.column.nickname"),
       dataIndex: 'email',
       key: 'email',
       align: 'center',
     },
     {
-      title: '手机号',
+      title: t("sysUserDept.users.column.mobile"),
       dataIndex: 'mobile',
       key: 'mobile',
       align: 'center',
     },
     {
-      title: '状态',
+      title: t("sysUserDept.users.column.status"),
       dataIndex: 'status',
       key: 'status',
       align: 'center',
       render: (value) => (
         <>
-          {value === 1 && <Tag color={'success'}>启用</Tag>}
-          {value === 0 && <Tag color={'error'}>禁用</Tag>}
+          {value === 1 && <Tag color={'success'}>{t("sysUserDept.users.column.status.0")}</Tag>}
+          {value === 0 && <Tag color={'error'}>{t("sysUserDept.users.column.status.1")}</Tag>}
         </>
       )
     },
@@ -295,7 +297,7 @@ const Dept = () => {
           layoutType={'ModalForm'}
           open={formOpen}
           modalProps={{
-            title: '新增部门',
+            title: t("sysUserDept.createModalTitle"),
             forceRender: true,
             styles: { body: { paddingTop: 20, paddingRight: 40 } },
             onCancel: () => setFormOpen(false),
@@ -310,14 +312,14 @@ const Dept = () => {
             <Space>
               <Button
                 loading={loading}
-                children={'新增部门'}
+                children={t("sysUserDept.createButton")}
                 icon={<PlusOutlined />}
                 type={'primary'}
                 onClick={() => addChange()}
               />
               <Button
                 loading={loading}
-                children={'添加下级'}
+                children={t("sysUserDept.createChildrenButton")}
                 icon={<PlusOutlined />}
                 type={'primary'}
                 onClick={() => addChange(true)}
@@ -330,18 +332,18 @@ const Dept = () => {
           {checkedKeys.length > 0 && (
             <Alert
               style={{ marginBottom: 20 }}
-              message={`已选中 ${checkedKeys.length} 条记录`}
+              message={t("sysUserDept.checkedMessage", {checked: checkedKeys.length})}
               type="info"
               action={
                 <Space>
                   <Button size="small" type="primary" onClick={()=> setCheckedKeys([])}>
-                    取消选择
+                    {t("sysUserDept.unselect")}
                   </Button>
                   <Popconfirm
-                    okText={'删除'}
-                    cancelText={'取消删除'}
-                    title={'删除部门'}
-                    description={'你是否要删除这些部门？'}
+                    okText={t("sysUserDept.delete.ok")}
+                    cancelText={t("sysUserDept.delete.cancel")}
+                    title={t("sysUserDept.delete.title")}
+                    description={t("sysUserDept.delete.description")}
                     onConfirm={() => onDeleteConfirm()}
                   >
                     <Button type="primary" icon={<DeleteOutlined />} size={'small'} danger loading={loading}/>
@@ -379,7 +381,7 @@ const Dept = () => {
             submitter={{
               render: () => (
                 <Button
-                  children={'保存信息'}
+                  children={t("sysUserDept.saveInfo")}
                   loading={loading}
                   htmlType={'submit'}
                   type={'primary'}
