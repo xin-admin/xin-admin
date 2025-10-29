@@ -27,7 +27,7 @@ function generateReactRoutes(menuData: IMenus[]): DataRouteObject[] {
   function traverse(nodes: IMenus[]) {
     for (const node of nodes) {
       // 处理 route 类型
-      if (node.type === 'route') {
+      if (node.type === 'route' && node.link !== 1) {
         // 检查是否有 nested-route 子节点
         const nestedChildren = node.children?.filter(child => child.type === 'nested-route') || [];
         if (nestedChildren.length > 0) {
