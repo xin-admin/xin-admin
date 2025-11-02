@@ -6,7 +6,7 @@ import type {
   ProFormInstance,
   ProTableProps,
 } from '@ant-design/pro-components';
-import React, {type Ref } from 'react';
+import React, {type Dispatch, type Ref, type SetStateAction} from 'react';
 import type {ColProps, ModalProps, RowProps} from 'antd';
 
 export type XinTableColumn<T = any> = ProFormColumnsType<T> & ProColumns<T>;
@@ -18,9 +18,9 @@ export interface BooleanActions {
   toggle: () => void;
 }
 
-export interface XinTableRef {
-  formRef?: React.RefObject<ProFormInstance | undefined>;
-  tableRef?: React.RefObject<ActionType | undefined>;
+export interface XinTableRef<T> {
+  setFormInitValue: Dispatch<SetStateAction<false | T>>;
+  setFormOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface XinFromProps {
@@ -65,7 +65,9 @@ export type XinTableProps<T> = {
   /** 操作栏之后渲染 */
   afterOperateRender?: (record: T) => React.ReactNode;
   /** ProTable 和 ProForm 的 ref */
-  tableRef?: Ref<XinTableRef | undefined>;
+  tableRef?: Ref<ActionType | undefined>;
+  formRef?: Ref<ProFormInstance | undefined>;
+  xinTableRef?: Ref<XinTableRef<T> | undefined>;
   /** 工具栏渲染 */
   toolBarRender?: React.ReactNode[];
   /**

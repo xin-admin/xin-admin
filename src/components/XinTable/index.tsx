@@ -24,7 +24,9 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
     api,
     rowKey,
     columns,
+    formRef,
     tableRef,
+    xinTableRef,
     accessName,
     operateShow,
     editShow = true,
@@ -39,27 +41,29 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
   /** 表格 Ref */
   const actionRef = useRef<ActionType>(undefined);
   /** 表单 Ref */
-  const formRef = useRef<ProFormInstance>(undefined);
+  const schemaFormRef = useRef<ProFormInstance>(undefined);
   /** 表单开启状态 */
   const [formOpen, setFormOpen] = useState<boolean>(false);
   /** 表单初始数据 */
   const [formInitValue, setFormInitValue] = useState<T | false>(false);
   /** Ref */
-  useImperativeHandle(tableRef, () => ({
-    tableRef: actionRef,
-    formRef: formRef,
+  useImperativeHandle(tableRef, () => actionRef.current);
+  useImperativeHandle(formRef, () => schemaFormRef.current);
+  useImperativeHandle(xinTableRef, () => ({
+    setFormOpen: setFormOpen,
+    setFormInitValue: setFormInitValue,
   }));
   /** 新增按钮点击事件 */
   const addButtonClick = () => {
     setFormInitValue(false);
-    formRef.current?.resetFields();
+    schemaFormRef.current?.resetFields();
     setFormOpen(true);
   };
   /** 编辑按钮点击事件 */
   const editButtonClick = (record: T) => {
     setFormInitValue(record);
     setFormOpen(true);
-    formRef.current?.setFieldsValue(record);
+    schemaFormRef.current?.setFieldsValue(record);
   };
   /** 删除按钮点击事件 */
   const deleteButtonClick = async (record: T) => {
@@ -180,7 +184,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
         layoutType={'ModalForm'}
         onFinish={onFinish}
         columns={columns}
-        formRef={formRef}
+        formRef={schemaFormRef}
         {...props.formProps}
         modalProps={{
           onCancel: () => setFormOpen(false),
