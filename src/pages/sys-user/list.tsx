@@ -1,8 +1,8 @@
 import {Avatar, Button, Form, Input, message, Modal, Tag, Tooltip} from 'antd';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import XinTable from '@/components/XinTable';
 import {type ProTableProps} from '@ant-design/pro-components';
-import type {XinTableColumn, XinTableRef} from "@/components/XinTable/typings.ts";
+import type {XinTableColumn} from "@/components/XinTable/typings.ts";
 import type ISysUser from "@/domain/iSysUser.ts";
 import AuthButton from "@/components/AuthButton";
 import type {DeptFieldType, ResetPasswordType, RoleFieldType} from "@/api/sysUserList.ts";
@@ -17,8 +17,6 @@ interface TableParams {
 
 const Table: React.FC = () => {
   const {t} = useTranslation();
-  /** 表格 REF */
-  const tableRef = useRef<XinTableRef>(null);
   /** 角色选项数据 */
   const [roles, setRoles] = useState<RoleFieldType[]>([]);
   /** 部门选项数据 */
@@ -233,7 +231,6 @@ const Table: React.FC = () => {
         api={'/sys-user/list'}
         columns={columns}
         rowKey={'id'}
-        tableRef={tableRef}
         accessName={'sys-user.list'}
         beforeOperateRender={(record) => (
           <>
