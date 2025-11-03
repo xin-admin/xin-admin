@@ -20,6 +20,8 @@ import type {XinTableColumn} from "@/components/XinTable/typings.ts";
 import {BetaSchemaForm, type ProFormInstance} from "@ant-design/pro-components";
 import * as React from "react";
 import {useTranslation} from "react-i18next";
+import AuthButton from "@/components/AuthButton";
+import useAccess from "@/utils/useAccess.ts";
 
 const deptMap = new Map<string, ISysDept>();
 
@@ -31,6 +33,7 @@ interface TableParams {
 
 const Dept = () => {
   const {t} = useTranslation();
+  const {auth} = useAccess();
   /** 部门信息表单 */
   const formRef = useRef<ProFormInstance>(null);
   /** 新增表单 */
@@ -51,7 +54,8 @@ const Dept = () => {
     },
     {
       key: 'users',
-      label: t("sysUserDept.tab.users")
+      label: t("sysUserDept.tab.users"),
+      disabled: !auth("sys-user.dept.users")
     },
   ];
   /** 部门数据 */
@@ -97,7 +101,9 @@ const Dept = () => {
         if(!selectKey || !deptMap.has(selectKey)) {
           setSelectKey(res.data.data[0].id!.toString());
           formRef.current?.setFieldsValue(omit(res.data.data[0], 'children'));
-          await selectUsers(res.data.data[0].id!);
+          if(auth("sys-user.dept.users")) {
+            await selectUsers(res.data.data[0].id!);
+          }
         }
       }
     } finally {
@@ -310,20 +316,24 @@ const Dept = () => {
         <Card
           title={(
             <Space>
-              <Button
-                loading={loading}
-                children={t("sysUserDept.createButton")}
-                icon={<PlusOutlined />}
-                type={'primary'}
-                onClick={() => addChange()}
-              />
-              <Button
-                loading={loading}
-                children={t("sysUserDept.createChildrenButton")}
-                icon={<PlusOutlined />}
-                type={'primary'}
-                onClick={() => addChange(true)}
-              />
+              <AuthButton auth={"sys-user.dept.create"}>
+                <Button
+                  loading={loading}
+                  children={t("sysUserDept.createButton")}
+                  icon={<PlusOutlined />}
+                  type={'primary'}
+                  onClick={() => addChange()}
+                />
+              </AuthButton>
+              <AuthButton auth={"sys-user.dept.create"}>
+                <Button
+                  loading={loading}
+                  children={t("sysUserDept.createChildrenButton")}
+                  icon={<PlusOutlined />}
+                  type={'primary'}
+                  onClick={() => addChange(true)}
+                />
+              </AuthButton>
             </Space>
           )}
           loading={loading}
@@ -339,15 +349,17 @@ const Dept = () => {
                   <Button size="small" type="primary" onClick={()=> setCheckedKeys([])}>
                     {t("sysUserDept.unselect")}
                   </Button>
-                  <Popconfirm
-                    okText={t("sysUserDept.delete.ok")}
-                    cancelText={t("sysUserDept.delete.cancel")}
-                    title={t("sysUserDept.delete.title")}
-                    description={t("sysUserDept.delete.description")}
-                    onConfirm={() => onDeleteConfirm()}
-                  >
-                    <Button type="primary" icon={<DeleteOutlined />} size={'small'} danger loading={loading}/>
-                  </Popconfirm>
+                  <AuthButton auth={"sys-user.dept.delete"}>
+                    <Popconfirm
+                      okText={t("sysUserDept.delete.ok")}
+                      cancelText={t("sysUserDept.delete.cancel")}
+                      title={t("sysUserDept.delete.title")}
+                      description={t("sysUserDept.delete.description")}
+                      onConfirm={() => onDeleteConfirm()}
+                    >
+                      <Button type="primary" icon={<DeleteOutlined />} size={'small'} danger loading={loading}/>
+                    </Popconfirm>
+                  </AuthButton>
                 </Space>
               }
             />
@@ -380,34 +392,38 @@ const Dept = () => {
             style={{ display: tabKey === 'info' ? "block" : "none" }}
             submitter={{
               render: () => (
-                <Button
-                  children={t("sysUserDept.saveInfo")}
-                  loading={loading}
-                  htmlType={'submit'}
-                  type={'primary'}
-                />
+                <AuthButton auth={"sys-user.dept.update"}>
+                  <Button
+                    children={t("sysUserDept.saveInfo")}
+                    loading={loading}
+                    htmlType={'submit'}
+                    type={'primary'}
+                  />
+                </AuthButton>
               )
             }}
           />
-          <Table<IDeptUsers>
-            style={{ display: tabKey === 'users' ? "block" : "none" }}
-            dataSource={users}
-            bordered={true}
-            columns={usersColumns}
-            loading={tableLoading}
-            size={'small'}
-            pagination={{
-              current: tableParams.page,
-              pageSize: tableParams.pageSize,
-              total: tableParams.total,
-              showSizeChanger: true,
-              onChange: (page, pageSize) => {
-                const params = { total: tableParams.total, pageSize, page }
-                setTableParams(params);
-                selectUsers(Number(selectKey), params).then();
-              }
-            }}
-          />
+          <AuthButton auth={"sys-user.dept.users"}>
+            <Table<IDeptUsers>
+              style={{ display: tabKey === 'users' ? "block" : "none" }}
+              dataSource={users}
+              bordered={true}
+              columns={usersColumns}
+              loading={tableLoading}
+              size={'small'}
+              pagination={{
+                current: tableParams.page,
+                pageSize: tableParams.pageSize,
+                total: tableParams.total,
+                showSizeChanger: true,
+                onChange: (page, pageSize) => {
+                  const params = { total: tableParams.total, pageSize, page }
+                  setTableParams(params);
+                  selectUsers(Number(selectKey), params).then();
+                }
+              }}
+            />
+          </AuthButton>
         </Card>
       </Col>
     </Row>
