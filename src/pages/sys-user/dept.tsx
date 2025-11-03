@@ -21,7 +21,7 @@ import {BetaSchemaForm, type ProFormInstance} from "@ant-design/pro-components";
 import * as React from "react";
 import {useTranslation} from "react-i18next";
 import AuthButton from "@/components/AuthButton";
-import useAccess from "@/utils/useAccess.ts";
+import useAuth from "@/utils/useAuth.ts";
 
 const deptMap = new Map<string, ISysDept>();
 
@@ -33,7 +33,7 @@ interface TableParams {
 
 const Dept = () => {
   const {t} = useTranslation();
-  const {auth} = useAccess();
+  const {auth} = useAuth();
   /** 部门信息表单 */
   const formRef = useRef<ProFormInstance>(null);
   /** 新增表单 */

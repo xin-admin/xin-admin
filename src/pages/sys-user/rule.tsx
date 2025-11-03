@@ -9,12 +9,12 @@ import IconSelect from "@/components/XinForm/IconSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useRef} from "react";
 import type {ProFormInstance} from "@ant-design/pro-components";
-import useAccess from "@/utils/useAccess";
+import useAuth from "@/utils/useAuth.ts";
 import AuthButton from "@/components/AuthButton";
 
 const Rule =  () => {
   const {t} = useTranslation();
-  const {auth} = useAccess();
+  const {auth} = useAuth();
   const formRef = useRef<ProFormInstance>(null);
   const xinTableRef = useRef<XinTableRef<ISysRule>>(null);
 

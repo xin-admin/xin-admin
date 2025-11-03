@@ -1,6 +1,6 @@
 import useAuthStore from "@/stores/user.ts";
 
-function useAccess() {
+function useAuth() {
   const access = useAuthStore(state => state.access);
 
   const auth = (key: string) => access.includes(key);
@@ -8,4 +8,4 @@ function useAccess() {
   return {auth};
 }
 
-export default useAccess;
+export default useAuth;
