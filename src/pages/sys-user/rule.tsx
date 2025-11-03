@@ -17,15 +17,15 @@ const Rule =  () => {
 
   /** 路由地址表单项 */
   const pathItem: XinTableColumn<ISysRule> = {
-    title: '路由地址',
+    title: t("sysUserRule.routePath"),
     dataIndex: 'path',
     valueType: 'text',
-    formItemProps: { rules: [{ required: true, message: '此项为必填项' }]},
-    tooltip: '路由页面的地址，如果为外链直接填写外链网站URL',
+    formItemProps: { rules: [{ required: true, message: t("sysUserRule.routePath.required") }]},
+    tooltip: t("sysUserRule.routePath.tooltip"),
   };
   /** 图标表单项 */
   const iconItem: XinTableColumn<ISysRule> = {
-    title: '图标',
+    title: t("sysUserRule.icon"),
     dataIndex: 'icon',
     valueType: 'text',
     renderFormItem: (form, config, schema) => (
@@ -34,54 +34,53 @@ const Rule =  () => {
   };
   /** 多语言表单项 */
   const localeItem: XinTableColumn<ISysRule> = {
-    title: '多语言标识',
+    title: t("sysUserRule.local"),
     dataIndex: 'local',
     valueType: 'text',
     hideInTable: true,
   };
   /** 是否外链表单项 */
   const linkItem: XinTableColumn<ISysRule> = {
-    title: '是否外链',
+    title: t("sysUserRule.link"),
     dataIndex: 'link',
     valueType: 'switch',
     hideInTable: true,
     fieldProps: {
-      checkedChildren: '是',
-      unCheckedChildren: '否',
+      checkedChildren: t("sysUserRule.link.1"),
+      unCheckedChildren: t("sysUserRule.link.0"),
       onClick: (checked: boolean) => {
         formRef.current?.setFieldValue('link', checked ? 1 : 0);
       },
     },
-
   }
   /** 路由组件路径表单项 */
   const elementPathItem: XinTableColumn<ISysRule> = {
-    title: '组件路径',
+    title: t("sysUserRule.elementPath"),
     dataIndex: 'elementPath',
     valueType: 'text',
     hideInTable: true,
-    formItemProps: { rules: [{ required: true, message: '此项为必填项' }]},
+    formItemProps: { rules: [{ required: true, message: t("sysUserRule.elementPath.required") }]},
   }
 
   const columns: XinTableColumn<ISysRule>[] = [
     /** ----------------- 表单使用的 Column ------------------- */
     {
-      title: '类型',
+      title: t("sysUserRule.type"),
       dataIndex: 'type',
       valueType: 'radioButton',
       valueEnum: {
-        "menu": "菜单",
-        "route": "路由",
-        "nested-route": "嵌套路由",
-        "rule": "权限",
+        "menu": t("sysUserRule.type.menu"),
+        "route": t("sysUserRule.type.route"),
+        "nested-route": t("sysUserRule.type.nested-route"),
+        "rule": t("sysUserRule.type.rule"),
       },
       hideInTable: true,
       initialValue: 'menu',
       colProps: { span: 9 },
-      formItemProps: { rules: [{ required: true, message: '此项为必填项' }]},
+      formItemProps: { rules: [{ required: true, message: t("sysUserRule.type.required") }]},
     },
     {
-      title: '父节点',
+      title: t("sysUserRule.parent"),
       dataIndex: 'parent_id',
       hideInTable: true,
       valueType: 'treeSelect',
@@ -89,7 +88,7 @@ const Rule =  () => {
         const data = await ruleParent();
         return [
           {
-            name: "顶级菜单",
+            name: t("sysUserRule.parent.0"),
             id: 0,
             children: data.data.data!
           }
@@ -97,32 +96,32 @@ const Rule =  () => {
       },
       initialValue: 0,
       fieldProps: { fieldNames: { label: 'name', value: 'id' }, disabled: true},
-      formItemProps: { rules: [{ required: true, message: '此项为必填项' }]},
+      formItemProps: { rules: [{ required: true, message: t("sysUserRule.parent.required") }]},
       colProps: { span: 9 },
     },
     {
-      title: '排序',
+      title: t("sysUserRule.order"),
       hideInTable: true,
       dataIndex: 'order',
       valueType: 'digit',
       width: "100%",
       initialValue: 0,
       colProps: { span: 6 },
-      formItemProps: { rules: [{ required: true, message: '此项为必填项' }]},
+      formItemProps: { rules: [{ required: true, message: t("sysUserRule.order.required") }]},
     },
     {
-      title: '规则名称',
+      title: t("sysUserRule.name"),
       hideInTable: true,
       dataIndex: 'name',
       valueType: 'text',
-      formItemProps: { rules: [{ required: true, message: '此项为必填项' }]},
+      formItemProps: { rules: [{ required: true, message: t("sysUserRule.name.required") }]},
     },
     {
-      title: '权限标识',
+      title: t("sysUserRule.key"),
       valueType: 'text',
       dataIndex: 'key',
       hideInTable: true,
-      formItemProps: { rules: [{ required: true, message: '此项为必填项' }]},
+      formItemProps: { rules: [{ required: true, message: t("sysUserRule.key.required") }]},
     },
     {
       valueType: 'dependency',
@@ -146,7 +145,7 @@ const Rule =  () => {
     },
     /** ------------------ 表格使用的 Column ---------------- */
     {
-      title: '规则名称',
+      title: t("sysUserRule.name"),
       width: 220,
       ellipsis: true,
       hideInForm: true,
@@ -156,13 +155,13 @@ const Rule =  () => {
       width: 220,
       ellipsis: true,
       align: 'center',
-      title: '显示名称',
+      title: t("sysUserRule.local.show"),
       dataIndex: 'local',
       hideInForm: true,
       renderText: (data) => t(data)
     },
     {
-      title: '图标',
+      title: t("sysUserRule.icon"),
       dataIndex: 'icon',
       align: 'center',
       width: 60,
@@ -170,34 +169,34 @@ const Rule =  () => {
       renderText: (data) => data ? <IconFont name={data} /> : '-'
     },
     {
-      title: '类型',
+      title: t("sysUserRule.type"),
       dataIndex: 'type',
       align: 'center',
       width: 120,
       hideInForm: true,
       renderText: (value: string, record) => (
         <>
-          { value === 'menu' && <Tag color={'processing'}>菜单</Tag> }
+          { value === 'menu' && <Tag color={'processing'}>{t("sysUserRule.type.menu")}</Tag> }
           { value === 'route' && (
-            <Tooltip title={"路由地址：" + record.path}>
-              <Tag color={'success'}>路由</Tag>
+            <Tooltip title={t("sysUserRule.routePath.showTooltip", {path: record.path})}>
+              <Tag color={'success'}>{t("sysUserRule.type.route")}</Tag>
             </Tooltip>
           )}
-          { value === 'nested-route' && <Tag color={'success'}>嵌套路由</Tag> }
-          { value === 'rule' && <Tag>权限</Tag> }
+          { value === 'nested-route' && <Tag color={'success'}>{t("sysUserRule.type.nested-route")}</Tag> }
+          { value === 'rule' && <Tag>{t("sysUserRule.type.rule")}</Tag> }
         </>
       )
     },
     {
       width: 60,
-      title: '排序',
+      title: t("sysUserRule.order"),
       align: 'center',
       dataIndex: 'order',
       hideInForm: true,
       render: (value) => <Tag bordered={false} color={'purple'}>{value}</Tag>,
     },
     {
-      title: '权限标识',
+      title: t("sysUserRule.key"),
       align: 'center',
       dataIndex: 'key',
       hideInForm: true,
@@ -205,57 +204,57 @@ const Rule =  () => {
       render: (value) => <Tag bordered={false} color={'geekblue'}>{value}</Tag>,
     },
     {
-      title: '显示状态',
+      title: t("sysUserRule.hidden"),
       align: 'center',
       dataIndex: 'hidden',
       hideInForm: true,
-      tooltip: '菜单栏显示状态，控制菜单是否显示再导航中（菜单规则依然生效）',
+      tooltip: t("sysUserRule.hidden.tooltip"),
       render: (_, data) => {
         if (data.type === 'rule' || data.type === 'nested-route') { return '-' }
         return (
           <Switch
-            checkedChildren='显示'
-            unCheckedChildren='隐藏'
+            checkedChildren={t("sysUserRule.hidden.1")}
+            unCheckedChildren={t("sysUserRule.hidden.0")}
             defaultValue={data.hidden === 1}
             onChange={ async (_, event) => {
               event.stopPropagation();
               await showRule(data.id!);
-              message.success('修改成功');
+              message.success(t("sysUserRule.hidden.updateSuccess"));
             }}
           />
         )
       },
     },
     {
-      title: '是否禁用',
+      title: t("sysUserRule.status"),
       dataIndex: 'status',
       hideInForm: true,
-      tooltip: '权限是否禁用（将不会参与权限验证）',
+      tooltip: t("sysUserRule.status.tooltip"),
       align: 'center',
       render: (_, data) => {
         return (
           <Switch
-            checkedChildren='启用'
-            unCheckedChildren='禁用'
+            checkedChildren={t("sysUserRule.status.1")}
+            unCheckedChildren={t("sysUserRule.status.0")}
             defaultChecked={data.status === 1}
             onChange={async (_, event) => {
               event.stopPropagation();
               await statusRule(data.id!);
-              message.success('修改成功');
+              message.success(t("sysUserRule.status.updateSuccess"));
             }}
           />
         )
       },
     },
     {
-      title: '创建时间',
+      title: t("sysUserRule.created_at"),
       dataIndex: 'created_at',
       valueType: 'fromNow',
       hideInForm: true,
       align: 'center',
     },
     {
-      title: '最近修改',
+      title: t("sysUserRule.updated_at"),
       dataIndex: 'updated_at',
       valueType: 'fromNow',
       hideInForm: true,
@@ -273,7 +272,7 @@ const Rule =  () => {
             success: data.success
           };
         },
-        headerTitle: '用户权限',
+        headerTitle: t("sysUserRule.title"),
         search: false,
         bordered: true,
         pagination: false,
@@ -283,7 +282,7 @@ const Rule =  () => {
       }}
       beforeOperateRender={(data) => {
         return (
-          <Tooltip title={'添加下级'}>
+          <Tooltip title={t("sysUserRule.addChildButton")}>
             <Button
               color={'green'}
               variant={'solid'}
