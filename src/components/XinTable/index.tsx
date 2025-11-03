@@ -3,7 +3,7 @@ import { BetaSchemaForm, ProTable } from '@ant-design/pro-components';
 import type {ProTableProps, ProFormInstance, ProColumns, ActionType,} from '@ant-design/pro-components';
 import { Create, Delete, Update, List } from '@/api/common/table';
 import {Button, message, Popconfirm, Space, Tooltip} from 'antd';
-import ButtonAccess from '@/components/AuthButton';
+import AuthButton from '@/components/AuthButton';
 import type { XinTableProps } from './typings.ts';
 import {
   CaretDownOutlined,
@@ -105,14 +105,14 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
           <Space>
             {beforeOperateRender?.(record)}
             {(typeof editShow === 'function' ? editShow(record) : editShow) &&
-              <ButtonAccess auth={props.accessName + '.update'} key={'update'}>
+              <AuthButton auth={props.accessName + '.update'} key={'update'}>
                 <Tooltip title={t('xin-table.editButton')}>
                   <Button type="primary" icon={<EditOutlined />} size={'small'} onClick={() => editButtonClick(record)}/>
                 </Tooltip>
-              </ButtonAccess>
+              </AuthButton>
             }
             {(typeof deleteShow === 'function' ? deleteShow(record) : deleteShow) !== false &&
-              <ButtonAccess auth={props.accessName + '.delete'} key={'delete '}>
+              <AuthButton auth={props.accessName + '.delete'} key={'delete '}>
                 <Popconfirm
                   okText={t('xin-table.deleteButton.ok')}
                   cancelText={t('xin-table.deleteButton.cancel')}
@@ -124,7 +124,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
                     <Button type="primary" icon={<DeleteOutlined />} size={'small'} danger/>
                   </Tooltip>
                 </Popconfirm>
-              </ButtonAccess>
+              </AuthButton>
             }
             {afterOperateRender?.(record)}
           </Space>
@@ -141,9 +141,9 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
       return [
         <>
           {addShow &&
-            <ButtonAccess auth={accessName + '.create'} key={'create'}>
+            <AuthButton auth={accessName + '.create'} key={'create'}>
               <Button children={t('xin-table.createButton')} type={'primary'} onClick={addButtonClick} />
-            </ButtonAccess>
+            </AuthButton>
           }
         </>,
         ...toolBarRender,

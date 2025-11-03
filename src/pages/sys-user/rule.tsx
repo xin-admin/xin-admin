@@ -10,7 +10,7 @@ import {PlusOutlined} from "@ant-design/icons";
 import {useRef} from "react";
 import type {ProFormInstance} from "@ant-design/pro-components";
 import useAccess from "@/utils/useAccess";
-import ButtonAccess from "@/components/AuthButton";
+import AuthButton from "@/components/AuthButton";
 
 const Rule =  () => {
   const {t} = useTranslation();
@@ -286,7 +286,7 @@ const Rule =  () => {
         },
       }}
       beforeOperateRender={(data) => (
-        <ButtonAccess auth={"sys-user.rule.create"}>
+        <AuthButton auth={"sys-user.rule.create"}>
           <Tooltip title={t("sysUserRule.addChildButton")}>
             <Button
               color={'green'}
@@ -301,7 +301,7 @@ const Rule =  () => {
               }}
             />
           </Tooltip>
-        </ButtonAccess>
+        </AuthButton>
       )}
       formProps={{
         grid: true,

@@ -6,7 +6,7 @@ interface PropsTypes {
   children: React.ReactNode;
 }
 
-const ButtonAccess =  ( props: PropsTypes ) => {
+const AuthButton =  ( props: PropsTypes ) => {
 
   const access = useAuthStore((model) => model.access);
 
@@ -25,4 +25,4 @@ const ButtonAccess =  ( props: PropsTypes ) => {
   );
 }
 
-export default ButtonAccess
+export default AuthButton;
