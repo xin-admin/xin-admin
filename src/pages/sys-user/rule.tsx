@@ -205,13 +205,6 @@ const Rule =  () => {
       render: (value) => <Tag bordered={false} color={'geekblue'}>{value}</Tag>,
     },
     {
-      title: '路由地址',
-      hideInTable: true,
-      valueType: 'text',
-      hideInForm: true,
-      dataIndex: 'path',
-    },
-    {
       title: '显示状态',
       align: 'center',
       dataIndex: 'hidden',
