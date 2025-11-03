@@ -9,9 +9,12 @@ import IconSelect from "@/components/XinForm/IconSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useRef} from "react";
 import type {ProFormInstance} from "@ant-design/pro-components";
+import useAccess from "@/utils/useAccess";
+import ButtonAccess from "@/components/AuthButton";
 
 const Rule =  () => {
   const {t} = useTranslation();
+  const {auth} = useAccess();
   const formRef = useRef<ProFormInstance>(null);
   const xinTableRef = useRef<XinTableRef<ISysRule>>(null);
 
@@ -213,9 +216,10 @@ const Rule =  () => {
         if (data.type === 'rule' || data.type === 'nested-route') { return '-' }
         return (
           <Switch
+            defaultValue={data.hidden === 1}
+            disabled={!auth("sys-user.rule.show")}
             checkedChildren={t("sysUserRule.hidden.1")}
             unCheckedChildren={t("sysUserRule.hidden.0")}
-            defaultValue={data.hidden === 1}
             onChange={ async (_, event) => {
               event.stopPropagation();
               await showRule(data.id!);
@@ -234,9 +238,10 @@ const Rule =  () => {
       render: (_, data) => {
         return (
           <Switch
+            defaultChecked={data.status === 1}
+            disabled={!auth("sys-user.rule.status")}
             checkedChildren={t("sysUserRule.status.1")}
             unCheckedChildren={t("sysUserRule.status.0")}
-            defaultChecked={data.status === 1}
             onChange={async (_, event) => {
               event.stopPropagation();
               await statusRule(data.id!);
@@ -280,8 +285,8 @@ const Rule =  () => {
           bordered: true
         },
       }}
-      beforeOperateRender={(data) => {
-        return (
+      beforeOperateRender={(data) => (
+        <ButtonAccess auth={"sys-user.rule.create"}>
           <Tooltip title={t("sysUserRule.addChildButton")}>
             <Button
               color={'green'}
@@ -296,8 +301,8 @@ const Rule =  () => {
               }}
             />
           </Tooltip>
-        )
-      }}
+        </ButtonAccess>
+      )}
       formProps={{
         grid: true,
         colProps: {span: 12}
