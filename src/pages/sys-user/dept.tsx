@@ -14,7 +14,7 @@ import {
 import {BankOutlined, DeleteOutlined, PlusOutlined, TeamOutlined, UserOutlined} from "@ant-design/icons";
 import {useEffect, useRef, useState} from "react";
 import {listDept, addDept, updateDept, deleteDept, deptUsers} from "@/api/sysUserDept";
-import type {IDeptUsers, ISysDept} from "@/domain/iSysDept.ts";
+import type {ISysDept} from "@/domain/iSysDept.ts";
 import {isArray, omit} from 'lodash';
 import type {XinTableColumn} from "@/components/XinTable/typings.ts";
 import {BetaSchemaForm, type ProFormInstance} from "@ant-design/pro-components";
@@ -22,6 +22,7 @@ import * as React from "react";
 import {useTranslation} from "react-i18next";
 import AuthButton from "@/components/AuthButton";
 import useAuth from "@/utils/useAuth.ts";
+import type ISysUser from "@/domain/iSysUser.ts";
 
 const deptMap = new Map<string, ISysDept>();
 
@@ -61,7 +62,7 @@ const Dept = () => {
   /** 部门数据 */
   const [deptData, setDeptData] = useState<TreeDataNode[]>([]);
   /** 部门用户列表数据 */
-  const [users, setUsers] = useState<IDeptUsers[]>([]);
+  const [users, setUsers] = useState<ISysUser[]>([]);
   /** 部门用户列表表格参数 */
   const [tableParams, setTableParams] = useState<TableParams>({ page: 1, pageSize: 10, total: 0 });
   /** 加载状态 */
@@ -249,7 +250,7 @@ const Dept = () => {
     },
   ];
   /** 部门用户列表表格列 */
-  const usersColumns: TableProps['columns'] = [
+  const usersColumns: TableProps<ISysUser>['columns'] = [
     {
       title: t("sysUserDept.users.column.id"),
       dataIndex: 'id',
@@ -404,7 +405,7 @@ const Dept = () => {
             }}
           />
           <AuthButton auth={"sys-user.dept.users"}>
-            <Table<IDeptUsers>
+            <Table<ISysUser>
               style={{ display: tabKey === 'users' ? "block" : "none" }}
               dataSource={users}
               bordered={true}

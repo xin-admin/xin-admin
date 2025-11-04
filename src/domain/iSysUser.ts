@@ -41,7 +41,6 @@ export default interface ISysUser {
   }[];
   /** 部门名称 */
   dept_name?: string;
-
 }
 
 

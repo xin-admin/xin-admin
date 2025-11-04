@@ -31,18 +31,3 @@ export interface ISysDept {
   /** 更新时间 */
   updated_at?: string;
 }
-
-export interface IDeptUsers {
-  /** 用户ID */
-  id?: number;
-  /** 用户名 */
-  username?: string;
-  /** 昵称 */
-  nickname?: string;
-  /** 邮箱 */
-  email?: string;
-  /** 手机号 */
-  mobile?: string;
-  /** 状态 */
-  status?: number;
-}
