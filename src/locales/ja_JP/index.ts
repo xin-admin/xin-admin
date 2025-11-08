@@ -4,6 +4,7 @@ import xinTable from "./xin-table";
 import sysUserList from "./sys-user-list";
 import sysUserDept from "./sys-user-dept";
 import sysUserRule from "./sys-user-rule";
+import sysUserRole from "./sys-user-role";
 
 export default {
   ...xinTable,
@@ -12,4 +13,5 @@ export default {
   ...sysUserList,
   ...sysUserDept,
   ...sysUserRule,
+  ...sysUserRole,
 };

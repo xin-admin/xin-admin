@@ -29,23 +29,23 @@ const Role = () => {
     {
       key: "users",
       icon: <TeamOutlined />,
-      label: '用户列表',
+      label: t('sysUserRole.tab.users'),
     },
     {
       key: "rules",
       icon: <KeyOutlined />,
-      label: '权限设置'
+      label: t('sysUserRole.tab.rules')
     }
   ];
   // 角色表格列配置
   const roleColumns: XinTableColumn<ISysRole>[] = [
     {
-      title: '角色名称',
+      title: t('sysUserRole.table.roleName'),
       dataIndex: "name",
       valueType: "text",
       align: "center",
       formItemProps: {
-        rules: [{ required: true, message: '请输入角色名称' }],
+        rules: [{ required: true, message: t('sysUserRole.table.roleName.required') }],
       },
       render: (value, record) => (
         <>
@@ -56,51 +56,51 @@ const Role = () => {
       ),
     },
     {
-      title: '排序',
+      title: t('sysUserRole.table.sort'),
       dataIndex: "sort",
       valueType: "digit",
       hideInSearch: true,
       align: "center",
       formItemProps: {
-        rules: [{ required: true, message: '请输入排序值' }],
+        rules: [{ required: true, message: t('sysUserRole.table.sort.required') }],
       },
       render: (value) => <Tag bordered={false} color="purple">{value}</Tag>,
     },
     {
-      title: '用户数',
+      title: t('sysUserRole.table.userCount'),
       dataIndex: "countUser",
       valueType: "text",
       hideInForm: true,
       align: "center",
-      renderText: (value: number) => <a><u>{value}人</u></a>,
+      renderText: (value: number) => <a><u>{value}{t('sysUserRole.userTable.person')}</u></a>,
     },
     {
-      title: '状态',
+      title: t('sysUserRole.table.status'),
       dataIndex: "status",
       valueType: "switch",
       align: "center",
       filters: true,
       hideInSearch: true,
       formItemProps: {
-        rules: [{ required: true, message: '请选择状态' }],
+        rules: [{ required: true, message: t('sysUserRole.table.status.required') }],
       },
       valueEnum: {
-        0: { text: "停用", status: 'Error' as const },
-        1: { text: "启用", status: 'Success' as const },
+        0: { text: t('sysUserRole.table.status.disable'), status: 'Error' as const },
+        1: { text: t('sysUserRole.table.status.enable'), status: 'Success' as const },
       },
       render: (_, record) => (
         <Switch
           disabled={record.id === 1}
           checked={record.status === 1}
-          checkedChildren='启用'
-          unCheckedChildren='停用'
+          checkedChildren={t('sysUserRole.table.status.enable')}
+          unCheckedChildren={t('sysUserRole.table.status.disable')}
           onChange={async (_, event) => {
             event.stopPropagation();
             try {
               await statusRole(record.id!);
-              message.success('状态更新成功');
+              message.success(t('sysUserRole.message.statusUpdateSuccess'));
             } catch (error) {
-              message.error('状态更新失败');
+              message.error(t('sysUserRole.message.statusUpdateFailed'));
               console.error('Failed to update role status:', error);
             }
           }}
@@ -109,20 +109,20 @@ const Role = () => {
     },
     {
       valueType: 'textarea',
-      title: '角色描述',
+      title: t('sysUserRole.table.description'),
       dataIndex: 'description',
       hideInTable: true,
     },
     {
       valueType: 'fromNow',
-      title: '创建时间',
+      title: t('sysUserRole.table.createdAt'),
       hideInForm: true,
       dataIndex: 'created_at',
       align: 'center',
     },
     {
       valueType: 'fromNow',
-      title: '更新时间',
+      title: t('sysUserRole.table.updatedAt'),
       hideInForm: true,
       dataIndex: 'updated_at',
       align: 'center',
@@ -131,46 +131,46 @@ const Role = () => {
   // 用户列表表格列配置
   const userColumns: TableProps<ISysUser>['columns'] = [
     {
-      title: '用户ID',
+      title: t('sysUserRole.userTable.userId'),
       dataIndex: 'id',
       key: 'id',
       align: 'center',
       width: 80,
     },
     {
-      title: '用户名',
+      title: t('sysUserRole.userTable.username'),
       dataIndex: 'username',
       key: 'username',
       align: 'center',
     },
     {
-      title: '昵称',
+      title: t('sysUserRole.userTable.nickname'),
       dataIndex: 'nickname',
       key: 'nickname',
       align: 'center',
     },
     {
-      title: '邮箱',
+      title: t('sysUserRole.userTable.email'),
       dataIndex: 'email',
       key: 'email',
       align: 'center',
       ellipsis: true,
     },
     {
-      title: '手机号',
+      title: t('sysUserRole.userTable.mobile'),
       dataIndex: 'mobile',
       key: 'mobile',
       align: 'center',
     },
     {
-      title: '状态',
+      title: t('sysUserRole.userTable.status'),
       dataIndex: 'status',
       key: 'status',
       align: 'center',
       render: (value: number) => {
         const status = value === 0 
-          ? { color: 'error', text: "禁用" }
-          : { color: 'success', text: "正常" };
+          ? { color: 'error', text: t('sysUserRole.userTable.status.banned') }
+          : { color: 'success', text: t('sysUserRole.userTable.status.normal') };
         return <Tag color={status.color}>{status.text}</Tag>;
       },
       width: 80,
@@ -281,14 +281,14 @@ const Role = () => {
   // 保存权限设置
   const handleSaveRules = async () => {
     if (!selectedRoleId) {
-      message.warning('请先选择角色');
+      message.warning(t('sysUserRole.message.selectRoleFirst'));
       return;
     }
     setIsSavingRules(true);
     try {
       const ruleIds = checkedRuleKeys.map(key => Number(key));
       await saveRoleRules(selectedRoleId, ruleIds);
-      message.success('权限保存成功');
+      message.success(t('sysUserRole.message.rulesSaveSuccess'));
     } finally {
       setIsSavingRules(false);
     }
@@ -304,7 +304,7 @@ const Role = () => {
           columns={roleColumns}
           rowKey="id"
           tableProps={{
-            headerTitle: '角色列表',
+            headerTitle: t('sysUserRole.table.headerTitle'),
             search: false,
             bordered: true,
             rowSelection: {
@@ -367,13 +367,13 @@ const Role = () => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                   <span style={{ color: '#666', fontSize: 12 }}>
-                    已选择 {checkedRuleKeys.length} 项权限
+                    {t('sysUserRole.permission.selectedCount', { count: checkedRuleKeys.length })}
                   </span>
-                  <Button size="small" onClick={expandAll}>展开全部</Button>
-                  <Button size="small" onClick={collapseAll}>折叠全部</Button>
-                  <Button size="small" onClick={selectAll}>选择全部</Button>
-                  <Button size="small" onClick={deselectAll}>清空选择</Button>
-                  <Button size="small" onClick={invertSelection}>反选</Button>
+                  <Button size="small" onClick={expandAll}>{t('sysUserRole.button.expandAll')}</Button>
+                  <Button size="small" onClick={collapseAll}>{t('sysUserRole.button.collapseAll')}</Button>
+                  <Button size="small" onClick={selectAll}>{t('sysUserRole.button.selectAll')}</Button>
+                  <Button size="small" onClick={deselectAll}>{t('sysUserRole.button.clearAll')}</Button>
+                  <Button size="small" onClick={invertSelection}>{t('sysUserRole.button.invertSelection')}</Button>
                   <Button
                     type="primary"
                     icon={<SaveOutlined />}
@@ -382,7 +382,7 @@ const Role = () => {
                     size="small"
                     disabled={selectedRoleId === 1}
                   >
-                    保存权限
+                    {t('sysUserRole.button.saveRules')}
                   </Button>
                 </div>
               </>
@@ -390,7 +390,7 @@ const Role = () => {
           ) : (
             <div style={{ textAlign: 'center', color: '#00000040' }}>
               <SmileOutlined style={{ fontSize: 40, marginBottom: 12 }} />
-              <p>请先选择角色</p>
+              <p>{t('sysUserRole.placeholder.selectRole')}</p>
             </div>
           )}
         </Card>
