@@ -19,6 +19,7 @@ const MenuRender = () => {
   const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
   const setBreadcrumb = useGlobalStore(state => state.setBreadcrumb);
   const [menu, setMenu] = useState<MenuItem[]>([]);
+  const isMobile = useGlobalStore(state => state.isMobile);
   const navigate = useNavigate();
 
   const transformMenus = useCallback((nodes: IMenus[]): MenuItem[] => {
@@ -67,6 +68,10 @@ const MenuRender = () => {
   }
 
   useEffect(() => {
+    if(isMobile) {
+      setMenu(transformMenus(menus))
+      return;
+    }
     if(layout === 'mix' || layout === 'columns') {
       const rule = menus.find(item => item.key === menuParentKey!)
       if (rule && rule.children) {
@@ -79,7 +84,7 @@ const MenuRender = () => {
 
   return (
     <Menu
-      mode={ layout === 'top' ? 'horizontal' : 'inline' }
+      mode={ layout === 'top' || !isMobile ? 'horizontal' : 'inline' }
       items={menu}
       onClick={menuClick}
     />

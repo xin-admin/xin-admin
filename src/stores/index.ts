@@ -22,6 +22,8 @@ interface GlobalState {
   appList: AppListProps;
   breadcrumb: BreadcrumbType[];
   menuParentKey: string | null;
+  isMobile: boolean;
+  mobileMenuOpen: boolean;
   setHeadTitle: (title: string) => void;
   setCollapsed: (collapsed: boolean) => void;
   setThemeConfig: (themeConfig: ThemeProps) => void;
@@ -29,6 +31,8 @@ interface GlobalState {
   setLayout: (layout: LayoutType) => void;
   setBreadcrumb: (breadcrumb: BreadcrumbType[]) => void;
   setMenuParentKey: (menuParentKey: string) => void;
+  setIsMobile: (isMobile: boolean) => void;
+  setMobileMenuOpen: (mobileMenuOpen: boolean) => void;
 }
 
 export const useGlobalStore = create<GlobalState>()(
@@ -44,6 +48,8 @@ export const useGlobalStore = create<GlobalState>()(
       appList: [],
       breadcrumb: [],
       menuParentKey: null,
+      isMobile: false,
+      mobileMenuOpen: false,
       setHeadTitle: (headTitle: string) => {
         setState({headTitle})
       },
@@ -64,6 +70,12 @@ export const useGlobalStore = create<GlobalState>()(
       },
       setMenuParentKey: (menuParentKey: string) => {
         setState({menuParentKey})
+      },
+      setIsMobile: (isMobile: boolean) => {
+        setState({isMobile})
+      },
+      setMobileMenuOpen: (mobileMenuOpen: boolean) => {
+        setState({mobileMenuOpen})
       }
     }),
     {

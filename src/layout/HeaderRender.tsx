@@ -23,6 +23,7 @@ const HeaderRender: React.FC = () => {
   const setCollapsed = useGlobalStore(state => state.setCollapsed);
   const menuParentKey = useGlobalStore(state => state.menuParentKey);
   const setMenuParentKey = useGlobalStore(state => state.setMenuParentKey);
+  const isMobile = useGlobalStore(state => state.isMobile);
   const theme: ThemeConfig = {
     cssVar: true,
     token: { colorTextBase: themeConfig.headerColor },
@@ -76,40 +77,53 @@ const HeaderRender: React.FC = () => {
   
   return (
     <ConfigProvider theme={theme}>
-      <Header
-        className={"flex sticky z-1 top-0 backdrop-blur-xs"}
-        style={{
-          borderBottom: themeConfig.layoutBorder ? '1px solid ' + themeConfig.colorBorder : 'none',
-        }}
-      >
-        { layout !== 'columns' && <HeaderLeftRender/> }
-        <div className="flex-1 flex items-center">
-          {/* 侧边栏开关 */}
-          {['mix', 'side'].includes(layout) && (
-            <Button
-              type={'text'}
-              className={'text-[16px] mr-2'}
-              onClick={() => setCollapsed(!collapsed)}
-            >
-              { collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/> }
-            </Button>
-          )}
-          {/* 面包屑 */}
-          { ['columns', 'side'].includes(layout) && <BreadcrumbRender/> }
-          {/* 顶部菜单 */}
-          { layout == 'top' && <MenuRender /> }
-          {/* 混合布局模式下的顶部菜单 */}
-          { layout == 'mix' && (
-            <Menu
-              style={{ borderBottom: 'none' }}
-              mode="horizontal"
-              items={mixMenu}
-              selectedKeys={[menuParentKey!]}
-            />
-          )}
-        </div>
-        <HeaderRightRender/>
-      </Header>
+      {/* 移动端菜单按钮 */}
+      {isMobile ? (
+        <Header
+          className={"flex sticky z-1 top-0 backdrop-blur-xs justify-between items-center"}
+          style={{
+            borderBottom: themeConfig.layoutBorder ? '1px solid ' + themeConfig.colorBorder : 'none',
+          }}
+        >
+          <HeaderLeftRender/>
+          <HeaderRightRender/>
+        </Header>
+      ) : (
+        <Header
+          className={"flex sticky z-1 top-0 backdrop-blur-xs"}
+          style={{
+            borderBottom: themeConfig.layoutBorder ? '1px solid ' + themeConfig.colorBorder : 'none',
+          }}
+        >
+          { layout !== 'columns' && <HeaderLeftRender/> }
+          <div className="flex-1 flex items-center">
+            {/* 侧边栏开关 */}
+            {['mix', 'side'].includes(layout) && (
+              <Button
+                type={'text'}
+                className={'text-[16px] mr-2'}
+                onClick={() => setCollapsed(!collapsed)}
+              >
+                { collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/> }
+              </Button>
+            )}
+            {/* 面包屑 */}
+            { ['columns', 'side'].includes(layout) && <BreadcrumbRender/> }
+            {/* 顶部菜单 */}
+            { layout == 'top' && <MenuRender /> }
+            {/* 混合布局模式下的顶部菜单 */}
+            { layout == 'mix' && (
+              <Menu
+                style={{ borderBottom: 'none' }}
+                mode="horizontal"
+                items={mixMenu}
+                selectedKeys={[menuParentKey!]}
+              />
+            )}
+          </div>
+          <HeaderRightRender/>
+        </Header>
+      )}
     </ConfigProvider>
   )
 }

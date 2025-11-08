@@ -35,6 +35,7 @@ const HeaderLeftRender = () => {
   const title = useGlobalStore(state => state.title);
   const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
   const setBreadcrumb = useGlobalStore(state => state.setBreadcrumb);
+  const isMobile = useGlobalStore(state => state.isMobile);
 
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [searchOpen, setSearch] = useState<boolean>(false);
@@ -137,21 +138,25 @@ const HeaderLeftRender = () => {
         </Space>
       </Modal>
       <Space>
-        <Button icon={<HomeOutlined/>} size={'large'} type={'text'}
+        { !isMobile && (
+          <>
+            <Button icon={<HomeOutlined/>} size={'large'} type={'text'}
                 onClick={() => window.open('https://xin-admin.com')}/>
-        <Button icon={<GithubOutlined/>} size={'large'} type={'text'}
-                onClick={() => window.open('https://github.com/xin-admin/xin-admin-ui')}/>
-        <Button icon={<SearchOutlined/>} size={'large'} type={'text'} onClick={() => setSearch(true)}/>
-        <Button
-          onClick={onFullscreenClick}
-          icon={fullscreen ? <FullscreenExitOutlined/> : <FullscreenOutlined/>}
-          size={"large"}
-          type={'text'}
-        />
-        <Dropdown menu={{items: localesItems}}>
-          <Button icon={<TranslationOutlined/>} size={"large"} type={'text'}/>
-        </Dropdown>
-        <Button onClick={() => setThemeDrawer(!themeDrawer)} icon={<SettingOutlined/>} size={"large"} type={'text'}/>
+            <Button icon={<GithubOutlined/>} size={'large'} type={'text'}
+                    onClick={() => window.open('https://github.com/xin-admin/xin-admin-ui')}/>
+            <Button icon={<SearchOutlined/>} size={'large'} type={'text'} onClick={() => setSearch(true)}/>
+            <Button
+              onClick={onFullscreenClick}
+              icon={fullscreen ? <FullscreenExitOutlined/> : <FullscreenOutlined/>}
+              size={"large"}
+              type={'text'}
+            />
+            <Dropdown menu={{items: localesItems}}>
+              <Button icon={<TranslationOutlined/>} size={"large"} type={'text'}/>
+            </Dropdown>
+            <Button onClick={() => setThemeDrawer(!themeDrawer)} icon={<SettingOutlined/>} size={"large"} type={'text'}/>
+          </>
+        )}
         {userInfo ?
           <Dropdown menu={{items: userItems}}>
             <Button size={"large"} type={'text'}>
