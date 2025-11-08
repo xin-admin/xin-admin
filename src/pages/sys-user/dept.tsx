@@ -74,6 +74,10 @@ const Dept = () => {
       setTableLoading(true);
       const data = await deptUsers(id, omit(params || tableParams, 'total'));
       setUsers(data.data.data!.data);
+      setTableParams({
+        ...tableParams,
+        total: data.data.data!.total
+      })
     } finally {
       setTableLoading(false);
     }

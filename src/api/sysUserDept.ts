@@ -1,6 +1,7 @@
 import createAxios from '@/utils/request';
-import type {IDeptUsers, ISysDept} from "@/domain/iSysDept.ts";
+import type {ISysDept} from "@/domain/iSysDept.ts";
 import React from "react";
+import type ISysUser from "@/domain/iSysUser.ts";
 
 /** 获取部门列表 */
 export async function listDept() {
@@ -42,7 +43,7 @@ export async function deptUsers(id: number, params: {
   page: number;
   pageSize: number;
 } = { page: 1, pageSize: 10 }) {
-  return createAxios<API.ListResponse<IDeptUsers>>({
+  return createAxios<API.ListResponse<ISysUser>>({
     url: '/sys-user/dept/users/' + id,
     method: 'get',
     params: params
