@@ -84,7 +84,7 @@ const MenuRender = () => {
 
   return (
     <Menu
-      mode={ layout === 'top' || !isMobile ? 'horizontal' : 'inline' }
+      mode={ layout === 'top' && !isMobile ? 'horizontal' : 'inline' }
       items={menu}
       onClick={menuClick}
     />
