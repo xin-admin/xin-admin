@@ -488,18 +488,6 @@ const defaultRoute: IMenus[] = [
         local: "menu.system.monitor",
         hidden: 1,
         link: 0
-      },
-      {
-        type: "route",
-        key: "system.rule",
-        name: "菜单权限",
-        path: "/system/rule",
-        icon: "",
-        elementPath: "/system/rule",
-        order: 2,
-        local: "menu.system.rule",
-        hidden: 1,
-        link: 0
       }
     ]
   },
