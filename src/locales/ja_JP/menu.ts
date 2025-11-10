@@ -36,6 +36,10 @@ export default {
   "menu.system": "システム設定",
   "menu.system.info": "システム情報",
   "menu.system.monitor": "システムモニター",
-  "menu.system.rule": "メニュー権限",
+  "menu.system.watcher": "システムログ",
+  "menu.system.watcher.request": "リクエスト記録",
+  "menu.system.watcher.query": "SQL記録",
+  "menu.system.watcher.cache": "キャッシュ記録",
+  "menu.system.watcher.redis": "Redis記録",
   "menu.xin-admin": "XinAdmin",
 }

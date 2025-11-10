@@ -36,6 +36,10 @@ export default {
   "menu.system": "System Settings",
   "menu.system.info": "System Info",
   "menu.system.monitor": "System Monitor",
-  "menu.system.rule": "Menu Permission",
+  "menu.system.watcher": "System Logs",
+  "menu.system.watcher.request": "Request Records",
+  "menu.system.watcher.query": "SQL Records",
+  "menu.system.watcher.cache": "Cache Records",
+  "menu.system.watcher.redis": "Redis Records",
   "menu.xin-admin": "XinAdmin",
 }

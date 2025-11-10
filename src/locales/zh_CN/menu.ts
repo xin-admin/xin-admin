@@ -36,6 +36,10 @@ export default {
   "menu.system": "系统设置",
   "menu.system.info": "系统信息",
   "menu.system.monitor": "系统监控",
-  "menu.system.rule": "菜单权限",
+  "menu.system.watcher": "系统日志",
+  "menu.system.watcher.request": "请求记录",
+  "menu.system.watcher.query": "SQL记录",
+  "menu.system.watcher.cache": "缓存记录",
+  "menu.system.watcher.redis": "Redis记录",
   "menu.xin-admin": "XinAdmin",
 }
