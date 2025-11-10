@@ -3,6 +3,7 @@ import { HddOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { getCacheList } from '@/api/watcher';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import type { TableProps } from 'antd';
 import type { CacheRecord } from '@/domain/iSysWatcher';
 
@@ -10,6 +11,7 @@ import type { CacheRecord } from '@/domain/iSysWatcher';
  * 缓存记录查询页面
  */
 export default function CacheRecordPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<CacheRecord[]>([]);
   const [pagination, setPagination] = useState({
@@ -45,7 +47,7 @@ export default function CacheRecordPage() {
         total: totalCount,
       });
     } catch (error) {
-      console.error('获取缓存数据失败:', error);
+      console.error(t('watcher.cache.loadError'), error);
       setData([]);
       setPagination({
         current: page,
@@ -82,14 +84,14 @@ export default function CacheRecordPage() {
    */
   const columns: TableProps['columns'] = [
     {
-      title: '缓存类型',
+      title: t('watcher.cache.type'),
       dataIndex: 'type',
       key: 'type',
       width: 120,
-      render: (type: 'cache' | 'redis') => type === 'cache' ? '缓存' : 'Redis',
+      render: (type: 'cache' | 'redis') => type === 'cache' ? t('watcher.cache.typeCache') : t('watcher.cache.typeRedis'),
     },
     {
-      title: '缓存键',
+      title: t('watcher.cache.key'),
       dataIndex: 'key',
       key: 'key',
       ellipsis: true,
@@ -104,7 +106,7 @@ export default function CacheRecordPage() {
       ),
     },
     {
-      title: '缓存值',
+      title: t('watcher.cache.value'),
       dataIndex: 'value',
       key: 'value',
       ellipsis: true,
@@ -122,12 +124,12 @@ export default function CacheRecordPage() {
       },
     },
     {
-      title: '过期时间',
+      title: t('watcher.cache.expiration'),
       dataIndex: 'expiration',
       key: 'expiration',
       width: 180,
       render: (expiration: number) => {
-        if (!expiration) return '永不过期';
+        if (!expiration) return t('watcher.cache.neverExpire');
         return (
           <Space>
             <ClockCircleOutlined style={{ color: '#1890ff' }} />
@@ -143,14 +145,14 @@ export default function CacheRecordPage() {
       title={(
         <Space>
           <HddOutlined />
-          <span>缓存记录查询</span>
+          <span>{t('watcher.cache.title')}</span>
         </Space>
       )}
       extra={(
         <DatePicker
           value={selectedDate}
           onChange={handleDateChange}
-          placeholder="选择日期"
+          placeholder={t('watcher.cache.datePlaceholder')}
           style={{ width: 150 }}
         />
       )}
@@ -165,7 +167,7 @@ export default function CacheRecordPage() {
           total: pagination.total,
           showSizeChanger: true,
           showQuickJumper: true,
-          showTotal: (total) => `共 ${total} 条记录`,
+          showTotal: (total) => t('watcher.cache.totalRecords', { total }),
         }}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}

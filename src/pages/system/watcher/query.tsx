@@ -3,6 +3,7 @@ import { DatabaseOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { getQueryList } from '@/api/watcher';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import type { TableProps } from 'antd';
 import type { QueryRecord } from '@/domain/iSysWatcher';
 const { Paragraph } = Typography;
@@ -10,6 +11,7 @@ const { Paragraph } = Typography;
  * SQL查询记录查询页面
  */
 export default function QueryRecordPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<QueryRecord[]>([]);
   const [pagination, setPagination] = useState({
@@ -45,7 +47,7 @@ export default function QueryRecordPage() {
         total: totalCount,
       });
     } catch (error) {
-      console.error('获取查询记录失败:', error);
+      console.error(t('watcher.query.loadError'), error);
       setData([]);
       setPagination({
         current: page,
@@ -79,7 +81,7 @@ export default function QueryRecordPage() {
    */
   const columns: TableProps<QueryRecord>['columns'] = [
     {
-      title: '数据库连接',
+      title: t('watcher.query.connection'),
       dataIndex: 'connection',
       key: 'connection',
       width: 100,
@@ -92,7 +94,7 @@ export default function QueryRecordPage() {
       ),
     },
     {
-      title: 'SQL语句',
+      title: t('watcher.query.sql'),
       dataIndex: 'sql',
       key: 'sql',
       ellipsis: true,
@@ -109,7 +111,7 @@ export default function QueryRecordPage() {
       ),
     },
     {
-      title: '执行时间',
+      title: t('watcher.query.time'),
       dataIndex: 'time',
       key: 'time',
       width: 80,
@@ -124,33 +126,33 @@ export default function QueryRecordPage() {
             <span style={{ 
               color: duration >= 1000 ? '#ff4d4f' : duration >= 100 ? '#faad14' : '#52c41a'
             }}>
-              {time}ms
+              {t('watcher.common.ms', { time })}
             </span>
           </Space>
         );
       },
     },
     {
-      title: '慢查询',
+      title: t('watcher.query.slow'),
       dataIndex: 'slow',
       key: 'slow',
       width: 80,
       align: 'center',
       render: (slow: boolean) => (
         <span style={{ color: slow ? '#ff4d4f' : '#52c41a' }}>
-          {slow ? '是' : '否'}
+          {slow ? t('watcher.query.yes') : t('watcher.query.no')}
         </span>
       ),
     },
     {
-      title: '文件位置',
+      title: t('watcher.query.file'),
       dataIndex: 'file',
       key: 'file',
       width: 500,
       ellipsis: true,
       render: (file, record) => (
         <Paragraph copyable ellipsis style={{ fontSize: '12px', margin: 0 }}>
-          {record.line}行 : {file} 
+          {t('watcher.query.line', { line: record.line })} : {file} 
         </Paragraph>
       ),
     },
@@ -161,14 +163,14 @@ export default function QueryRecordPage() {
       title={(
         <Space>
           <DatabaseOutlined />
-          <span>SQL查询记录查询</span>
+          <span>{t('watcher.query.title')}</span>
         </Space>
       )}
       extra={(
         <DatePicker
           value={selectedDate}
           onChange={handleDateChange}
-          placeholder="选择日期"
+          placeholder={t('watcher.query.datePlaceholder')}
           style={{ width: 150 }}
         />
       )}
@@ -184,7 +186,7 @@ export default function QueryRecordPage() {
           total: pagination.total,
           showSizeChanger: true,
           showQuickJumper: true,
-          showTotal: (total) => `共 ${total} 条记录`,
+          showTotal: (total) => t('watcher.query.totalRecords', { total }),
         }}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}

@@ -3,6 +3,7 @@ import { DatabaseOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { getRedisList } from '@/api/watcher';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import type { TableProps } from 'antd';
 import type { RedisRecord } from '@/domain/iSysWatcher';
 const { Paragraph } = Typography;
@@ -11,6 +12,7 @@ const { Paragraph } = Typography;
  * Redis记录查询页面
  */
 export default function RedisRecordPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RedisRecord[]>([]);
   const [pagination, setPagination] = useState({
@@ -63,7 +65,7 @@ export default function RedisRecordPage() {
         total: totalCount,
       });
     } catch (error) {
-      console.error('获取Redis记录失败:', error);
+      console.error(t('watcher.redis.loadError'), error);
       setData([]);
       setPagination({
         current: page,
@@ -97,7 +99,7 @@ export default function RedisRecordPage() {
    */
   const columns: TableProps<RedisRecord>['columns'] = [
     {
-      title: 'Redis连接',
+      title: t('watcher.redis.connection'),
       dataIndex: 'connection',
       key: 'connection',
       width: 120,
@@ -110,7 +112,7 @@ export default function RedisRecordPage() {
       ),
     },
     {
-      title: '执行命令',
+      title: t('watcher.redis.command'),
       dataIndex: 'command',
       key: 'command',
       width: 300,
@@ -137,7 +139,7 @@ export default function RedisRecordPage() {
       },
     },
     {
-      title: '执行时间',
+      title: t('watcher.redis.time'),
       dataIndex: 'time',
       key: 'time',
       width: 90,
@@ -154,7 +156,7 @@ export default function RedisRecordPage() {
             <span style={{ 
               color: isSlow ? '#d4380d' : isWarning ? '#d48806' : '#389e0d'
             }}>
-              {time}ms
+              {t('watcher.common.ms', { time })}
             </span>
           </Space>
         );
@@ -167,14 +169,14 @@ export default function RedisRecordPage() {
       title={(
         <Space>
           <DatabaseOutlined />
-          <span>Redis记录查询</span>
+          <span>{t('watcher.redis.title')}</span>
         </Space>
       )}
       extra={(
         <DatePicker
           value={selectedDate}
           onChange={handleDateChange}
-          placeholder="选择日期"
+          placeholder={t('watcher.redis.datePlaceholder')}
           style={{ width: 150 }}
         />
       )}
@@ -190,7 +192,7 @@ export default function RedisRecordPage() {
           total: pagination.total,
           showSizeChanger: true,
           showQuickJumper: true,
-          showTotal: (total) => `共 ${total} 条记录`,
+          showTotal: (total) => t('watcher.redis.totalRecords', { total }),
         }}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}

@@ -3,6 +3,7 @@ import { GlobalOutlined, ClockCircleOutlined, HddOutlined } from '@ant-design/ic
 import { useEffect, useState } from 'react';
 import { getRequestList } from '@/api/watcher';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import type { TableProps } from 'antd';
 import type { RequestRecord } from '@/domain/iSysWatcher';
 const { Paragraph } = Typography;
@@ -11,6 +12,7 @@ const { Paragraph } = Typography;
  * 请求记录查询页面
  */
 export default function RequestRecordPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RequestRecord[]>([]);
   const [pagination, setPagination] = useState({
@@ -62,7 +64,7 @@ export default function RequestRecordPage() {
         total: totalCount,
       });
     } catch (error) {
-      console.error('获取请求记录失败:', error);
+      console.error(t('watcher.request.loadError'), error);
       setData([]);
       setPagination({
         current: page,
@@ -96,7 +98,7 @@ export default function RequestRecordPage() {
    */
   const columns: TableProps<RequestRecord>['columns'] = [
     {
-      title: '请求方法',
+      title: t('watcher.request.method'),
       dataIndex: 'method',
       key: 'method',
       width: 90,
@@ -108,7 +110,7 @@ export default function RequestRecordPage() {
       ),
     },
     {
-      title: '请求路径',
+      title: t('watcher.request.uri'),
       dataIndex: 'uri',
       key: 'uri',
       ellipsis: true,
@@ -128,7 +130,7 @@ export default function RequestRecordPage() {
       ),
     },
     {
-      title: '状态码',
+      title: t('watcher.request.status'),
       dataIndex: 'response_status',
       key: 'response_status',
       width: 90,
@@ -142,7 +144,7 @@ export default function RequestRecordPage() {
       ),
     },
     {
-      title: 'IP地址',
+      title: t('watcher.request.ip'),
       dataIndex: 'ip_address',
       key: 'ip_address',
       width: 120,
@@ -154,7 +156,7 @@ export default function RequestRecordPage() {
       ),
     },
     {
-      title: '用户代理',
+      title: t('watcher.request.userAgent'),
       dataIndex: 'headers',
       key: 'user_agent',
       ellipsis: true,
@@ -172,7 +174,7 @@ export default function RequestRecordPage() {
       },
     },
     {
-      title: '响应时间',
+      title: t('watcher.request.duration'),
       dataIndex: 'duration',
       key: 'duration',
       width: 100,
@@ -189,24 +191,24 @@ export default function RequestRecordPage() {
             <span style={{ 
               color: isSlow ? '#d4380d' : isWarning ? '#d48806' : '#389e0d'
             }}>
-              {time}ms
+              {t('watcher.common.ms', { time })}
             </span>
           </Space>
         );
       },
     },
     {
-      title: '内存使用',
+      title: t('watcher.request.memory'),
       dataIndex: 'memory',
       key: 'memory',
       width: 100,
       align: 'center',
       render: (memory: number) => (
-        <span>{(memory / 1024 / 1024).toFixed(1)}MB</span>
+        <span>{t('watcher.common.mb', { memory: (memory / 1024 / 1024).toFixed(1) })}</span>
       ),
     },
     {
-      title: '请求时间',
+      title: t('watcher.request.time'),
       dataIndex: 'time',
       key: 'time',
       width: 160,
@@ -223,14 +225,14 @@ export default function RequestRecordPage() {
       title={(
         <Space>
           <HddOutlined />
-          <span>HTTP请求记录查询</span>
+          <span>{t('watcher.request.title')}</span>
         </Space>
       )}
       extra={(
         <DatePicker
           value={selectedDate}
           onChange={handleDateChange}
-          placeholder="选择日期"
+          placeholder={t('watcher.request.datePlaceholder')}
           style={{ width: 150 }}
         />
       )}
@@ -246,7 +248,7 @@ export default function RequestRecordPage() {
           total: pagination.total,
           showSizeChanger: true,
           showQuickJumper: true,
-          showTotal: (total) => `共 ${total} 条记录`,
+          showTotal: (total) => t('watcher.request.totalRecords', { total }),
         }}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}
