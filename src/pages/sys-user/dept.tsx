@@ -302,8 +302,8 @@ const Dept = () => {
   useEffect(() => { refreshDept() }, []);
 
   return (
-    <Row gutter={16}>
-      <Col span={12}>
+    <Row gutter={[20, 20]}>
+      <Col xxl={12} lg={12} xs={24}>
         <BetaSchemaForm<ISysDept>
           layoutType={'ModalForm'}
           open={formOpen}
@@ -382,7 +382,7 @@ const Dept = () => {
           />
         </Card>
       </Col>
-      <Col span={12}>
+      <Col xxl={12} lg={12} xs={24}>
         <Card
           tabList={tabList}
           tabProps={{ accessKey: tabKey }}
@@ -427,6 +427,7 @@ const Dept = () => {
                   selectUsers(Number(selectKey), params).then();
                 }
               }}
+              scroll={{x: 600}}
             />
           </AuthButton>
         </Card>

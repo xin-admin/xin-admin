@@ -284,6 +284,7 @@ const Rule =  () => {
         cardProps: {
           bordered: true
         },
+        scroll: {x: 1400},
       }}
       beforeOperateRender={(data) => (
         <AuthButton auth={"sys-user.rule.create"}>

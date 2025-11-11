@@ -3,12 +3,14 @@ import {UserOutlined, LockOutlined, IdcardOutlined, SnippetsOutlined} from '@ant
 import { Outlet, useNavigate, useLocation } from 'react-router';
 import {useEffect, useState} from 'react';
 import {useTranslation} from "react-i18next";
+import { useMobile } from '@/utils/useMobile';
 
 const UserSettingsPage = () => {
   const [activeTab, setActiveTab] = useState('/user/setting');
   const navigate = useNavigate();
   const location = useLocation();
   const {t} = useTranslation();
+  const isMobile = useMobile();
 
   useEffect(() => {
     setActiveTab(location.pathname);
@@ -19,7 +21,7 @@ const UserSettingsPage = () => {
       label: (
         <span className="flex items-center">
           <UserOutlined className="mr-2" />
-          {t("userSetting.baseInfo")}
+          {isMobile ? null : t("userSetting.baseInfo")}
         </span>
       ),
       key: '/user/setting',
@@ -28,7 +30,7 @@ const UserSettingsPage = () => {
       label: (
         <span className="flex items-center">
           <LockOutlined className="mr-2" />
-          {t("userSetting.changePassword")}
+          {isMobile ? null : t("userSetting.changePassword")}
         </span>
       ),
       key: '/user/setting/security',
@@ -37,7 +39,7 @@ const UserSettingsPage = () => {
       label: (
         <span className="flex items-center">
           <IdcardOutlined className="mr-2" />
-          {t("userSetting.userVerification")}
+          {isMobile ? null : t("userSetting.userVerification")}
         </span>
       ),
       key: '/user/setting/verification',
@@ -46,7 +48,7 @@ const UserSettingsPage = () => {
       label: (
         <span className="flex items-center">
           <SnippetsOutlined className="mr-2" />
-          {t("userSetting.loginLog")}
+          {isMobile ? null : t("userSetting.loginLog")}
         </span>
       ),
       key: '/user/setting/loginlog',

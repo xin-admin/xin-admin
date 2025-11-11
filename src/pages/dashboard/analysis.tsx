@@ -399,6 +399,7 @@ const Index: React.FC = () => {
               ]}
               dataSource={data}
               pagination={false}
+              scroll={{x: 800}}
             />
           </Card>
         </Col>

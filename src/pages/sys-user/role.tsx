@@ -295,9 +295,9 @@ const Role = () => {
   }
 
   return (
-    <Row gutter={20}>
+    <Row gutter={[20, 20]}>
       {/* 角色列表 */}
-      <Col span={12}>
+      <Col xxl={12} lg={12} xs={24}>
         <XinTable<ISysRole>
           api="/sys-user/role"
           accessName="sys-user.role"
@@ -318,6 +318,7 @@ const Role = () => {
             tableAlertRender: false,
             tableStyle: { minHeight: '70vh' },
             cardProps: { bordered: true },
+            scroll: {x: 900},
           }}
           editShow={(row) => row.id !== 1}
           deleteShow={(row) => row.id !== 1}
@@ -329,7 +330,7 @@ const Role = () => {
       </Col>
 
       {/* 用户列表和权限管理 */}
-      <Col span={12}>
+      <Col xxl={12} lg={12} xs={24}>
         <Card
           tabList={tabList}
           onTabChange={setActiveTab}
@@ -349,6 +350,7 @@ const Role = () => {
                   showSizeChanger: true,
                   onChange: fetchRoleUsers
                 }}
+                scroll={{x: 600}}
               />
             ) : (
               <>

@@ -48,10 +48,11 @@ const LayoutRender = () => {
             </Content>
             <FooterRender/>
           </Layout>
-          <div className="fixed bottom-8 left-8">
+          <div className="fixed bottom-8 left-8 z-999">
             <Button
               type={'primary'}
               shape="circle"
+              size='large'
               icon={mobileMenuOpen ? <MenuFoldOutlined/> : <MenuUnfoldOutlined/>}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             />

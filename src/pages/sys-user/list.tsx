@@ -197,7 +197,8 @@ const Table: React.FC = () => {
     cardProps: {
       bordered: true
     },
-    search: {}
+    search: {},
+    scroll: {x: 1400},
   }
   /** 修改密码相关状态 */
   const [isModalOpen, setIsModalOpen] = useState(false);

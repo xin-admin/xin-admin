@@ -27,10 +27,10 @@ const LoginLogsPage = () => {
   return (
     <List
       dataSource={logs}
-      className={'w-full px-6 py-4'}
+      className={'w-full px-6 py-4 overflow-auto'}
       locale={{ emptyText: '暂无登录日志数据' }}
       renderItem={(log) => (
-        <List.Item>
+        <List.Item style={{minWidth: 600}}>
           <Avatar
             size="large"
             icon={<UserOutlined />}

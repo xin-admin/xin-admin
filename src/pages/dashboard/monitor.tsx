@@ -41,10 +41,10 @@ const Monitor = () => {
 
   return (
     <Row gutter={[20, 20]}>
-      <Col span={18}>
+      <Col xxl={18} lg={16} xs={24}>
         <Card variant={"borderless"} style={{marginBottom: 20}}>
           <Row gutter={[20, 20]}>
-            <Col span={6}>
+            <Col xxl={6} lg={12} xs={24}>
               <div className={"flex items-center"}>
                 <div className={"size-14 rounded-full p-3"} style={{background: token.colorPrimaryBg }}>
                   <img src="/static/帮办代办.png" alt="1"/>
@@ -56,7 +56,7 @@ const Monitor = () => {
                 </div>
               </div>
             </Col>
-            <Col span={6}>
+            <Col xxl={6} lg={12} xs={24}>
               <div className={"flex items-center"}>
                 <div className={"size-14 rounded-full p-3"} style={{background: token.colorPrimaryBg }}>
                   <img src="/static/购房.png" alt="1"/>
@@ -68,7 +68,7 @@ const Monitor = () => {
                 </div>
               </div>
             </Col>
-            <Col span={6}>
+            <Col xxl={6} lg={12} xs={24}>
               <div className={"flex items-center"}>
                 <div className={"size-14 rounded-full p-3"} style={{background: token.colorPrimaryBg }}>
                   <img src="/static/报警.png" alt="1"/>
@@ -80,7 +80,7 @@ const Monitor = () => {
                 </div>
               </div>
             </Col>
-            <Col span={6}>
+            <Col xxl={6} lg={12} xs={24}>
               <div className={"flex items-center"}>
                 <div className={"size-14 rounded-full p-3"} style={{background: token.colorPrimaryBg }}>
                   <img src="/static/更多服务.png" alt="1"/>
@@ -98,7 +98,7 @@ const Monitor = () => {
           <div style={{ marginBottom: 20, fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>
             待办事项 <Divider type="vertical" /> <span style={{color: token.colorTextDescription}}>我的关注</span>
           </div>
-          <Space className={"mb-5"}>
+          <Space className={"mb-5"} wrap>
             <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorPrimary, background: token.colorPrimaryBg }}>全部 15</div>
             <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>物业工单 8</div>
             <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>维修工单 2</div>
@@ -121,7 +121,7 @@ const Monitor = () => {
           />
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xxl={6} lg={8} xs={24}>
         <Card variant={"borderless"} style={{ marginBottom: 20 }}>
           <img src="/static/group65.png" alt="1"/>
         </Card>
