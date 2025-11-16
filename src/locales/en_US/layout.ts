@@ -53,7 +53,4 @@ export default {
   "layout.searchConfirm": "Confirm",
   "layout.searchSwitch": "Switch",
   "layout.searchClose": "Close",
-  "layout.langZhCN": "简体中文",
-  "layout.langEnUS": "English",
-  "layout.langJaJP": "日本語です",
 }

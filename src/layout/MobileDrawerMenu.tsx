@@ -28,18 +28,28 @@ const MobileDrawerMenu: React.FC = () => {
   const localesItems: MenuProps['items'] = [
     {
       key: '1',
-      label: t('layout.langZhCN'),
+      label: '简体中文',
       onClick: () => onLocationClick('zh'),
     },
     {
       key: '2',
-      label: t('layout.langEnUS'),
+      label: 'English',
       onClick: () => onLocationClick('en'),
     },
     {
       key: '3',
-      label: t('layout.langJaJP'),
+      label: '日本語です',
       onClick: () => onLocationClick('jp'),
+    },
+    {
+      key: '4',
+      label: 'Français',
+      onClick: () => onLocationClick('fr'),
+    },
+    {
+      key: '5',
+      label: 'Русский',
+      onClick: () => onLocationClick('ru'),
     },
   ];
 
