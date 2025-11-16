@@ -6,6 +6,7 @@ import sysUserDept from "./sys-user-dept";
 import sysUserRule from "./sys-user-rule";
 import sysUserRole from "./sys-user-role";
 import watcher from "./watcher";
+import sysFile from "./sys-file";
 
 export default {
   ...xinTable,
@@ -16,4 +17,5 @@ export default {
   ...sysUserRule,
   ...sysUserRole,
   ...watcher,
+  ...sysFile,
 };
