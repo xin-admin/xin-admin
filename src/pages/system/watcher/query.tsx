@@ -166,6 +166,7 @@ export default function QueryRecordPage() {
           <span>{t('watcher.query.title')}</span>
         </Space>
       )}
+      variant='borderless'
       extra={(
         <DatePicker
           value={selectedDate}

@@ -148,6 +148,7 @@ export default function CacheRecordPage() {
           <span>{t('watcher.cache.title')}</span>
         </Space>
       )}
+      variant='borderless'
       extra={(
         <DatePicker
           value={selectedDate}
