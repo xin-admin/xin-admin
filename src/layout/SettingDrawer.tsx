@@ -5,51 +5,52 @@ import {useGlobalStore} from "@/stores";
 import {configTheme, darkColorTheme, defaultColorTheme, greenColorTheme, pinkColorTheme} from "@/layout/theme.ts";
 import {algorithmOptions} from "@/layout/algorithm.ts";
 import useAuthStore from "@/stores/user.ts";
+import {useTranslation} from 'react-i18next';
 
 const {useToken} = theme;
 
 // 主题配置项
 const THEME_CONFIGS = [
-  {key: 'colorPrimary', label: '主色'},
-  {key: 'colorText', label: '基础文字颜色'},
-  {key: 'colorBg', label: '基础背景颜色'},
-  {key: 'colorSuccess', label: '成功色'},
-  {key: 'colorWarning', label: '警告色'},
-  {key: 'colorError', label: '错误色'},
-  {key: 'bodyBg', label: '内容区域背景色'},
-  {key: 'footerBg', label: '页脚背景色'},
-  {key: 'headerBg', label: '头部背景色'},
-  {key: 'headerColor', label: '头部文字颜色'},
-  {key: 'siderBg', label: '侧边栏背景色'},
-  {key: 'siderColor', label: '侧边栏文字颜色'},
-  {key: 'colorBorder', label: '布局边框颜色'},
+  {key: 'colorPrimary', label: 'layout.colorPrimary'},
+  {key: 'colorText', label: 'layout.colorText'},
+  {key: 'colorBg', label: 'layout.colorBg'},
+  {key: 'colorSuccess', label: 'layout.colorSuccess'},
+  {key: 'colorWarning', label: 'layout.colorWarning'},
+  {key: 'colorError', label: 'layout.colorError'},
+  {key: 'bodyBg', label: 'layout.bodyBg'},
+  {key: 'footerBg', label: 'layout.footerBg'},
+  {key: 'headerBg', label: 'layout.headerBg'},
+  {key: 'headerColor', label: 'layout.headerColor'},
+  {key: 'siderBg', label: 'layout.siderBg'},
+  {key: 'siderColor', label: 'layout.siderColor'},
+  {key: 'colorBorder', label: 'layout.colorBorder'},
 ];
 
 // 风格配置项
 const STYLE_CONFIGS = [
-  {key: 'fixedFooter', label: '固定页脚', type: 'switch'},
-  {key: 'motion', label: '开启动画', type: 'switch'},
-  {key: 'layoutBorder', label: '开启边框', type: 'switch'},
-  {key: 'borderRadius', label: '圆角大小', type: 'number', min: 0, max: 30},
-  {key: 'controlHeight', label: '基础控件高度', type: 'number', min: 0},
-  {key: 'headerPadding', label: '头部两侧内边距', type: 'number', min: 0},
-  {key: 'headerHeight', label: '头部高度', type: 'number', min: 0},
-  {key: 'siderWeight', label: '侧边栏宽度', type: 'number', min: 0},
-  {key: 'bodyPadding', label: '内容区域内边距', type: 'number', min: 0},
+  {key: 'fixedFooter', label: 'layout.fixedFooter', type: 'switch'},
+  {key: 'motion', label: 'layout.motion', type: 'switch'},
+  {key: 'layoutBorder', label: 'layout.layoutBorder', type: 'switch'},
+  {key: 'borderRadius', label: 'layout.borderRadius', type: 'number', min: 0, max: 30},
+  {key: 'controlHeight', label: 'layout.controlHeight', type: 'number', min: 0},
+  {key: 'headerPadding', label: 'layout.headerPadding', type: 'number', min: 0},
+  {key: 'headerHeight', label: 'layout.headerHeight', type: 'number', min: 0},
+  {key: 'siderWeight', label: 'layout.siderWeight', type: 'number', min: 0},
+  {key: 'bodyPadding', label: 'layout.bodyPadding', type: 'number', min: 0},
 ];
 
 // 预设主题列表
 const THEME_LIST = [
-  {background: '/theme/default.svg', name: 'light', title: '默认'},
-  {background: '/theme/dark.svg', name: 'dark', title: '暗黑'},
-  {background: '/theme/pink.svg', name: 'pink', title: '桃花缘'},
-  {background: '/theme/green.svg', name: 'green', title: '知识协作'},
+  {background: '/theme/default.svg', name: 'light', title: 'layout.themeLight'},
+  {background: '/theme/dark.svg', name: 'dark', title: 'layout.themeDark'},
+  {background: '/theme/pink.svg', name: 'pink', title: 'layout.themePink'},
+  {background: '/theme/green.svg', name: 'green', title: 'layout.themeGreen'},
 ];
 
 // 布局配置
 const LAYOUT_CONFIGS = [
   {
-    key: 'side', title: '左侧导航', render: (token: any) => (
+    key: 'side', title: 'layout.layoutSide', render: (token: any) => (
       <>
         <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimaryBorder}}/>
         <div className="flex">
@@ -60,7 +61,7 @@ const LAYOUT_CONFIGS = [
     )
   },
   {
-    key: 'top', title: '顶部导航', render: (token: any) => (
+    key: 'top', title: 'layout.layoutTop', render: (token: any) => (
       <>
         <div className="rounded-sm h-6 w-full mb-1.5" style={{background: token.colorPrimary}}/>
         <div className="rounded-sm h-16" style={{background: token.colorPrimaryBg}}/>
@@ -68,7 +69,7 @@ const LAYOUT_CONFIGS = [
     )
   },
   {
-    key: 'mix', title: '混合导航', render: (token: any) => (
+    key: 'mix', title: 'layout.layoutMix', render: (token: any) => (
       <>
         <div className="rounded-sm w-full h-6 mb-1.5" style={{background: token.colorPrimary}}/>
         <div className="flex">
@@ -79,7 +80,7 @@ const LAYOUT_CONFIGS = [
     )
   },
   {
-    key: 'columns', title: '双栏导航', render: (token: any) => (
+    key: 'columns', title: 'layout.layoutColumns', render: (token: any) => (
       <div className="flex">
         <div className="rounded-sm mr-1.5 w-3 h-24" style={{background: token.colorPrimary}}/>
         <div className="rounded-sm mr-1.5 w-6 h-24" style={{background: token.colorPrimaryHover}}/>
@@ -90,6 +91,7 @@ const LAYOUT_CONFIGS = [
 ];
 
 const SettingDrawer: React.FC = () => {
+  const {t} = useTranslation();
   const {token} = useToken();
   const themeDrawer = useGlobalStore(state => state.themeDrawer);
   const setThemeDrawer = useGlobalStore(state => state.setThemeDrawer);
@@ -100,6 +102,12 @@ const SettingDrawer: React.FC = () => {
   const localRoute = useAuthStore(state => state.localRoute);
   const setLocalRoute = useAuthStore(state => state.setLocalRoute);
   const getUserInfo = useAuthStore(state => state.getInfo);
+
+  // 翻译后的算法选项
+  const translatedAlgorithmOptions = algorithmOptions?.map(option => ({
+    ...option,
+    label: t(option.label as string)
+  })) || [];
 
   // 防抖更新主题配置
   const changeSetting = debounce((key: string, value: any) => {
@@ -145,17 +153,17 @@ const SettingDrawer: React.FC = () => {
       width={392}
       footer={(
         <div className="flex w-full justify-between">
-          <Button onClick={resetTheme}>重置主题</Button>
-          <Button type="primary">保存主题</Button>
+          <Button onClick={resetTheme}>{t('layout.resetTheme')}</Button>
+          <Button type="primary">{t('layout.saveTheme')}</Button>
         </div>
       )}
     >
       {/* 布局样式 */}
-      <Divider>布局样式</Divider>
+      <Divider>{t('layout.layoutStyle')}</Divider>
       <Row gutter={[20, 20]}>
         {LAYOUT_CONFIGS.map(({key, title, render}) => (
           <Col span={12} key={key}>
-            <Tooltip title={title}>
+            <Tooltip title={t(title)}>
               <div
                 className="p-2 rounded-lg cursor-pointer"
                 style={{
@@ -173,7 +181,7 @@ const SettingDrawer: React.FC = () => {
       </Row>
 
       {/* 预设主题 */}
-      <Divider>预设主题</Divider>
+      <Divider>{t('layout.presetTheme')}</Divider>
       <Row gutter={20} onClick={handleThemeChange}>
         {THEME_LIST.map((item) => (
           <Col span={8} key={item.name} className="mb-2.5">
@@ -188,27 +196,27 @@ const SettingDrawer: React.FC = () => {
             >
               <img src={item.background} alt={item.name}/>
             </div>
-            <div className="text-center mt-1.5">{item.title}</div>
+            <div className="text-center mt-1.5">{t(item.title)}</div>
           </Col>
         ))}
         <Col span={24} className="mb-2.5">
           <div className="flex justify-between items-center">
-            <div>主题算法</div>
+            <div>{t('layout.themeAlgorithm')}</div>
             <Select
               value={themeConfig.algorithm}
               style={{ width: 160 }}
               onChange={(value) => changeSetting('algorithm', value)}
-              options={algorithmOptions}
+              options={translatedAlgorithmOptions}
             />
           </div>
         </Col>
       </Row>
 
       {/* 主题颜色 */}
-      <Divider>主题颜色</Divider>
+      <Divider>{t('layout.themeColor')}</Divider>
       {THEME_CONFIGS.map(({key, label}) => (
         <div key={key} className="flex justify-between items-center mb-2.5">
-          <div>{label}</div>
+          <div>{t(label)}</div>
           <ColorPicker
             showText
             value={themeConfig[key as keyof typeof themeConfig] as string}
@@ -218,10 +226,10 @@ const SettingDrawer: React.FC = () => {
       ))}
 
       {/* 风格配置 */}
-      <Divider>风格配置</Divider>
+      <Divider>{t('layout.styleConfig')}</Divider>
       {STYLE_CONFIGS.map(({key, label, type, ...rest}) => (
         <div key={key} className="flex justify-between items-center mb-2.5">
-          <div>{label}</div>
+          <div>{t(label)}</div>
           {type === 'switch' ? (
             <Switch
               value={themeConfig[key as keyof typeof themeConfig] as boolean}
@@ -238,9 +246,9 @@ const SettingDrawer: React.FC = () => {
       ))}
 
       {/* 系统配置 */}
-      <Divider>系统配置</Divider>
+      <Divider>{t('layout.systemConfig')}</Divider>
       <div className="flex justify-between items-center mb-2.5">
-        <div>本地菜单路由</div>
+        <div>{t('layout.localRoute')}</div>
         <Switch
           value={localRoute}
           onChange={changeLocaleRoute}

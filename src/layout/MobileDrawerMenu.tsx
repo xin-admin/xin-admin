@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Drawer, Dropdown, Layout, Space, type MenuProps } from 'antd';
+import { Button, Drawer, Dropdown, Space, type MenuProps } from 'antd';
 import { useGlobalStore } from '@/stores';
 import MenuRender from '@/layout/MenuRender';
 import { GithubOutlined, HomeOutlined, SettingOutlined, TranslationOutlined } from '@ant-design/icons';
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
  */
 const MobileDrawerMenu: React.FC = () => {
   const isMobile = useGlobalStore(state => state.isMobile);
-  const {i18n} = useTranslation();
+  const {t, i18n} = useTranslation();
   const mobileMenuOpen = useGlobalStore(state => state.mobileMenuOpen);
   const setMobileMenuOpen = useGlobalStore(state => state.setMobileMenuOpen);
   const themeConfig = useGlobalStore(state => state.themeConfig);
@@ -28,17 +28,17 @@ const MobileDrawerMenu: React.FC = () => {
   const localesItems: MenuProps['items'] = [
     {
       key: '1',
-      label: '简体中文',
+      label: t('layout.langZhCN'),
       onClick: () => onLocationClick('zh'),
     },
     {
       key: '2',
-      label: 'English',
+      label: t('layout.langEnUS'),
       onClick: () => onLocationClick('en'),
     },
     {
       key: '3',
-      label: '日本語です',
+      label: t('layout.langJaJP'),
       onClick: () => onLocationClick('jp'),
     },
   ];

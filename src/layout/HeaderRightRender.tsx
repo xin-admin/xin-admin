@@ -67,17 +67,17 @@ const HeaderLeftRender = () => {
   const localesItems: MenuProps['items'] = [
     {
       key: '1',
-      label: '简体中文',
+      label: t('layout.langZhCN'),
       onClick: () => onLocationClick('zh'),
     },
     {
       key: '2',
-      label: 'English',
+      label: t('layout.langEnUS'),
       onClick: () => onLocationClick('en'),
     },
     {
       key: '3',
-      label: '日本語です',
+      label: t('layout.langJaJP'),
       onClick: () => onLocationClick('jp'),
     },
   ];
@@ -85,7 +85,7 @@ const HeaderLeftRender = () => {
   const userItems: MenuProps['items'] = [
     {
       key: '1',
-      label: '用户设置',
+      label: t('layout.userSetting'),
       icon: <UserOutlined/> ,
       onClick: () => {
         const menu = menuMap['user.setting'];
@@ -97,14 +97,14 @@ const HeaderLeftRender = () => {
     },
     {
       key: '2',
-      label: '退出登录',
+      label: t('layout.logout'),
       icon: <VerticalLeftOutlined />,
       onClick: async () => {
         logout().then(() => {
-          message.success("退出成功，正在跳转")
+          message.success(t('layout.logoutSuccess'))
           navigate('/login', {replace: true})
         }).catch(() => {
-          message.error("退出登录失败")
+          message.error(t('layout.logoutFailed'))
         })
       },
     },
@@ -124,7 +124,7 @@ const HeaderLeftRender = () => {
         onCancel={() => setSearch(false)}
       >
         <div className={'p-5'}>
-          <Input size="large" placeholder="Please enter the search content" prefix={<SearchOutlined/>}/>
+          <Input size="large" placeholder={t('layout.searchPlaceholder')} prefix={<SearchOutlined/>}/>
           <div className={'mt-5'}>
             <Empty/>
             {/* TODO 可以帮忙实现菜单栏搜索 */}
@@ -132,9 +132,9 @@ const HeaderLeftRender = () => {
         </div>
         <Space className={'mt-5 flex align-center pl-5 pr-5 pt-2.5 pb-2.5'}
                style={{borderTop: '1px solid ' + token.colorBorder}}>
-          <EnterOutlined/> <span className={'mr-4'}>Confirm</span>
-          <ArrowUpOutlined/><ArrowDownOutlined/> <span className={'mr-4'}>Switch</span>
-          Esc <span className={'mr-2'}>Close</span>
+          <EnterOutlined/> <span className={'mr-4'}>{t('layout.searchConfirm')}</span>
+          <ArrowUpOutlined/><ArrowDownOutlined/> <span className={'mr-4'}>{t('layout.searchSwitch')}</span>
+          Esc <span className={'mr-2'}>{t('layout.searchClose')}</span>
         </Space>
       </Modal>
       <Space>

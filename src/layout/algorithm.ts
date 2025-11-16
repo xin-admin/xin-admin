@@ -12,22 +12,22 @@ const algorithm = {
   darkCompactAlgorithm: [antTheme.darkAlgorithm, antTheme.compactAlgorithm],
 };
 
-/** 算法切换选择器的 Options */
+/** 算法切换选择器的 Options (使用 i18n key) */
 export const algorithmOptions:  SelectProps['options'] = [
   {
-    label: '默认',
+    label: 'layout.algorithmDefault',
     value: 'defaultAlgorithm',
   },
   {
-    label: '暗黑',
+    label: 'layout.algorithmDark',
     value: 'darkAlgorithm',
   },
   {
-    label: '默认 + 紧凑',
+    label: 'layout.algorithmDefaultCompact',
     value: 'defaultCompactAlgorithm',
   },
   {
-    label: '暗黑 + 紧凑',
+    label: 'layout.algorithmDarkCompact',
     value: 'darkCompactAlgorithm',
   },
 ]
