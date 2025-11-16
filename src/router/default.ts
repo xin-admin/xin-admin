@@ -490,6 +490,18 @@ const defaultRoute: IMenus[] = [
         link: 0
       },
       {
+        type: "route",
+        key: "system.file",
+        name: "文件管理",
+        path: "/system/file",
+        icon: "",
+        elementPath: "/system/file",
+        order: 3,
+        local: "menu.system.file",
+        hidden: 1,
+        link: 0
+      },
+      {
         type: "menu",
         key: "system.watcher",
         name: "监控中心",

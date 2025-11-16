@@ -35,6 +35,7 @@ export default {
   "menu.sys-user.rule": "ユーザー権限",
   "menu.system": "システム設定",
   "menu.system.info": "システム情報",
+  "menu.system.file": "ファイル管理",
   "menu.system.monitor": "システムモニター",
   "menu.system.watcher": "システムログ",
   "menu.system.watcher.request": "リクエスト記録",
