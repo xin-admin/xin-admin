@@ -5,8 +5,8 @@ import {type ProTableProps} from '@ant-design/pro-components';
 import type {XinTableColumn} from "@/components/XinTable/typings.ts";
 import type ISysUser from "@/domain/iSysUser.ts";
 import AuthButton from "@/components/AuthButton";
-import type {DeptFieldType, ResetPasswordType, RoleFieldType} from "@/api/sysUserList.ts";
-import {deptField, resetPassword, roleField} from "@/api/sysUserList.ts";
+import type {DeptFieldType, ResetPasswordType, RoleFieldType} from "@/api/sys/sysUserList";
+import {deptField, resetPassword, roleField} from "@/api/sys/sysUserList";
 import {RedoOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 

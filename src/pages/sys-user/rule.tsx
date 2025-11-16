@@ -1,5 +1,5 @@
 import type {ISysRule} from "@/domain/iSysRule.ts";
-import {listRule, ruleParent, showRule, statusRule} from "@/api/sysUserRule.ts";
+import {listRule, ruleParent, showRule, statusRule} from "@/api/sys/sysUserRule";
 import {useTranslation} from "react-i18next";
 import IconFont from "@/components/IconFont";
 import XinTable from "@/components/XinTable";

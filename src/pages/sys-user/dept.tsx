@@ -13,7 +13,7 @@ import {
 } from "antd";
 import {BankOutlined, DeleteOutlined, PlusOutlined, TeamOutlined, UserOutlined} from "@ant-design/icons";
 import {useEffect, useRef, useState} from "react";
-import {listDept, addDept, updateDept, deleteDept, deptUsers} from "@/api/sysUserDept";
+import {listDept, addDept, updateDept, deleteDept, deptUsers} from "@/api/sys/sysUserDept";
 import type {ISysDept} from "@/domain/iSysDept.ts";
 import {isArray, omit} from 'lodash';
 import type {XinTableColumn} from "@/components/XinTable/typings.ts";

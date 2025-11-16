@@ -1,7 +1,7 @@
 import XinTable from "@/components/XinTable";
 import type {XinTableColumn} from "@/components/XinTable/typings.ts";
 import {Button, Card, type CardProps, Col, message, Row, Switch, Table, type TableProps, Tag, Tooltip, Tree, type TreeProps} from "antd";
-import {type RuleFieldsList, rulesList, saveRoleRules, statusRole, users as usersApi} from "@/api/sysUserRole";
+import {type RuleFieldsList, rulesList, saveRoleRules, statusRole, users as usersApi} from "@/api/sys/sysUserRole";
 import type {ISysRole} from "@/domain/iSysRole";
 import React, {useEffect, useRef, useState} from "react";
 import type ISysUser from "@/domain/iSysUser.ts";

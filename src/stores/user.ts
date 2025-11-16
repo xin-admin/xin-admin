@@ -1,8 +1,8 @@
 import {create} from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
 import type ISysUser from "@/domain/iSysUser.ts";
-import {info, login, logout} from "@/api/admin.ts";
-import type {LoginParams, InfoResponse} from "@/api/admin.ts";
+import {info, login, logout} from "@/api/sys/sysUser";
+import type {LoginParams, InfoResponse} from "@/api/sys/sysUser";
 import type {IMenus} from "@/domain/iSysRule.ts";
 import defaultRoute from "@/router/default.ts";
 

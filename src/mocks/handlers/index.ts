@@ -2,7 +2,7 @@ import {http, HttpResponse, type HttpResponseResolver} from "msw";
 import {withAuth} from '@/mocks/middleware';
 import type {ISysRule} from "@/domain/iSysRule.ts";
 import defaultRoute from "@/router/default";
-import type {InfoResponse, LoginParams, LoginResponse} from "@/api/admin.ts";
+import type {InfoResponse, LoginParams, LoginResponse} from "@/api/sys/sysUser";
 
 const adminLogin: HttpResponseResolver = async ({ request }) => {
   const postData: LoginParams = await request.clone().json() // Post

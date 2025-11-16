@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Tag, List, Avatar, Space, Typography } from 'antd';
 import { UserOutlined, LaptopOutlined, EnvironmentOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import type ISysLoginRecord from "@/domain/iSysLoginRecord.ts";
-import { loginRecord } from "@/api/admin.ts";
+import { loginRecord } from "@/api/sys/sysUser";
 import dayjs from 'dayjs';
 import {useTranslation} from "react-i18next";
 

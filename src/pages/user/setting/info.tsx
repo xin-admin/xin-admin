@@ -2,7 +2,7 @@ import {UploadOutlined} from '@ant-design/icons';
 import {Avatar, Button, Form, Input, message, Radio, Upload, type UploadProps} from 'antd';
 import useAuthStore from "@/stores/user";
 import type {FormProps} from "@ant-design/pro-components";
-import {type InfoParams, updateInfo} from "@/api/admin.ts";
+import {type InfoParams, updateInfo} from "@/api/sys/sysUser";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 

@@ -1,7 +1,7 @@
 import { Card, Space, Table, DatePicker, Typography, Tag } from 'antd';
 import { DatabaseOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import { getRedisList } from '@/api/watcher';
+import { getRedisList } from '@/api/sys/sysWatcher';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import type { TableProps } from 'antd';
