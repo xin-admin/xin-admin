@@ -9,13 +9,18 @@ import {useTranslation} from "react-i18next";
 const Info = () => {
   const userInfo = useAuthStore(state => state.user);
   const getInfo = useAuthStore(state => state.getInfo);
+  const token = useAuthStore(state => state.token);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const {t} = useTranslation();
 
   /** 上传头像 */
-  const uploadChange: UploadProps['onChange'] = async () => {
-    message.success('头像上传成功');
+  const uploadChange: UploadProps['onChange'] = async (info) => {
+    console.log('Upload Change', info);
+    if (info.file.status === 'done') {
+      message.success('头像上传成功');
+      await getInfo();
+    }
   }
 
   /** 提交表单 */
@@ -36,7 +41,11 @@ const Info = () => {
         <div className={'flex flex-col items-center mb-3'}>
           <Avatar size={120} src={userInfo?.avatar_url} className="mb-4 border-2 border-gray-200" />
           <Upload
-            name="avatar"
+            name="file"
+            action={`${import.meta.env.VITE_BASE_URL}/admin/avatar`}
+            headers={{
+              Authorization: `Bearer ${token}`
+            }}
             showUploadList={false}
             onChange={uploadChange}
           >
