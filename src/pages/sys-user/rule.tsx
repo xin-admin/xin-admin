@@ -295,8 +295,9 @@ const Rule =  () => {
               icon={<PlusOutlined />}
               size={'small'}
               onClick={() => {
-                xinTableRef.current?.setFormInitValue(false);
                 formRef.current?.resetFields();
+                xinTableRef.current?.setEditingRecord(undefined);
+                xinTableRef.current?.setFormMode("create");
                 xinTableRef.current?.setFormOpen(true);
                 formRef.current?.setFieldValue('parent_id', data.id);
               }}
