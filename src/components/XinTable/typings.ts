@@ -11,15 +11,11 @@ import type {ColProps, ModalProps, RowProps} from 'antd';
 
 export type XinTableColumn<T = any> = ProFormColumnsType<T> & ProColumns<T>;
 
-export interface BooleanActions {
-  setTrue: () => void;
-  setFalse: () => void;
-  set: (value: boolean) => void;
-  toggle: () => void;
-}
+export type FormMode = 'create' | 'edit';
 
 export interface XinTableRef<T> {
-  setFormInitValue: Dispatch<SetStateAction<false | T>>;
+  setFormMode: Dispatch<SetStateAction<FormMode>>;
+  setEditingRecord: Dispatch<SetStateAction<T | undefined>>;
   setFormOpen: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -54,11 +50,11 @@ export type XinTableProps<T> = {
   accessName: string;
   /** 表格操作列显示 */
   operateShow?: boolean;
-  /** 编辑按钮显示 */
+  /** 新增按钮显示 */
   addShow?: boolean;
   /** 编辑按钮显示 */
   editShow?: ((record: T) => boolean) | boolean;
-  /** 操作栏之后渲染 */
+  /** 删除按钮显示 */
   deleteShow?: ((record: T) => boolean) | boolean;
   /** 操作栏之后渲染 */
   beforeOperateRender?: (record: T) => React.ReactNode;
@@ -73,9 +69,26 @@ export type XinTableProps<T> = {
   /**
    * 表单提交
    * @param formData 表单数据
-   * @param initValue 编辑时的初始数据，如果是新增则为 false
+   * @param mode 表单模式 'create' | 'edit'
+   * @param editingRecord 编辑时的原始数据，新增时为 null
    */
-  onFinish?: (formData: T, initValue: T | false) => Promise<boolean>
+  onFinish?: (formData: T, mode: FormMode, editingRecord?: T) => Promise<boolean>
+  /** 删除前钩子，返回 false 可取消删除 */
+  beforeDelete?: (record: T) => Promise<boolean> | boolean;
+  /** 删除后钩子 */
+  afterDelete?: (record: T) => void;
+  /** 提交前钩子，可对表单数据进行处理 */
+  beforeSubmit?: (formData: T, mode: FormMode, editingRecord?: T) => Promise<T> | T;
+  /** 提交后钩子 */
+  afterSubmit?: (formData: T, mode: FormMode) => void;
+  /** 刷新方式: reset-重置到第一页, reload-保持当前页 */
+  reloadType?: 'reset' | 'reload';
+  /** 成功提示文本配置 */
+  successMessage?: {
+    create?: string;
+    update?: string;
+    delete?: string;
+  };
   /** 表单扩展配置 */
   formProps?: XinFromProps;
   /** 表格扩展配置 */

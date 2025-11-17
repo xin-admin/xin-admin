@@ -4,7 +4,7 @@ import type {ProTableProps, ProFormInstance, ProColumns, ActionType,} from '@ant
 import { Create, Delete, Update, List } from '@/api/common/table';
 import {Button, message, Popconfirm, Space, Tooltip} from 'antd';
 import AuthButton from '@/components/AuthButton';
-import type { XinTableProps } from './typings.ts';
+import type { FormMode, XinTableProps } from './typings.ts';
 import {
   CaretDownOutlined,
   CaretUpOutlined,
@@ -35,6 +35,12 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
     beforeOperateRender,
     afterOperateRender,
     toolBarRender = [],
+    reloadType = 'reset',
+    beforeDelete,
+    afterDelete,
+    beforeSubmit,
+    afterSubmit,
+    successMessage,
   } = props;
   /** 多语言 */
   const {t} = useTranslation();
@@ -44,51 +50,90 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
   const schemaFormRef = useRef<ProFormInstance>(undefined);
   /** 表单开启状态 */
   const [formOpen, setFormOpen] = useState<boolean>(false);
-  /** 表单初始数据 */
-  const [formInitValue, setFormInitValue] = useState<T | false>(false);
+  /** 表单模式: create-新增, edit-编辑 */
+  const [formMode, setFormMode] = useState<FormMode>('create');
+  /** 正在编辑的记录 */
+  const [editingRecord, setEditingRecord] = useState<T>();
   /** Ref */
   useImperativeHandle(tableRef, () => actionRef.current);
   useImperativeHandle(formRef, () => schemaFormRef.current);
   useImperativeHandle(xinTableRef, () => ({
     setFormOpen: setFormOpen,
-    setFormInitValue: setFormInitValue,
+    setFormMode: setFormMode,
+    setEditingRecord: setEditingRecord,
   }));
   /** 新增按钮点击事件 */
   const addButtonClick = () => {
-    setFormInitValue(false);
+    setFormMode('create');
+    setEditingRecord(undefined);
     schemaFormRef.current?.resetFields();
     setFormOpen(true);
   };
   /** 编辑按钮点击事件 */
   const editButtonClick = (record: T) => {
-    setFormInitValue(record);
+    setFormMode('edit');
+    setEditingRecord(record);
     setFormOpen(true);
     schemaFormRef.current?.setFieldsValue(record);
   };
   /** 删除按钮点击事件 */
   const deleteButtonClick = async (record: T) => {
+    // 执行删除前钩子
+    if (beforeDelete) {
+      const canDelete = await beforeDelete(record);
+      if (canDelete === false) return;
+    }
     await Delete(api + `/${record[rowKey]}`);
-    message.success(t('xin-table.deleteSuccess'));
-    actionRef.current?.reset?.();
+    const msg = successMessage?.delete || t('xin-table.deleteSuccess');
+    message.success(msg);
+    // 刷新表格
+    refreshTable();
+    // 执行删除后钩子
+    if (afterDelete) {
+      afterDelete(record);
+    }
   };
   /** 提交表单 */
   const onFinish = async (formData: T) => {
+    // 自定义提交逻辑
     if (props.onFinish) {
-      const ba = await props.onFinish(formData, formInitValue);
-      if (ba) {
+      const success = await props.onFinish(formData, formMode, editingRecord);
+      if (success) {
         setFormOpen(false);
-        actionRef.current?.reset?.();
+        refreshTable();
       }
       return;
     }
-    if (formInitValue && formInitValue[rowKey]) {
-      await Update(api + `/${formInitValue[rowKey]}`, formData);
-    } else {
-      await Create(api, formData);
+    // 执行提交前钩子
+    let processedData = formData;
+    if (beforeSubmit) {
+      processedData = await beforeSubmit(formData, formMode, editingRecord);
     }
-    actionRef.current?.reset?.();
-    message.success(t('xin-table.finishSuccess'));
+    // 默认提交逻辑
+    if (formMode === 'edit' && editingRecord) {
+      await Update(api + `/${editingRecord[rowKey]}`, processedData);
+      const msg = successMessage?.update || t('xin-table.finishSuccess');
+      message.success(msg);
+    } else {
+      await Create(api, processedData);
+      const msg = successMessage?.create || t('xin-table.finishSuccess');
+      message.success(msg);
+    }
+    refreshTable();
     setFormOpen(false);
+    // 执行提交后钩子
+    if (afterSubmit) {
+      afterSubmit(processedData, formMode);
+    }
+  };
+  
+  /** 刷新表格 */
+  const refreshTable = () => {
+    if (reloadType === 'reload') {
+      actionRef.current?.reload?.();
+    } else {
+      actionRef.current?.reset?.();
+    }
   };
   /** 表格操作列 */
   const operate = (): ProColumns<T>[] => {
@@ -180,12 +225,12 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
   return (
     <>
       <BetaSchemaForm<T>
+        {...props.formProps}
         open={formOpen}
         layoutType={'ModalForm'}
         onFinish={onFinish}
         columns={columns}
         formRef={schemaFormRef}
-        {...props.formProps}
         modalProps={{
           onCancel: () => setFormOpen(false),
           forceRender: true,
