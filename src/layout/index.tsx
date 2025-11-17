@@ -1,7 +1,7 @@
 import {Outlet} from 'react-router';
 import {useEffect} from 'react';
 import {useGlobalStore} from "@/stores";
-import {Button, FloatButton, Layout} from "antd";
+import {Button, Layout} from "antd";
 import HeaderRender from "@/layout/HeaderRender";
 import FooterRender from "@/layout/FooterRender";
 import SettingDrawer from "@/layout/SettingDrawer";
