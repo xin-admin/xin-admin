@@ -10,6 +10,7 @@ import MenuRender from "@/layout/MenuRender";
 import MobileDrawerMenu from "@/layout/MobileDrawerMenu";
 import {useMobile} from "@/utils/useMobile";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import useAuthStore from '@/stores/user';
 
 const {Content, Sider} = Layout;
 
@@ -21,13 +22,17 @@ const LayoutRender = () => {
   const isMobile = useGlobalStore(state => state.isMobile);
   const mobileMenuOpen = useGlobalStore(state => state.mobileMenuOpen);
   const setMobileMenuOpen = useGlobalStore(state => state.setMobileMenuOpen);
+  const getInfo = useAuthStore(state => state.getInfo);
   // 使用移动端检测Hook
   const mobileDetected = useMobile();
 
   // 当移动端状态改变时更新全局状态
-  useEffect(() => {
-    setIsMobile(mobileDetected);
-  }, [mobileDetected, setIsMobile]);
+  useEffect(() => { setIsMobile(mobileDetected) }, [mobileDetected]);
+  useEffect(() => { 
+    if( localStorage.getItem("token") ) {
+      getInfo()
+    }
+  }, []);
 
   return (
     <Layout

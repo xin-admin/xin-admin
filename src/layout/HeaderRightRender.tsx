@@ -17,7 +17,7 @@ import {useGlobalStore} from "@/stores";
 import {useTranslation} from "react-i18next";
 import useAuthStore from "@/stores/user";
 import {useNavigate} from "react-router";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 const {useToken} = theme;
 
@@ -28,7 +28,6 @@ const HeaderLeftRender = () => {
   const themeDrawer = useGlobalStore(state => state.themeDrawer);
   const setThemeDrawer = useGlobalStore(state => state.setThemeDrawer);
   const userInfo = useAuthStore(state => state.user);
-  const getInfo = useAuthStore(state => state.getInfo);
   const logout = useAuthStore(state => state.logout);
   const menuMap = useAuthStore(state => state.menuMap);
   const breadcrumbMap = useAuthStore(state => state.breadcrumbMap);
@@ -119,8 +118,6 @@ const HeaderLeftRender = () => {
       },
     },
   ]
-
-  useEffect(() => { getInfo() }, [getInfo]);
 
   return (
     <>
