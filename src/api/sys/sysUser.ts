@@ -8,6 +8,8 @@ export interface LoginParams {
   username?: string;
   /** 密码 */
   password?: string;
+  /** 是否记住我 */
+  remember?: boolean;
 }
 
 export interface LoginResponse {
