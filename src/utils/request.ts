@@ -99,9 +99,9 @@ const handleNetworkError = async (errStatus?: number): Promise<void> => {
     localStorage.removeItem('auth-storage');
     
     // 避免在登录页重复跳转
-    if (window.location.pathname !== LOGIN_PATH) {
-      window.location.href = LOGIN_PATH;
-    }
+    // if (window.location.pathname !== LOGIN_PATH) {
+    //   window.location.href = LOGIN_PATH;
+    // }
     return;
   }
 
@@ -203,7 +203,7 @@ function createAxios<Data, T = API.ResponseStructure<Data>>(
 
       // 自动附加 Token 到请求头（排除登录接口）
       const token = localStorage.getItem('token');
-      if (token && !config.url?.includes('/login')) {
+      if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
       }
 
