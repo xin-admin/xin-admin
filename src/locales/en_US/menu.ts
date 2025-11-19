@@ -37,6 +37,7 @@ export default {
   "menu.system.info": "System Info",
   "menu.system.monitor": "System Monitor",
   "menu.system.file": "File Management",
+  "menu.system.dict": "Dictionary Management",
   "menu.system.watcher": "System Logs",
   "menu.system.watcher.request": "Request Records",
   "menu.system.watcher.query": "SQL Records",

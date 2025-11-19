@@ -37,6 +37,7 @@ export default {
   "menu.system.info": "システム情報",
   "menu.system.file": "ファイル管理",
   "menu.system.monitor": "システムモニター",
+  "menu.system.dict": "システム辞書",
   "menu.system.watcher": "システムログ",
   "menu.system.watcher.request": "リクエスト記録",
   "menu.system.watcher.query": "SQL記録",

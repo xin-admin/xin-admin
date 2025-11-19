@@ -502,6 +502,18 @@ const defaultRoute: IMenus[] = [
         link: 0
       },
       {
+        type: "route",
+        key: "system.dict",
+        name: "字典管理",
+        path: "/system/dict",
+        icon: "",
+        elementPath: "/system/dict",
+        order: 3,
+        local: "menu.system.dict",
+        hidden: 1,
+        link: 0
+      },
+      {
         type: "menu",
         key: "system.watcher",
         name: "监控中心",
