@@ -40,6 +40,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
     afterDelete,
     beforeSubmit,
     afterSubmit,
+    requestSuccess,
     successMessage,
   } = props;
   /** 多语言 */
@@ -196,6 +197,7 @@ function XinTable<T extends Record<string, any>>(props: XinTableProps<T>) {
     },
     request: async (params, sorter, filter) => {
       const { data } = await List<T>(props.api, { page: params.current,  sorter, filter, ...params });
+      requestSuccess && requestSuccess(data.data)
       return { ...data.data, success: data.success };
     },
     ...props.tableProps,

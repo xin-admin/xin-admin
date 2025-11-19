@@ -37,7 +37,7 @@ export function List<T,>(
     params?: IListParams,
     options?: AxiosRequestConfig | undefined
 ){
-  return createAxios<T>({
+  return createAxios<API.ListResponse<T>>({
     url: url,
     method: 'get',
     params,

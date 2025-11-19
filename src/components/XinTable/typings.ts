@@ -81,6 +81,8 @@ export type XinTableProps<T> = {
   beforeSubmit?: (formData: T, mode: FormMode, editingRecord?: T) => Promise<T> | T;
   /** 提交后钩子 */
   afterSubmit?: (formData: T, mode: FormMode) => void;
+  /** 请求后钩子 */
+  requestSuccess?: (data?: API.ListResponse<T>) => void;
   /** 刷新方式: reset-重置到第一页, reload-保持当前页 */
   reloadType?: 'reset' | 'reload';
   /** 成功提示文本配置 */
