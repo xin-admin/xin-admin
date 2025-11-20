@@ -99,9 +99,9 @@ const handleNetworkError = async (errStatus?: number): Promise<void> => {
     localStorage.removeItem('auth-storage');
     
     // 避免在登录页重复跳转
-    // if (window.location.pathname !== LOGIN_PATH) {
-    //   window.location.href = LOGIN_PATH;
-    // }
+    if (window.location.pathname !== LOGIN_PATH) {
+      window.location.href = LOGIN_PATH;
+    }
     return;
   }
 
