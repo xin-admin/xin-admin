@@ -514,13 +514,25 @@ const defaultRoute: IMenus[] = [
         link: 0
       },
       {
+        type: "route",
+        key: "system.setting",
+        name: "系统配置",
+        path: "/system/setting",
+        icon: "",
+        elementPath: "/system/setting",
+        order: 4,
+        local: "menu.system.setting",
+        hidden: 1,
+        link: 0
+      },
+      {
         type: "menu",
         key: "system.watcher",
         name: "监控中心",
         path: "",
         icon: "",
         elementPath: "",
-        order: 2,
+        order: 5,
         local: "menu.system.watcher",
         hidden: 1,
         link: 0,

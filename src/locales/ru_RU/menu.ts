@@ -38,6 +38,7 @@ export default {
   "menu.system.monitor": "Мониторинг системы",
   "menu.system.file": "Управление файлами",
   "menu.system.dict": "Управление словарем",
+  "menu.system.setting": "Настройки системы",
   "menu.system.watcher": "Системный журнал",
   "menu.system.watcher.request": "Журнал запросов",
   "menu.system.watcher.query": "Журнал SQL",

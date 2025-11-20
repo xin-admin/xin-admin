@@ -38,6 +38,7 @@ export default {
   "menu.system.monitor": "Surveillance du système",
   "menu.system.file": "Gestion des fichiers",
   "menu.system.dict": "Gestion du dictionnaire",
+  "menu.system.setting": "Paramètres du système",
   "menu.system.watcher": "Journal système",
   "menu.system.watcher.request": "Enregistrement des requêtes",
   "menu.system.watcher.query": "Enregistrement SQL",
