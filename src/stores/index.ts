@@ -14,6 +14,8 @@ type BreadcrumbType = {
 interface GlobalState {
   logo: string;
   title: string;
+  subtitle: string;
+  describe: string;
   headTitle: string;
   layout: LayoutType;
   themeConfig: ThemeProps;
@@ -24,6 +26,7 @@ interface GlobalState {
   menuParentKey: string | null;
   isMobile: boolean;
   mobileMenuOpen: boolean;
+  setWebInfo: (title: string, subtitle: string, describe: string, logo: string) => void;
   setHeadTitle: (title: string) => void;
   setCollapsed: (collapsed: boolean) => void;
   setThemeConfig: (themeConfig: ThemeProps) => void;
@@ -40,6 +43,8 @@ export const useGlobalStore = create<GlobalState>()(
     (setState) => ({
       logo: "https://file.xinadmin.cn/file/favicons.ico",
       title: "Xin Admin",
+      subtitle: "基于 Ant Design 的后台管理框架",
+      describe: "Xin Admin 是一个基于 Ant Design 的后台管理框架",
       headTitle: "Xin Admin",
       layout: "side",
       themeConfig: {...defaultColorTheme, ...configTheme},
@@ -50,6 +55,9 @@ export const useGlobalStore = create<GlobalState>()(
       menuParentKey: null,
       isMobile: false,
       mobileMenuOpen: false,
+      setWebInfo: (title: string, subtitle: string, describe: string, logo: string) => {
+        setState({title, subtitle, describe, logo})
+      },
       setHeadTitle: (headTitle: string) => {
         setState({headTitle})
       },
