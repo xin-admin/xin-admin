@@ -6,7 +6,6 @@ import {
   UserOutlined,
   FileTextOutlined,
   GithubOutlined,
-  WechatOutlined,
   QqOutlined
 } from '@ant-design/icons';
 
@@ -14,46 +13,52 @@ const SystemInfoPage = () => {
   // 系统基本信息
   const systemInfo = [
     { label: '系统名称', value: 'XinAdmin' },
-    { label: '版本号', value: 'v1' },
-    { label: '构建时间', value: '2025-7-25' },
-    { label: '前端框架', value: 'React 18' },
-    { label: 'UI框架', value: 'Ant Design 5' },
-    { label: 'CSS框架', value: 'TailwindCSS 4' },
+    { label: '版本号', value: 'v2.0' },
+    { label: '构建工具', value: 'Vite 7.1.5' },
+    { label: '前端框架', value: 'React 19.1.0' },
+    { label: 'UI框架', value: 'Ant Design 5.27.1' },
+    { label: 'CSS框架', value: 'TailwindCSS 4.1.11' },
+    { label: '路由管理', value: 'React Router 7.8.2' },
+    { label: '状态管理', value: 'Zustand 5.0.8' },
+    { label: 'TypeScript', value: '5.8.3' },
   ];
 
   // 项目地址
   const projectLinks = [
-    { name: 'GitHub仓库', url: 'https://github.com/xin-admin/xin-admin', icon: <GithubOutlined /> },
-    { name: 'Gitee仓库', url: 'https://gitee.com/xin-admin/xin-admin', icon: <GithubOutlined /> },
-    { name: '文档地址', url: 'https://xinadmin.cn/ui', icon: <FileTextOutlined /> },
+    { name: 'GitHub 仓库', url: 'https://github.com/xin-admin/xin-admin', icon: <GithubOutlined /> },
+    { name: '在线文档', url: 'https://xinadmin.cn/ui/intro', icon: <FileTextOutlined /> },
     { name: '演示地址', url: 'https://ui.xinadmin.cn', icon: <LinkOutlined /> },
+    { name: '问题反馈', url: 'https://github.com/xin-admin/xin-admin/issues', icon: <InfoCircleOutlined /> },
   ];
 
   // 更新日志
   const changelog = [
-    { time: '2025-07-20', version: 'v1.0.1', content: '优化系统菜单栏' },
-    { time: '2025-07-22', version: 'v1.0.2', content: '更新依赖版本' },
-    { time: '2025-07-25', version: 'v1.0.3', content: '新增权限管理模块' },
+    { time: '2025-11', version: 'v2.0', content: '基于React 19、Vite 7、ReactRouter 7、zustand 5 和 TypeScript，重构项目模块' },
   ];
 
   // 作者信息
   const authorInfo = {
-    name: '小刘同学',
-    avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-    role: '软件开发工程师',
+    name: 'XinAdmin 团队',
+    avatar: 'https://file.xinadmin.cn/file/favicons.ico',
+    role: '企业级中后台解决方案提供者',
     contact: [
-      { type: 'GitHub', value: 'https://github.com/xineny' },
-      { type: '邮箱', value: '2302563948@qq.com' },
-      { type: '微信', value: '*******' },
-      { type: 'QQ', value: '2302563948' },
+      { type: 'GitHub', value: 'https://github.com/xin-admin/xin-admin', icon: <GithubOutlined /> },
+      { type: 'QQ群', value: 'Xin Admin Official Community', icon: <QqOutlined /> },
+      { type: '讨论区', value: 'https://github.com/xin-admin/xin-admin/discussions', icon: <LinkOutlined /> },
     ],
   };
 
   // 系统描述
-  const systemDescription = `
-    XinAdmin是基于React和Ant Design构建的中后台管理系统，集成了用户管理、权限控制、数据可视化等功能模块。
-    采用现代化的前端技术栈，具有良好的扩展性和可维护性。系统设计遵循最佳实践，代码结构清晰，适合作为企业级应用的起点。
-  `;
+  const systemDescription = `XinAdmin 是一个基于 Ant Design 设计规范的企业级中后台前端模板，采用最新的前端技术栈，包括 React 19、Vite 7、ReactRouter 7、zustand 5 和 TypeScript。
+
+核心特性：
+✨ 前沿技术栈 - React 19 + Vite 7 + TypeScript 5.8
+👑 Ant Design 规范 - 模块化解决方案，减少冗余开发
+🎢 清晰代码结构 - 语义化目录命名，独立命名空间
+🎡 ReactRouter v7 - 支持后端动态路由，自动生成菜单
+🧩 TailwindCSS - 原子化CSS，与 Ant Design 完美配合
+🎡 内置国际化 - 支持中英日法俄5种语言
+⛳ 完善的页面组件 - 包含错误页、布局组件等`;
 
   return (
     <div className="p-4 min-h-screen">
@@ -70,21 +75,22 @@ const SystemInfoPage = () => {
             </div>
           }
         >
-          <div className="space-y-3">
+          <div className="space-y-2">
             {systemInfo.map((item, index) => (
-              <div key={index} className="flex justify-between">
-                <span className="text-gray-600">{item.label}:</span>
-                <span className="font-medium">{item.value}</span>
+              <div key={index} className="flex justify-between items-center py-1">
+                <span className="text-gray-600 text-sm">{item.label}:</span>
+                <span className="font-medium text-sm">{item.value}</span>
               </div>
             ))}
           </div>
           <Divider className="my-4" />
           <div className="flex flex-wrap gap-2">
-            <Tag color="pink">XinAdmin</Tag>
-            <Tag color="blue">React</Tag>
+            <Tag color="blue">React 19</Tag>
             <Tag color="geekblue">Ant Design</Tag>
             <Tag color="cyan">TailwindCSS</Tag>
             <Tag color="purple">TypeScript</Tag>
+            <Tag color="green">Vite 7</Tag>
+            <Tag color="orange">Zustand</Tag>
           </div>
         </Card>
 
@@ -116,7 +122,7 @@ const SystemInfoPage = () => {
           </div>
           <Divider className="my-4" />
           <div className="text-sm text-gray-500">
-            请根据实际项目情况修改以上链接
+            加入社区，获取最新动态和技术支持
           </div>
         </Card>
 
@@ -132,8 +138,8 @@ const SystemInfoPage = () => {
         >
           <Timeline mode="left" className="mt-4">
             {changelog.map((log, index) => (
-              <Timeline.Item key={index} label={log.time}>
-                <div className="font-medium">{log.version}</div>
+              <Timeline.Item key={index}>
+                <div className="font-medium">{log.version}<span className="ml-2 text-gray-400 font-normal">{log.time} </span></div>
                 <div className="text-gray-600">{log.content}</div>
               </Timeline.Item>
             ))}
@@ -165,9 +171,10 @@ const SystemInfoPage = () => {
           <div className="space-y-3">
             {authorInfo.contact.map((item, index) => (
               <div key={index} className="flex items-center">
+                <span className="mr-2 text-gray-500">{item.icon}</span>
                 <span className="w-16 text-gray-600">{item.type}:</span>
-                <span className="font-medium">
-                  {item.type === 'GitHub' ? (
+                <span className="font-medium text-sm">
+                  {item.type === 'GitHub' || item.type === '讨论区' ? (
                     <a
                       href={item.value}
                       target="_blank"
@@ -176,10 +183,10 @@ const SystemInfoPage = () => {
                     >
                       {item.value}
                     </a>
-                  ) : item.value}
+                  ) : (
+                    item.value
+                  )}
                 </span>
-                {item.type === '微信' && <WechatOutlined className="ml-2 text-green-500" />}
-                {item.type === 'QQ' && <QqOutlined className="ml-2 text-blue-500" />}
               </div>
             ))}
           </div>
@@ -202,11 +209,13 @@ const SystemInfoPage = () => {
             </p>
           </div>
           <Divider className="my-4" />
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-center flex-wrap gap-2">
             <Tag color="magenta">企业级</Tag>
-            <Tag color="red">高性能</Tag>
+            <Tag color="red">开箱即用</Tag>
             <Tag color="volcano">可扩展</Tag>
             <Tag color="gold">现代化</Tag>
+            <Tag color="blue">国际化</Tag>
+            <Tag color="green">权限控制</Tag>
           </div>
         </Card>
       </div>
