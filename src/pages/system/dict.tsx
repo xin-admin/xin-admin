@@ -6,98 +6,100 @@ import type { XinTableColumn, XinTableProps } from '@/components/XinTable/typing
 import type { ProTableProps } from '@ant-design/pro-components';
 import { useState } from 'react';
 import { Create, Update } from '@/api/common/table';
+import { useTranslation } from 'react-i18next';
 
 /** 字典管理 */
 export default () => {
+  const { t } = useTranslation();
 
   // 字典
   const columns: XinTableColumn<IDict>[] = [
     { 
-      title: '字典ID', 
+      title: t('dict.id'), 
       dataIndex: 'id',
        hideInForm: true, 
        sorter: true 
     },
     { 
-      title: '字典名称',
+      title: t('dict.name'),
       dataIndex: 'name', 
       valueType: 'text', 
       colProps: { span: 8 },
-      formItemProps: { rules: [{ required: true, message: '字典名称不能为空' }] },
+      formItemProps: { rules: [{ required: true, message: t('dict.name.required') }] },
     },
     {
-      title: '字典编码', 
+      title: t('dict.code'), 
       dataIndex: 'code', 
       valueType: 'text', 
       colProps: { span: 8 },
-      formItemProps: { rules: [{ required: true, message: '字典编码不能为空' }] },
+      formItemProps: { rules: [{ required: true, message: t('dict.code.required') }] },
     },
     {
-      title: '类型', 
+      title: t('dict.type'), 
       dataIndex: 'type', 
       valueType: 'select', 
       filters: true, 
       colProps: { span: 8 },
-      formItemProps: { rules: [{ required: true, message: '类型不能为空' }] },
+      formItemProps: { rules: [{ required: true, message: t('dict.type.required') }] },
       valueEnum: {
-        default: { text: '文字', status: 'Success' },
-        badge: { text: '徽标', status: 'Success' },
-        tag: { text: '标签', status: 'Success' },
+        default: { text: t('dict.type.default'), status: 'Success' },
+        badge: { text: t('dict.type.badge'), status: 'Success' },
+        tag: { text: t('dict.type.tag'), status: 'Success' },
       },
     },
     { 
-      title: '描述', 
+      title: t('dict.describe'), 
       dataIndex: 'describe', 
       valueType: 'textarea', 
       colProps: { span: 24 }, 
       hideInSearch: true 
     },
-    { title: '创建时间', dataIndex: 'created_at', valueType: 'date', hideInForm: true },
-    { title: '修改时间', dataIndex: 'updated_at', valueType: 'date', hideInForm: true },
+    { title: t('dict.createdAt'), dataIndex: 'created_at', valueType: 'date', hideInForm: true },
+    { title: t('dict.updatedAt'), dataIndex: 'updated_at', valueType: 'date', hideInForm: true },
   ];
   // 字典项
   const itemColumns: XinTableColumn<IDictItem>[] = [
     { 
-      title: 'ID', 
+      title: t('dictItem.id'), 
       dataIndex: 'id', 
       hideInForm: true, 
       hideInTable: true 
     },
     { 
-      title: '名称', 
+      title: t('dictItem.label'), 
       dataIndex: 'label', 
       valueType: 'text', 
-      formItemProps: { rules: [{ required: true, message: '名称不能为空' }] },
+      formItemProps: { rules: [{ required: true, message: t('dictItem.label.required') }] },
     },
     { 
-      title: '值', 
+      title: t('dictItem.value'), 
       dataIndex: 'value', 
       valueType: 'text', 
-      formItemProps: { rules: [{ required: true, message: '值不能为空' }] },
+      formItemProps: { rules: [{ required: true, message: t('dictItem.value.required') }] },
     },
     {
-      title: '类型', 
+      title: t('dictItem.status'), 
       dataIndex: 'status', 
       valueType: 'text', 
       initialValue: 'default',
-      formItemProps: { rules: [{ required: true, message: '类型不能为空' }] },
+      formItemProps: { rules: [{ required: true, message: t('dictItem.status.required') }] },
       valueEnum: {
-        success: { text: 'success', status: 'Success' },
-        error: { text: 'error', status: 'Error' },
-        default: { text: 'default', status: 'Default' },
-        processing: { text: 'processing', status: 'Processing' },
-        warning: { text: 'warning', status: 'Warning' },
+        success: { text: t('dictItem.status.success'), status: 'Success' },
+        error: { text: t('dictItem.status.error'), status: 'Error' },
+        default: { text: t('dictItem.status.default'), status: 'Default' },
+        processing: { text: t('dictItem.status.processing'), status: 'Processing' },
+        warning: { text: t('dictItem.status.warning'), status: 'Warning' },
       },
     },
     { 
-      title: '状态', 
+      title: t('dictItem.switch'), 
       dataIndex: 'switch', 
       valueType: 'switch', 
       initialValue: true,
-      formItemProps: { rules: [{ required: true, message: '状态不能为空' }] },
+      formItemProps: { rules: [{ required: true, message: t('dictItem.switch.required') }] },
     },
-    { title: '创建时间', dataIndex: 'create_time', valueType: 'date', hideInForm: true, hideInTable: true },
-    { title: '修改时间', dataIndex: 'update_time', valueType: 'date', hideInForm: true, hideInTable: true },
+    { title: t('dictItem.createTime'), dataIndex: 'create_time', valueType: 'date', hideInForm: true, hideInTable: true },
+    { title: t('dictItem.updateTime'), dataIndex: 'update_time', valueType: 'date', hideInForm: true, hideInTable: true },
   ];
 
   const [selectedRows, setSelectedRows] = useState<IDict>();
@@ -121,7 +123,7 @@ export default () => {
     tableAlertOptionRender: false,
     toolbar: {
       search: {
-        placeholder: '请输入字典ID、字典名、字典编码搜索',
+        placeholder: t('dict.searchPlaceholder'),
         style: { width: 304 },
         onSearch: (value: string) => {
           setParams({ keywordSearch: value });
@@ -131,7 +133,7 @@ export default () => {
     },
     optionsRender: (_, dom) => {
       return [
-        <Button type="primary" key={'ref'} onClick={() => {}}>刷新字典缓存</Button>,
+        <Button type="primary" key={'ref'} onClick={() => {}}>{t('dict.refreshCache')}</Button>,
         ...dom
       ];
     },
@@ -139,18 +141,18 @@ export default () => {
 
   const handleAddItem: XinTableProps<IDictItem>['onFinish'] = async (formData, mode, initValue) => {
     if (!selectedRows) {
-      message.warning('请选择字典！');
+      message.warning(t('dict.selectWarning'));
       return false;
     }
     if (mode === 'edit' && initValue) {
       let data = { ...initValue, ...formData };
       await Update('/sys/dict/item/' + initValue.id, data);
-      message.success('编辑成功');
+      message.success(t('dict.editSuccess'));
       return true;
     } else {
       let data = { ...formData, dict_id: selectedRows.id, };
       await Create('/sys/dict/item', data);
-      message.success('添加成功');
+      message.success(t('dict.addSuccess'));
       return true;
     }
   };
@@ -189,13 +191,13 @@ export default () => {
               toolbar: { settings: [] },
               pagination: { pageSize: 10 },
               cardProps: { bordered: true },
-              headerTitle: `字典项管理（${selectedRows?.name}）`
+              headerTitle: `${t('dict.itemManagement')}（${selectedRows?.name}）`
             }}
             accessName={'system.dict.item'}
             formProps={{ grid: true, colProps: { span: 12 } }}
           />
         ) : (
-          <Empty description={'请选择字典'} />
+          <Empty description={t('dict.selectDict')} />
         )}
       </Col>
     </Row>

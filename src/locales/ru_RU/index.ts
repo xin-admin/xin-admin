@@ -7,6 +7,7 @@ import sysUserRule from "./sys-user-rule";
 import sysUserRole from "./sys-user-role";
 import watcher from "./watcher";
 import sysFile from "./sys-file";
+import sysDict from "./sys-dict";
 import layout from "./layout";
 
 export default {
@@ -19,5 +20,6 @@ export default {
   ...sysUserRole,
   ...watcher,
   ...sysFile,
+  ...sysDict,
   ...layout,
 };
