@@ -27,6 +27,7 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import { BetaSchemaForm, type ProFormInstance } from '@ant-design/pro-components';
+import { useTranslation } from 'react-i18next';
 import type { ISettingGroup } from '@/domain/iSettingGroup';
 import type { ISetting } from '@/domain/iSetting';
 import {
@@ -44,19 +45,20 @@ import {
 const { TextArea } = Input;
 const { Text } = Typography;
 
-/** 表单组件类型选项 */
-const FORM_COMPONENT_OPTIONS = [
-  { label: '输入框', value: 'Input' },
-  { label: '文本域', value: 'TextArea' },
-  { label: '数字输入框', value: 'InputNumber' },
-  { label: '开关', value: 'Switch' },
-  { label: '单选框', value: 'Radio' },
-  { label: '复选框', value: 'Checkbox' },
-  { label: '下拉选择', value: 'Select' },
-  { label: '日期选择器', value: 'DatePicker' },
-];
-
 const SettingManagement: React.FC = () => {
+  const { t } = useTranslation();
+
+  /** 表单组件类型选项 */
+  const FORM_COMPONENT_OPTIONS = [
+    { label: t('setting.component.Input'), value: 'Input' },
+    { label: t('setting.component.TextArea'), value: 'TextArea' },
+    { label: t('setting.component.InputNumber'), value: 'InputNumber' },
+    { label: t('setting.component.Switch'), value: 'Switch' },
+    { label: t('setting.component.Radio'), value: 'Radio' },
+    { label: t('setting.component.Checkbox'), value: 'Checkbox' },
+    { label: t('setting.component.Select'), value: 'Select' },
+    { label: t('setting.component.DatePicker'), value: 'DatePicker' },
+  ];
   const [settingGroups, setSettingGroups] = useState<ISettingGroup[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<number>();
   const [selectedGroupKey, setSelectedGroupKey] = useState<string>();
@@ -157,10 +159,10 @@ const SettingManagement: React.FC = () => {
     try {
       if (editingGroup) {
         await updateSettingGroup(editingGroup.id!, values);
-        message.success('修改设置组成功');
+        message.success(t('setting.group.updateSuccess'));
       } else {
         await createSettingGroup(values);
-        message.success('新增设置组成功');
+        message.success(t('setting.group.createSuccess'));
       }
       setGroupModalOpen(false);
       await loadSettingGroups();
@@ -174,7 +176,7 @@ const SettingManagement: React.FC = () => {
   const handleDeleteGroup = async (id: number) => {
     try {
       await deleteSettingGroup(id);
-      message.success('删除设置组成功');
+      message.success(t('setting.group.deleteSuccess'));
       if (selectedGroupId === id) {
         setSelectedGroupId(undefined);
         setSelectedGroupKey(undefined);
@@ -205,10 +207,10 @@ const SettingManagement: React.FC = () => {
     try {
       if (editingItem) {
         await updateSettingItem(editingItem.id!, { ...values, group_id: selectedGroupId });
-        message.success('修改设置项成功');
+        message.success(t('setting.item.updateSuccess'));
       } else {
         await createSettingItem(values);
-        message.success('新增设置项成功');
+        message.success(t('setting.item.createSuccess'));
       }
       setItemModalOpen(false);
       await loadSettingItems(selectedGroupId);
@@ -222,7 +224,7 @@ const SettingManagement: React.FC = () => {
   const handleDeleteItem = async (id: number) => {
     try {
       await deleteSettingItem(id);
-      message.success('删除设置项成功');
+      message.success(t('setting.item.deleteSuccess'));
       await loadSettingItems(selectedGroupId);
     } catch (error) {
       console.error('删除设置项失败:', error);
@@ -241,9 +243,9 @@ const SettingManagement: React.FC = () => {
       try {
         const valueStr = typeof value === 'object' ? JSON.stringify(value) : String(value);
         await saveSettingItemValue(itemId, valueStr);
-        message.success('保存成功', 1);
+        message.success(t('setting.save.success'), 1);
       } catch (error) {
-        message.error('保存失败');
+        message.error(t('setting.save.error'));
       }
     }, 500);
   };
@@ -295,10 +297,10 @@ const SettingManagement: React.FC = () => {
             onClick={() => handleEditItem(item)}
           />
           <Popconfirm
-            title="确认删除?"
+            title={t('setting.item.deleteConfirm')}
             onConfirm={() => handleDeleteItem(item.id!)}
-            okText="确认"
-            cancelText="取消"
+            okText={t('setting.confirm.ok')}
+            cancelText={t('setting.confirm.cancel')}
           >
             <Button
               type="text"
@@ -321,7 +323,7 @@ const SettingManagement: React.FC = () => {
       case 'Input':
         component = (
           <Input
-            placeholder={item.describe || '请输入'}
+            placeholder={item.describe || t('setting.form.placeholder.input')}
             {...commonProps}
             onBlur={(e) => handleValueChange(item.id!, e.target.value)}
           />
@@ -331,7 +333,7 @@ const SettingManagement: React.FC = () => {
       case 'TextArea':
         component = (
           <TextArea
-            placeholder={item.describe || '请输入'}
+            placeholder={item.describe || t('setting.form.placeholder.input')}
             rows={4}
             {...commonProps}
             onBlur={(e) => handleValueChange(item.id!, e.target.value)}
@@ -343,7 +345,7 @@ const SettingManagement: React.FC = () => {
         component = (
           <InputNumber
             style={{ width: '100%' }}
-            placeholder={item.describe || '请输入'}
+            placeholder={item.describe || t('setting.form.placeholder.input')}
             {...commonProps}
           />
         );
@@ -364,7 +366,7 @@ const SettingManagement: React.FC = () => {
       case 'Select':
         component = (
           <Select
-            placeholder={item.describe || '请选择'}
+            placeholder={item.describe || t('setting.form.placeholder.select')}
             options={options}
             {...commonProps}
           />
@@ -375,14 +377,14 @@ const SettingManagement: React.FC = () => {
         component = (
           <DatePicker
             style={{ width: '100%' }}
-            placeholder={item.describe || '请选择日期'}
+            placeholder={item.describe || t('setting.form.placeholder.date')}
             {...commonProps}
           />
         );
         break;
 
       default:
-        component = <Input placeholder={item.describe || '请输入'} {...commonProps} />;
+        component = <Input placeholder={item.describe || t('setting.form.placeholder.input')} {...commonProps} />;
     }
 
     return (
@@ -398,23 +400,23 @@ const SettingManagement: React.FC = () => {
   /** 设置组表单列 */
   const groupColumns = [
     {
-      title: '标题',
+      title: t('setting.group.field.title'),
       dataIndex: 'title',
       valueType: 'text' as const,
       formItemProps: {
-        rules: [{ required: true, message: '请输入标题' }],
+        rules: [{ required: true, message: t('setting.group.field.title.required') }],
       },
     },
     {
-      title: '键',
+      title: t('setting.group.field.key'),
       dataIndex: 'key',
       valueType: 'text' as const,
       formItemProps: {
-        rules: [{ required: true, message: '请输入键' }],
+        rules: [{ required: true, message: t('setting.group.field.key.required') }],
       },
     },
     {
-      title: '描述',
+      title: t('setting.group.field.remark'),
       dataIndex: 'remark',
       valueType: 'textarea' as const,
     },
@@ -423,57 +425,57 @@ const SettingManagement: React.FC = () => {
   /** 设置项表单列 */
   const itemColumns = [
     {
-      title: '键',
+      title: t('setting.item.field.key'),
       dataIndex: 'key',
       valueType: 'text' as const,
       formItemProps: {
-        rules: [{ required: true, message: '请输入键' }],
+        rules: [{ required: true, message: t('setting.item.field.key.required') }],
       },
     },
     {
-      title: '标题',
+      title: t('setting.item.field.title'),
       dataIndex: 'title',
       valueType: 'text' as const,
       formItemProps: {
-        rules: [{ required: true, message: '请输入标题' }],
+        rules: [{ required: true, message: t('setting.item.field.title.required') }],
       },
     },
     {
-      title: '组件类型',
+      title: t('setting.item.field.type'),
       dataIndex: 'type',
       valueType: 'select' as const,
       fieldProps: {
         options: FORM_COMPONENT_OPTIONS,
       },
       formItemProps: {
-        rules: [{ required: true, message: '请选择组件类型' }],
+        rules: [{ required: true, message: t('setting.item.field.type.required') }],
       },
     },
     {
-      title: '描述',
+      title: t('setting.item.field.describe'),
       dataIndex: 'describe',
       valueType: 'textarea' as const,
       colProps: { span: 24 },
     },
     {
-      title: '选项(JSON数组)',
+      title: t('setting.item.field.options'),
       dataIndex: 'options',
       valueType: 'textarea' as const,
-      tooltip: '例如: 1=选项1 /n 2=选项2',
+      tooltip: t('setting.item.field.options.tooltip'),
     },
     {
-      title: '属性(JSON对象)',
+      title: t('setting.item.field.props'),
       dataIndex: 'props',
       valueType: 'textarea' as const,
-      tooltip: '例如: placeholder=请输入 /n maxLength=100',
+      tooltip: t('setting.item.field.props.tooltip'),
     },
     {
-      title: '默认值',
+      title: t('setting.item.field.values'),
       dataIndex: 'values',
       valueType: 'text' as const,
     },
     {
-      title: '排序',
+      title: t('setting.item.field.sort'),
       dataIndex: 'sort',
       valueType: 'digit' as const,
     },
@@ -484,12 +486,12 @@ const SettingManagement: React.FC = () => {
       {/* 左侧设置组菜单 */}
       <Col xs={24} lg={6}>
         <Card
-          title={
+          title={(
             <Space>
               <SettingOutlined />
-              设置组
+              {t('setting.group.title')}
             </Space>
-          }
+          )}
           extra={
             <Button
               type="primary"
@@ -497,7 +499,7 @@ const SettingManagement: React.FC = () => {
               icon={<PlusOutlined />}
               onClick={handleAddGroup}
             >
-              新增
+              {t('setting.group.add')}
             </Button>
           }
           loading={loading}
@@ -521,14 +523,14 @@ const SettingManagement: React.FC = () => {
                       }}
                     />
                     <Popconfirm
-                      title="确认删除?"
-                      description="删除设置组将同时删除该组下的所有设置项"
+                      title={t('setting.group.deleteConfirm')}
+                      description={t('setting.group.deleteWarning')}
                       onConfirm={(e) => {
                         e?.stopPropagation();
                         handleDeleteGroup(group.id!);
                       }}
-                      okText="确认"
-                      cancelText="取消"
+                      okText={t('setting.confirm.ok')}
+                      cancelText={t('setting.confirm.cancel')}
                     >
                       <Button
                         type="text"
@@ -553,7 +555,7 @@ const SettingManagement: React.FC = () => {
       {/* 右侧设置项 */}
       <Col xs={24} lg={18}>
         <Card
-          title="设置项"
+          title={t('setting.item.title')}
           extra={
             selectedGroupId && (
               <Button
@@ -561,21 +563,21 @@ const SettingManagement: React.FC = () => {
                 icon={<PlusOutlined />}
                 onClick={handleAddItem}
               >
-                新增设置项
+                {t('setting.item.add')}
               </Button>
             )
           }
         >
           {!selectedGroupId ? (
             <div style={{ textAlign: 'center', padding: '60px 0', color: '#999' }}>
-              请先选择设置组
+              {t('setting.item.selectGroup')}
             </div>
           ) : (
             <Spin spinning={itemsLoading}>
               <Form form={valuesForm} layout="vertical">
                 {settingItems.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '60px 0', color: '#999' }}>
-                    暂无设置项,请点击"新增设置项"按钮添加
+                    {t('setting.item.empty')}
                   </div>
                 ) : (
                   settingItems.map((item, index) => (
@@ -595,7 +597,7 @@ const SettingManagement: React.FC = () => {
 
       {/* 设置组表单弹窗 */}
       <BetaSchemaForm<ISettingGroup>
-        title={editingGroup ? '编辑设置组' : '新增设置组'}
+        title={editingGroup ? t('setting.group.edit') : t('setting.group.create')}
         open={groupModalOpen}
         layoutType="ModalForm"
         columns={groupColumns}
@@ -609,7 +611,7 @@ const SettingManagement: React.FC = () => {
 
       {/* 设置项表单弹窗 */}
       <BetaSchemaForm<ISetting>
-        title={editingItem ? '编辑设置项' : '新增设置项'}
+        title={editingItem ? t('setting.item.edit') : t('setting.item.create')}
         open={itemModalOpen}
         layoutType="ModalForm"
         columns={itemColumns}
