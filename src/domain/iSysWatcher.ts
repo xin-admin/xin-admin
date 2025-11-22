@@ -5,6 +5,10 @@ export interface CacheRecord {
   'key': string;
   /** 缓存值 */
   'value': string;
+  /** 缓存地址 */
+  'host_name': string;
+  /** 缓存记录时间 */
+  'recorded_at': string;
   /** 过期时间（秒） */
   'expiration': number;
 }

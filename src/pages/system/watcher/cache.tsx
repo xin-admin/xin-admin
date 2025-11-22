@@ -113,14 +113,22 @@ export default function CacheRecordPage() {
       width: 500,
       render: (value: string) => {
         if (!value) return '-';
+        let strValue: string;
+        if (typeof value === 'string') {
+          strValue = value;
+        }else if (typeof value === 'object') {
+          strValue = JSON.stringify(value);
+        }else {
+          strValue = String(value);
+        }
         return (
-          <div style={{ 
-            fontFamily: 'monospace',
-            fontSize: '12px'
-          }}>
-            {value.length > 100 ? `${value.substring(0, 100)}...` : value}
-          </div>
-        );
+            <div style={{ 
+              fontFamily: 'monospace',
+              fontSize: '12px'
+            }}>
+              {strValue}
+            </div>
+          );
       },
     },
     {
