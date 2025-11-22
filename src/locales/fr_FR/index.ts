@@ -9,6 +9,7 @@ import watcher from "./watcher";
 import sysFile from "./sys-file";
 import sysDict from "./sys-dict";
 import sysSetting from "./sys-setting";
+import dashboard from "./dashboard";
 import layout from "./layout";
 
 export default {
@@ -23,5 +24,6 @@ export default {
   ...sysFile,
   ...sysDict,
   ...sysSetting,
+  ...dashboard,
   ...layout,
 };

@@ -2,6 +2,7 @@ import React from "react";
 import {Card, Col, Row, theme, Radio, Table, Tag, Space, List, Avatar} from "antd";
 import ReactECharts from "echarts-for-react";
 import {ArrowDownOutlined, ArrowUpOutlined, LikeOutlined, TeamOutlined} from "@ant-design/icons";
+import { useTranslation } from 'react-i18next';
 const {useToken} = theme;
 
 interface DataType {
@@ -14,6 +15,7 @@ interface DataType {
 
 const Index: React.FC = () => {
   const {token} = useToken();
+  const { t } = useTranslation();
 
   const optionsBar = {
     xAxis: {
@@ -60,7 +62,7 @@ const Index: React.FC = () => {
 
   const options = {
     title: {
-      text: '年度销售额',
+      text: t('dashboard.analysis.annualSales'),
       textStyle: {
         color: token.colorText,
         fontSize: token.fontSizeLG,
@@ -83,7 +85,7 @@ const Index: React.FC = () => {
       }
     },
     legend: {
-      data: ['毛利润', '净利润', '总支出'],
+      data: [t('dashboard.analysis.grossProfit'), t('dashboard.analysis.netProfit'), t('dashboard.analysis.totalExpense')],
       textStyle: {
         color: token.colorText
       }
@@ -98,7 +100,20 @@ const Index: React.FC = () => {
       {
         type: 'category',
         boundaryGap: false,
-        data: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        data: [
+          t('dashboard.analysis.january'),
+          t('dashboard.analysis.february'),
+          t('dashboard.analysis.march'),
+          t('dashboard.analysis.april'),
+          t('dashboard.analysis.may'),
+          t('dashboard.analysis.june'),
+          t('dashboard.analysis.july'),
+          t('dashboard.analysis.august'),
+          t('dashboard.analysis.september'),
+          t('dashboard.analysis.october'),
+          t('dashboard.analysis.november'),
+          t('dashboard.analysis.december')
+        ]
       }
     ],
     yAxis: [
@@ -114,7 +129,7 @@ const Index: React.FC = () => {
     ],
     series: [
       {
-        name: '毛利润',
+        name: t('dashboard.analysis.grossProfit'),
         type: 'line',
         stack: 'Total',
         areaStyle: {
@@ -129,7 +144,7 @@ const Index: React.FC = () => {
         data: [30,36,42,33,21,26,29,35,42,32,28,26]
       },
       {
-        name: '净利润',
+        name: t('dashboard.analysis.netProfit'),
         type: 'line',
         stack: 'Total',
         areaStyle: {
@@ -144,7 +159,7 @@ const Index: React.FC = () => {
         data: [32,16,18,30,15,19,22,17,24,19,30,31]
       },
       {
-        name: '总支出',
+        name: t('dashboard.analysis.totalExpense'),
         type: 'line',
         stack: 'Total',
         areaStyle: {
@@ -163,7 +178,7 @@ const Index: React.FC = () => {
 
   const optionsPie = {
     title: {
-      text: 'Access From',
+      text: t('dashboard.analysis.accessFrom'),
       textStyle: {
         color: token.colorText,
         fontSize: token.fontSizeLG,
@@ -182,7 +197,7 @@ const Index: React.FC = () => {
     },
     series: [
       {
-        name: 'Access From',
+        name: t('dashboard.analysis.accessFrom'),
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
@@ -206,11 +221,11 @@ const Index: React.FC = () => {
           show: false
         },
         data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
+          { value: 1048, name: t('dashboard.analysis.searchEngine') },
+          { value: 735, name: t('dashboard.analysis.direct') },
+          { value: 580, name: t('dashboard.analysis.email') },
+          { value: 484, name: t('dashboard.analysis.unionAds') },
+          { value: 300, name: t('dashboard.analysis.videoAds') }
         ]
       }
     ]
@@ -277,27 +292,27 @@ const Index: React.FC = () => {
       <Row gutter={[20, 20]}>
         <Col xxl={6} lg={12} xs={24}>
           <Card variant={"borderless"}>
-            <div>总收入</div>
+            <div>{t('dashboard.analysis.totalRevenue')}</div>
             <div className={"flex items-center justify-between pt-4 pb-2"}>
               <div className={"text-4xl flex-0"}>￥3,415.00</div>
               <ReactECharts style={{width: 120, height: 80}} option={optionsBar} />
             </div>
-            <div>自上周以来 <span style={{color: token.colorError}}><ArrowUpOutlined />11.28%</span></div>
+            <div>{t('dashboard.since.lastWeek')} <span style={{color: token.colorError}}><ArrowUpOutlined />11.28%</span></div>
           </Card>
         </Col>
         <Col xxl={6} lg={12} xs={24}>
           <Card variant={"borderless"}>
-            <div>总支出</div>
+            <div>{t('dashboard.analysis.totalExpenses')}</div>
             <div className={"flex items-center justify-between pt-4 pb-2"}>
               <div className={"text-4xl flex-0"}>￥8,425.00</div>
               <ReactECharts style={{width: 120, height: 80}} option={optionsLine} />
             </div>
-            <div>自上周以来 <span style={{color: token.colorSuccess}}><ArrowDownOutlined />15.33%</span></div>
+            <div>{t('dashboard.since.lastWeek')} <span style={{color: token.colorSuccess}}><ArrowDownOutlined />15.33%</span></div>
           </Card>
         </Col>
         <Col xxl={6} lg={12} xs={24}>
           <Card variant={"borderless"}>
-            <div>访客量</div>
+            <div>{t('dashboard.analysis.visitors')}</div>
             <div className={"flex items-center justify-between pt-4 pb-2"}>
               <div className={"text-4xl flex-0"}>
                 1,128
@@ -306,12 +321,12 @@ const Index: React.FC = () => {
                 <TeamOutlined style={{ color: token.colorPrimary }}/>
               </div>
             </div>
-            <div>自上周以来 <span style={{color: token.colorError}}><ArrowUpOutlined />32.60%</span></div>
+            <div>{t('dashboard.since.lastWeek')} <span style={{color: token.colorError}}><ArrowUpOutlined />32.60%</span></div>
           </Card>
         </Col>
         <Col xxl={6} lg={12} xs={24}>
           <Card variant={"borderless"}>
-            <div>点赞量</div>
+            <div>{t('dashboard.analysis.likes')}</div>
             <div className={"flex items-center justify-between pt-4 pb-2"}>
               <div className={"text-4xl flex-0"}>
                 668
@@ -320,7 +335,7 @@ const Index: React.FC = () => {
                 <LikeOutlined  style={{ color: token.colorPrimary }}/>
               </div>
             </div>
-            <div>自上周以来 <span style={{color: token.colorSuccess}}><ArrowDownOutlined />9.60%</span></div>
+            <div>{t('dashboard.since.lastWeek')} <span style={{color: token.colorSuccess}}><ArrowDownOutlined />9.60%</span></div>
           </Card>
         </Col>
         <Col xl={18} xs={24}>
@@ -336,12 +351,12 @@ const Index: React.FC = () => {
         <Col xl={12} xs={24}>
           <Card variant={"borderless"}>
             <div className={"flex items-center justify-between mb-5"}>
-              <div style={{ fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>销售排名</div>
+              <div style={{ fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>{t('dashboard.analysis.salesRanking')}</div>
               <Radio.Group
                 options={[
-                  { label: '月份', value: 'month'},
-                  { label: '年份', value: 'year'},
-                  { label: '天', value: 'day'},
+                  { label: t('dashboard.analysis.month'), value: 'month'},
+                  { label: t('dashboard.analysis.year'), value: 'year'},
+                  { label: t('dashboard.analysis.day'), value: 'day'},
                 ]}
                 defaultValue={'day'}
                 optionType="button"
@@ -351,23 +366,23 @@ const Index: React.FC = () => {
             <Table
               columns={[
                 {
-                  title: 'Article',
+                  title: t('dashboard.analysis.article'),
                   dataIndex: 'name',
                   key: 'name',
                   render: (text) => <a>{text}</a>,
                 },
                 {
-                  title: 'Age',
+                  title: t('dashboard.analysis.age'),
                   dataIndex: 'age',
                   key: 'age',
                 },
                 {
-                  title: 'Address',
+                  title: t('dashboard.analysis.address'),
                   dataIndex: 'address',
                   key: 'address',
                 },
                 {
-                  title: 'Tags',
+                  title: t('dashboard.analysis.tags'),
                   key: 'tags',
                   dataIndex: 'tags',
                   render: (_, { tags }) => (
@@ -387,12 +402,12 @@ const Index: React.FC = () => {
                   ),
                 },
                 {
-                  title: 'Action',
+                  title: t('dashboard.analysis.action'),
                   key: 'action',
                   render: (_, record) => (
                     <Space size="middle">
-                      <a>Invite {record.name}</a>
-                      <a>Delete</a>
+                      <a>{t('dashboard.analysis.invite')} {record.name}</a>
+                      <a>{t('dashboard.analysis.delete')}</a>
                     </Space>
                   ),
                 },
@@ -405,7 +420,7 @@ const Index: React.FC = () => {
         </Col>
         <Col xl={12} xs={24}>
           <Card variant={"borderless"}>
-            <div className={"mb-5"} style={{ fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>用户评价</div>
+            <div className={"mb-5"} style={{ fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>{t('dashboard.analysis.userReviews')}</div>
             <List
               dataSource={msgData}
               renderItem={(item, index) => (
@@ -415,7 +430,7 @@ const Index: React.FC = () => {
                       <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />
                     }
                     title={<a href="https://ant.design">{item.title}</a>}
-                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                    description={t('dashboard.analysis.reviewDescription')}
                   />
                 </List.Item>
               )}

@@ -1,9 +1,11 @@
 import {Card, Row, Col, Space, Divider, List, Avatar, theme} from "antd";
 import {ArrowDownOutlined, ArrowUpOutlined} from "@ant-design/icons";
+import { useTranslation } from 'react-i18next';
 const {useToken} = theme
 
 const Monitor = () => {
   const {token} = useToken();
+  const { t } = useTranslation();
   const data = [
     {
       title: '3号楼2层走廊灯不亮，需检查线路并更换灯泡。',
@@ -50,9 +52,9 @@ const Monitor = () => {
                   <img src="/static/帮办代办.png" alt="1"/>
                 </div>
                 <div className={"ml-5"}>
-                  <div style={{color: token.colorTextDescription}}>帮办代办</div>
+                  <div style={{color: token.colorTextDescription}}>{t('dashboard.monitor.helpService')}</div>
                   <div className={"text-[30px]"}>30 / 255</div>
-                  <div>完成度 <span style={{color: token.colorError}}>11.60%</span></div>
+                  <div>{t('dashboard.completion')} <span style={{color: token.colorError}}>11.60%</span></div>
                 </div>
               </div>
             </Col>
@@ -62,9 +64,9 @@ const Monitor = () => {
                   <img src="/static/购房.png" alt="1"/>
                 </div>
                 <div className={"ml-5"}>
-                  <div style={{color: token.colorTextDescription}}>物业费</div>
+                  <div style={{color: token.colorTextDescription}}>{t('dashboard.monitor.propertyFee')}</div>
                   <div className={"text-[30px]"}>19,308 ￥</div>
-                  <div>较上周 <span style={{color: token.colorError}}><ArrowUpOutlined />19.20%</span></div>
+                  <div>{t('dashboard.vs.lastWeek')} <span style={{color: token.colorError}}><ArrowUpOutlined />19.20%</span></div>
                 </div>
               </div>
             </Col>
@@ -74,9 +76,9 @@ const Monitor = () => {
                   <img src="/static/报警.png" alt="1"/>
                 </div>
                 <div className={"ml-5"}>
-                  <div style={{color: token.colorTextDescription}}>报警事件</div>
+                  <div style={{color: token.colorTextDescription}}>{t('dashboard.monitor.alarmEvents')}</div>
                   <div className={"text-[30px]"}>30</div>
-                  <div>较上周 <span style={{color: token.colorSuccess}}><ArrowDownOutlined />32.60%</span></div>
+                  <div>{t('dashboard.vs.lastWeek')} <span style={{color: token.colorSuccess}}><ArrowDownOutlined />32.60%</span></div>
                 </div>
               </div>
             </Col>
@@ -86,9 +88,9 @@ const Monitor = () => {
                   <img src="/static/更多服务.png" alt="1"/>
                 </div>
                 <div className={"ml-5"}>
-                  <div style={{color: token.colorTextDescription}}>其它事件</div>
+                  <div style={{color: token.colorTextDescription}}>{t('dashboard.monitor.otherEvents')}</div>
                   <div className={"text-[30px]"}>255件</div>
-                  <div>较上周 <span style={{color: token.colorError}}><ArrowUpOutlined />16.50%</span></div>
+                  <div>{t('dashboard.vs.lastWeek')} <span style={{color: token.colorError}}><ArrowUpOutlined />16.50%</span></div>
                 </div>
               </div>
             </Col>
@@ -96,15 +98,15 @@ const Monitor = () => {
         </Card>
         <Card variant={"borderless"}>
           <div style={{ marginBottom: 20, fontSize: token.fontSizeLG, fontWeight: token.fontWeightStrong }}>
-            待办事项 <Divider type="vertical" /> <span style={{color: token.colorTextDescription}}>我的关注</span>
+            {t('dashboard.monitor.todoList')} <Divider type="vertical" /> <span style={{color: token.colorTextDescription}}>{t('dashboard.monitor.myFocus')}</span>
           </div>
           <Space className={"mb-5"} wrap>
-            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorPrimary, background: token.colorPrimaryBg }}>全部 15</div>
-            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>物业工单 8</div>
-            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>维修工单 2</div>
-            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>消防安全 3</div>
-            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>有偿服务 5</div>
-            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>公共服务 7</div>
+            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorPrimary, background: token.colorPrimaryBg }}>{t('dashboard.monitor.all')} 15</div>
+            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>{t('dashboard.monitor.propertyOrder')} 8</div>
+            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>{t('dashboard.monitor.repairOrder')} 2</div>
+            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>{t('dashboard.monitor.fireSafety')} 3</div>
+            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>{t('dashboard.monitor.paidService')} 5</div>
+            <div className={"rounded-xl pl-3 pr-3"} style={{ color: token.colorText, background: token.colorBorderSecondary	 }}>{t('dashboard.monitor.publicService')} 7</div>
           </Space>
           <List
             itemLayout="horizontal"
