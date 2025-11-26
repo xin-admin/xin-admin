@@ -11,6 +11,7 @@ import sysDict from "./sys-dict";
 import sysSetting from "./sys-setting";
 import dashboard from "./dashboard";
 import layout from "./layout";
+import login from "./login";
 
 export default {
   ...xinTable,
@@ -26,4 +27,5 @@ export default {
   ...sysSetting,
   ...dashboard,
   ...layout,
+  ...login,
 };

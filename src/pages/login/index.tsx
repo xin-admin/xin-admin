@@ -6,22 +6,32 @@ import {
   UserOutlined,
   WechatOutlined,
   WeiboOutlined,
+  TranslationOutlined,
+  BulbOutlined,
 } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
-import { Col, Divider, message, Row, Space } from 'antd';
-import {type CSSProperties, useEffect} from 'react';
+import { Col, Divider, message, Row, Space, Dropdown, Button, type MenuProps } from 'antd';
+import {type CSSProperties, useEffect, useState} from 'react';
 import React from 'react';
 import useAuthStore from "@/stores/user.ts";
 import {useNavigate} from "react-router";
 import type { LoginParams } from '@/api/sys/sysUser';
+import { useTranslation } from 'react-i18next';
+import { useGlobalStore } from '@/stores';
+import { darkColorTheme, defaultColorTheme } from '@/layout/theme';
 
-const bodyStyle: CSSProperties = {
-  backgroundImage: 'url(/public/static/bg.png)',
+// 样式定义函数，支持暗黑模式
+const getBodyStyle = (isDark: boolean): CSSProperties => ({
+  backgroundImage: isDark ? 'url(/public/static/bg-dark.jpg)' : 'url(/public/static/bg.png)',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
   minHeight: '100vh',
-};
+  minWidth: '520px',
+  backgroundColor: isDark ? '#141414' : '#f0f2f5',
+  transition: 'background-color 0.3s ease',
+});
+
 const loginBodyStyle: CSSProperties = {
   flex: 1,
   display: 'flex',
@@ -30,75 +40,161 @@ const loginBodyStyle: CSSProperties = {
   padding: '40px',
   position: 'relative',
 };
-const loginCardStyle: CSSProperties = { 
-  background: 'white', 
-  borderRadius: '16px', 
+
+const getLoginCardStyle = (isDark: boolean): CSSProperties => ({ 
+  background: isDark ? '#1f1f1f' : 'white', 
+  borderRadius: '24px', 
   overflow: 'hidden', 
-  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-  padding: '40px 20px',
+  boxShadow: isDark 
+    ? '0 8px 24px rgba(0, 0, 0, 0.45)' 
+    : '0 8px 24px rgba(0, 0, 0, 0.12)',
+  padding: '48px 32px',
   position: 'relative',
-};
-const iconStyle: CSSProperties = {
-  color: 'rgba(0, 0, 0, 0.2)',
-  fontSize: '18px',
+  transition: 'all 0.3s ease',
+});
+
+const getIconStyle = (isDark: boolean): CSSProperties => ({
+  color: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)',
+  fontSize: '20px',
   verticalAlign: 'middle',
   cursor: 'pointer',
-};
-const iconDivStyle: CSSProperties = {
+  transition: 'all 0.2s ease',
+});
+
+const getIconDivStyle = (isDark: boolean): CSSProperties => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
-  height: 40,
-  width: 40,
-  border: '1px solid #D4D8DD',
+  height: 48,
+  width: 48,
+  border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid #D4D8DD',
   borderRadius: '50%',
-};
+  transition: 'all 0.3s ease',
+  cursor: 'pointer',
+});
 
 const Login: React.FC = () => {
-  const navigate = useNavigate()
-  const { login, token, user } = useAuthStore()
+  const navigate = useNavigate();
+  const { login, token, user } = useAuthStore();
+  const { t, i18n } = useTranslation();
+  const themeConfig = useGlobalStore(state => state.themeConfig);
+  const setThemeConfig = useGlobalStore(state => state.setThemeConfig);
+  const logo = useGlobalStore(state => state.logo);
+  const title = useGlobalStore(state => state.title);
+  const subtitle = useGlobalStore(state => state.subtitle);
+  const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
+  const [isDark, setIsDark] = useState(themeConfig.algorithm === 'darkAlgorithm');
 
   useEffect(() => {
+    setHeadTitle(title + ' - ' + subtitle);
     if(token && user) {
-      console.log("已登录，路由重定向！");
+      console.log(t('login.alreadyLoggedIn'));
       window.location.href = '/';
     }
-  }, [token, user, navigate]);
+    
+  }, [token, user, navigate, t]);
 
   const handleSubmit = async (values: LoginParams) => {
     await login(values);
-    message.success('登录成功！');
+    message.success(t('login.success'));
     window.location.href = '/';
+  };
+  
+  // 语言切换
+  const onLocationClick = async (lng: string) => {
+    await i18n.changeLanguage(lng);
+    localStorage.setItem('i18nextLng', lng);
+  }
+  
+  const localesItems: MenuProps['items'] = [
+    {
+      key: '1',
+      label: '简体中文',
+      onClick: () => onLocationClick('zh'),
+    },
+    {
+      key: '2',
+      label: 'English',
+      onClick: () => onLocationClick('en'),
+    },
+    {
+      key: '3',
+      label: '日本語です',
+      onClick: () => onLocationClick('jp'),
+    },
+    {
+      key: '4',
+      label: 'Français',
+      onClick: () => onLocationClick('fr'),
+    },
+    {
+      key: '5',
+      label: 'Русский',
+      onClick: () => onLocationClick('ru'),
+    },
+  ];
+  
+  // 暗黑模式切换
+  const toggleTheme = () => {
+    const newIsDark = !isDark;
+    setIsDark(newIsDark);
+    setThemeConfig({
+      ...themeConfig,
+      ...newIsDark ? darkColorTheme : defaultColorTheme,
+    });
   };
 
   return (
-    <Row style={bodyStyle}>
+    <Row style={getBodyStyle(isDark)}>
       <Col lg={12} xs={24} style={loginBodyStyle}>
-        <div style={loginCardStyle}>
+        <div style={getLoginCardStyle(isDark)}>
+          {/* 右上角工具栏 */}
+          <div style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            zIndex: 10,
+          }}>
+            <Space size="middle">
+              <Dropdown menu={{items: localesItems}}>
+                <Button 
+                  icon={<TranslationOutlined />} 
+                  size="large" 
+                  type="text"
+                />
+              </Dropdown>
+              <Button 
+                icon={<BulbOutlined />} 
+                size="large" 
+                type="text"
+                onClick={toggleTheme}
+              />
+            </Space>
+          </div>
           <LoginForm
-            logo={'https://file.xinadmin.cn/file/favicons.ico'}
-            title={'Xin Admin'}
-            subTitle={'用技术改变世界'}
+            logo={logo}
+            title={title}
+            subTitle={subtitle}
             layout='vertical'
             actions={
               <>
-                <Divider plain>其他登录方式</Divider>
+                <Divider plain>{t('login.otherLogin')}</Divider>
                 <Space align="center" size={24} style={{ display: 'flex', justifyContent: 'center' }}>
-                  <div style={iconDivStyle}>
-                    <QqOutlined style={{ ...iconStyle, color: 'rgb(123, 212, 239)' }} />
+                  <div style={getIconDivStyle(isDark)}>
+                    <QqOutlined style={{ ...getIconStyle(isDark), color: 'rgb(123, 212, 239)' }} />
                   </div>
-                  <div style={iconDivStyle}>
-                    <WechatOutlined style={{ ...iconStyle, color: 'rgb(51, 204, 0)' }} />
+                  <div style={getIconDivStyle(isDark)}>
+                    <WechatOutlined style={{ ...getIconStyle(isDark), color: 'rgb(51, 204, 0)' }} />
                   </div>
-                  <div style={iconDivStyle}>
-                    <AlipayOutlined style={{ ...iconStyle, color: '#1677FF' }} />
+                  <div style={getIconDivStyle(isDark)}>
+                    <AlipayOutlined style={{ ...getIconStyle(isDark), color: '#1677FF' }} />
                   </div>
-                  <div style={iconDivStyle}>
-                    <TaobaoOutlined style={{ ...iconStyle, color: '#FF6A10' }} />
+                  <div style={getIconDivStyle(isDark)}>
+                    <TaobaoOutlined style={{ ...getIconStyle(isDark), color: '#FF6A10' }} />
                   </div>
-                  <div style={iconDivStyle}>
-                    <WeiboOutlined style={{ ...iconStyle, color: '#e71f19' }} />
+                  <div style={getIconDivStyle(isDark)}>
+                    <WeiboOutlined style={{ ...getIconStyle(isDark), color: '#e71f19' }} />
                   </div>
                 </Space>
               </>
@@ -107,36 +203,35 @@ const Login: React.FC = () => {
           >
             <ProFormText
               name="username"
-              label="用户名"
+              label={t('login.username')}
               fieldProps={{
                 size: 'large',
                 variant: "filled",
                 prefix: <UserOutlined className={'prefixIcon'} />,
               }}
-              placeholder={'admin'}
-              rules={[{ required: true, message: '请输入用户名!' }]}
+              placeholder={t('login.usernamePlaceholder')}
+              rules={[{ required: true, message: t('login.usernameRequired') }]}
             />
             <ProFormText.Password
               name="password"
-              label="密码"
+              label={t('login.password')}
               fieldProps={{
                 size: 'large',
                 variant: "filled",
                 prefix: <LockOutlined className={'prefixIcon'} />,
               }}
-              placeholder={'123456'}
-              rules={[{ required: true, message: '请输入密码！' }]}
+              placeholder={t('login.passwordPlaceholder')}
+              rules={[{ required: true, message: t('login.passwordRequired') }]}
             />
             <div style={{ marginBlockEnd: 24 }}>
-              <ProFormCheckbox noStyle name="remember">保持登录</ProFormCheckbox>
-              <a style={{ float: 'right' }}>忘记密码</a>
+              <ProFormCheckbox noStyle name="remember">{t('login.remember')}</ProFormCheckbox>
+              <a style={{ float: 'right' }}>{t('login.forgotPassword')}</a>
             </div>
           </LoginForm>
         </div>
       </Col>
       <Col lg={12} xs={24}></Col>
     </Row>
-    
   );
 };
 
