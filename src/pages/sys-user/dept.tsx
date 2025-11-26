@@ -21,7 +21,7 @@ import {BetaSchemaForm, type ProFormInstance} from "@ant-design/pro-components";
 import * as React from "react";
 import {useTranslation} from "react-i18next";
 import AuthButton from "@/components/AuthButton";
-import useAuth from "@/utils/useAuth.ts";
+import useAuth from "@/hooks/useAuth";
 import type ISysUser from "@/domain/iSysUser.ts";
 
 const deptMap = new Map<string, ISysDept>();

@@ -8,7 +8,7 @@ import SettingDrawer from "@/layout/SettingDrawer";
 import ColumnSiderRender from "@/layout/ColumnSiderRender";
 import MenuRender from "@/layout/MenuRender";
 import MobileDrawerMenu from "@/layout/MobileDrawerMenu";
-import {useMobile} from "@/utils/useMobile";
+import {useMobile} from "@/hooks/useMobile";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import useAuthStore from '@/stores/user';
 

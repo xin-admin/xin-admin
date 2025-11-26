@@ -9,7 +9,7 @@ import IconSelect from "@/components/XinForm/IconSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useRef} from "react";
 import type {ProFormInstance} from "@ant-design/pro-components";
-import useAuth from "@/utils/useAuth.ts";
+import useAuth from "@/hooks/useAuth";
 import AuthButton from "@/components/AuthButton";
 
 const Rule =  () => {
