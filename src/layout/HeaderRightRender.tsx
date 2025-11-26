@@ -9,7 +9,6 @@ import {
   HomeOutlined,
   SearchOutlined,
   SettingOutlined,
-  TranslationOutlined,
   UserOutlined,
   VerticalLeftOutlined
 } from "@ant-design/icons";
@@ -18,12 +17,13 @@ import {useTranslation} from "react-i18next";
 import useAuthStore from "@/stores/user";
 import {useNavigate} from "react-router";
 import {useState} from "react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const {useToken} = theme;
 
 const HeaderLeftRender = () => {
   const {token} = useToken();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const navigate = useNavigate()
   const themeDrawer = useGlobalStore(state => state.themeDrawer);
   const setThemeDrawer = useGlobalStore(state => state.setThemeDrawer);
@@ -54,42 +54,6 @@ const HeaderLeftRender = () => {
       });
     }
   };
-
-  /** 语言切换按钮事件 */
-  const onLocationClick = async (lng: string) => {
-    // 设置 i18n 语言
-    await i18n.changeLanguage(lng);
-    // 存储到 localStorage
-    localStorage.setItem('i18nextLng', lng);
-  }
-
-  const localesItems: MenuProps['items'] = [
-    {
-      key: '1',
-      label: '简体中文',
-      onClick: () => onLocationClick('zh'),
-    },
-    {
-      key: '2',
-      label: 'English',
-      onClick: () => onLocationClick('en'),
-    },
-    {
-      key: '3',
-      label: '日本語です',
-      onClick: () => onLocationClick('jp'),
-    },
-    {
-      key: '4',
-      label: 'Français',
-      onClick: () => onLocationClick('fr'),
-    },
-    {
-      key: '5',
-      label: 'Русский',
-      onClick: () => onLocationClick('ru'),
-    },
-  ];
 
   const userItems: MenuProps['items'] = [
     {
@@ -158,9 +122,7 @@ const HeaderLeftRender = () => {
               size={"large"}
               type={'text'}
             />
-            <Dropdown menu={{items: localesItems}}>
-              <Button icon={<TranslationOutlined/>} size={"large"} type={'text'}/>
-            </Dropdown>
+            <LanguageSwitcher size={"large"} type={'text'} />
             <Button onClick={() => setThemeDrawer(!themeDrawer)} icon={<SettingOutlined/>} size={"large"} type={'text'}/>
           </>
         )}

@@ -1,19 +1,10 @@
-import {App, ConfigProvider, type ConfigProviderProps, type ThemeConfig} from 'antd';
-import {type PropsWithChildren, useEffect, useMemo, useState} from 'react';
+import {App, ConfigProvider, type ThemeConfig} from 'antd';
+import {type PropsWithChildren, useMemo} from 'react';
 import '@ant-design/v5-patch-for-react-19';
 import algorithm from "@/layout/algorithm.ts";
 import {useGlobalStore} from "@/stores";
-import {useTranslation} from "react-i18next";
 import {ProConfigProvider} from "@ant-design/pro-components";
-import en_US from 'antd/es/locale/en_US';
-import ja_JP from 'antd/es/locale/ja_JP';
-import zh_CN from 'antd/es/locale/zh_CN';
-import 'dayjs/locale/en';
-import 'dayjs/locale/ja';
-import 'dayjs/locale/zh-cn';
-import dayjs from "dayjs";
-
-type Locale = ConfigProviderProps['locale'];
+import { useAntdLocale } from '@/hooks/useLanguage';
 
 function ContextHolder() {
   const { message, modal, notification } = App.useApp();
@@ -25,6 +16,8 @@ function ContextHolder() {
 
 const AppProvider = ({ children }: PropsWithChildren) => {
   const themeConfig = useGlobalStore(state => state.themeConfig);
+  const locale = useAntdLocale();
+
   const theme: ThemeConfig = useMemo(() => ({
     components: {
       Layout: {
@@ -56,22 +49,6 @@ const AppProvider = ({ children }: PropsWithChildren) => {
     },
     algorithm: themeConfig.algorithm ? algorithm[themeConfig.algorithm] : undefined
   }), [themeConfig])
-
-  const [locale, setLocal] = useState<Locale>(zh_CN);
-  const { i18n } = useTranslation();
-
-  useEffect(() => {
-    if( i18n.language === 'en') {
-      dayjs.locale('en');
-      setLocal(en_US);
-    } else if (i18n.language === 'jp') {
-      dayjs.locale('ja');
-      setLocal(ja_JP);
-    } else {
-      dayjs.locale('zh-cn');
-      setLocal(zh_CN);
-    }
-  }, [i18n.language]);
 
   return (
     <ConfigProvider theme={{...theme, cssVar: true}} locale={locale}>

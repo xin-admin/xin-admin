@@ -6,11 +6,10 @@ import {
   UserOutlined,
   WechatOutlined,
   WeiboOutlined,
-  TranslationOutlined,
   BulbOutlined,
 } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
-import { Col, Divider, message, Row, Space, Dropdown, Button, type MenuProps } from 'antd';
+import { Col, Divider, message, Row, Space, Button } from 'antd';
 import {type CSSProperties, useEffect, useState} from 'react';
 import React from 'react';
 import useAuthStore from "@/stores/user.ts";
@@ -19,6 +18,7 @@ import type { LoginParams } from '@/api/sys/sysUser';
 import { useTranslation } from 'react-i18next';
 import { useGlobalStore } from '@/stores';
 import { darkColorTheme, defaultColorTheme } from '@/layout/theme';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 // 样式定义函数，支持暗黑模式
 const getBodyStyle = (isDark: boolean): CSSProperties => ({
@@ -77,7 +77,7 @@ const getIconDivStyle = (isDark: boolean): CSSProperties => ({
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login, token, user } = useAuthStore();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const themeConfig = useGlobalStore(state => state.themeConfig);
   const setThemeConfig = useGlobalStore(state => state.setThemeConfig);
   const logo = useGlobalStore(state => state.logo);
@@ -101,40 +101,6 @@ const Login: React.FC = () => {
     window.location.href = '/';
   };
   
-  // 语言切换
-  const onLocationClick = async (lng: string) => {
-    await i18n.changeLanguage(lng);
-    localStorage.setItem('i18nextLng', lng);
-  }
-  
-  const localesItems: MenuProps['items'] = [
-    {
-      key: '1',
-      label: '简体中文',
-      onClick: () => onLocationClick('zh'),
-    },
-    {
-      key: '2',
-      label: 'English',
-      onClick: () => onLocationClick('en'),
-    },
-    {
-      key: '3',
-      label: '日本語です',
-      onClick: () => onLocationClick('jp'),
-    },
-    {
-      key: '4',
-      label: 'Français',
-      onClick: () => onLocationClick('fr'),
-    },
-    {
-      key: '5',
-      label: 'Русский',
-      onClick: () => onLocationClick('ru'),
-    },
-  ];
-  
   // 暗黑模式切换
   const toggleTheme = () => {
     const newIsDark = !isDark;
@@ -157,13 +123,7 @@ const Login: React.FC = () => {
             zIndex: 10,
           }}>
             <Space size="middle">
-              <Dropdown menu={{items: localesItems}}>
-                <Button 
-                  icon={<TranslationOutlined />} 
-                  size="large" 
-                  type="text"
-                />
-              </Dropdown>
+              <LanguageSwitcher size={"large"} type={'text'} />
               <Button 
                 icon={<BulbOutlined />} 
                 size="large" 
