@@ -18,6 +18,7 @@ import useAuthStore from "@/stores/user";
 import {useNavigate} from "react-router";
 import {useState} from "react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import {usePageTitle} from "@/hooks/usePageTitle";
 
 const {useToken} = theme;
 
@@ -31,10 +32,9 @@ const HeaderLeftRender = () => {
   const logout = useAuthStore(state => state.logout);
   const menuMap = useAuthStore(state => state.menuMap);
   const breadcrumbMap = useAuthStore(state => state.breadcrumbMap);
-  const title = useGlobalStore(state => state.title);
-  const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
   const setBreadcrumb = useGlobalStore(state => state.setBreadcrumb);
   const isMobile = useGlobalStore(state => state.isMobile);
+  const { setPageTitle } = usePageTitle();
 
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [searchOpen, setSearch] = useState<boolean>(false);
@@ -64,8 +64,8 @@ const HeaderLeftRender = () => {
         const menu = menuMap['user.setting'];
         setBreadcrumb(breadcrumbMap['user.setting']);
         const headTitle = menu.local ? t(menu.local) : menu.name;
-        setHeadTitle(title + ' - ' + headTitle);
-        navigate('/user/setting')
+        setPageTitle(headTitle || '');
+        navigate('/user/setting');
       },
     },
     {

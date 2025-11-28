@@ -16,7 +16,7 @@ interface GlobalState {
   title: string;
   subtitle: string;
   describe: string;
-  headTitle: string;
+  documentTitle: string;
   layout: LayoutType;
   themeConfig: ThemeProps;
   collapsed: boolean;
@@ -27,7 +27,7 @@ interface GlobalState {
   isMobile: boolean;
   mobileMenuOpen: boolean;
   setWebInfo: (title: string, subtitle: string, describe: string, logo: string) => void;
-  setHeadTitle: (title: string) => void;
+  setDocumentTitle: (documentTitle: string) => void;
   setCollapsed: (collapsed: boolean) => void;
   setThemeConfig: (themeConfig: ThemeProps) => void;
   setThemeDrawer: (themeDrawer: boolean) => void;
@@ -45,7 +45,7 @@ export const useGlobalStore = create<GlobalState>()(
       title: "Xin Admin",
       subtitle: "基于 Ant Design 的后台管理框架",
       describe: "Xin Admin 是一个基于 Ant Design 的后台管理框架",
-      headTitle: "Xin Admin",
+      documentTitle: "Xin Admin",
       layout: "side",
       themeConfig: {...defaultColorTheme, ...configTheme},
       collapsed: false,
@@ -58,8 +58,8 @@ export const useGlobalStore = create<GlobalState>()(
       setWebInfo: (title: string, subtitle: string, describe: string, logo: string) => {
         setState({title, subtitle, describe, logo})
       },
-      setHeadTitle: (headTitle: string) => {
-        setState({headTitle})
+      setDocumentTitle: (documentTitle: string) => {
+        setState({documentTitle})
       },
       setCollapsed: (collapsed: boolean) => {
         setState({collapsed})

@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useGlobalStore } from '@/stores';
 import { darkColorTheme, defaultColorTheme } from '@/layout/theme';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { usePageTitle } from '@/hooks/usePageTitle';
 
 // 样式定义函数，支持暗黑模式
 const getBodyStyle = (isDark: boolean): CSSProperties => ({
@@ -83,17 +84,16 @@ const Login: React.FC = () => {
   const logo = useGlobalStore(state => state.logo);
   const title = useGlobalStore(state => state.title);
   const subtitle = useGlobalStore(state => state.subtitle);
-  const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
   const [isDark, setIsDark] = useState(themeConfig.algorithm === 'darkAlgorithm');
+  const { setPageTitle } = usePageTitle();
 
   useEffect(() => {
-    setHeadTitle(title + ' - ' + subtitle);
+    setPageTitle(subtitle);
     if(token && user) {
       console.log(t('login.alreadyLoggedIn'));
       window.location.href = '/';
     }
-    
-  }, [token, user, navigate, t]);
+  }, [token, user, navigate, t, subtitle, setPageTitle]);
 
   const handleSubmit = async (values: LoginParams) => {
     await login(values);

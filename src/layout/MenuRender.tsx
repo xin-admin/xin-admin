@@ -6,6 +6,7 @@ import {Menu, type MenuProps} from "antd";
 import {useCallback, useEffect, useState} from "react";
 import {useGlobalStore} from "@/stores";
 import {useNavigate} from "react-router";
+import {usePageTitle} from "@/hooks/usePageTitle";
 type MenuItem = Required<MenuProps>['items'][number];
 
 const MenuRender = () => {
@@ -15,12 +16,11 @@ const MenuRender = () => {
   const breadcrumbMap = useAuthStore(state => state.breadcrumbMap);
   const layout = useGlobalStore(state => state.layout);
   const menuParentKey = useGlobalStore(state => state.menuParentKey);
-  const title = useGlobalStore(state => state.title);
-  const setHeadTitle = useGlobalStore(state => state.setHeadTitle);
   const setBreadcrumb = useGlobalStore(state => state.setBreadcrumb);
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const isMobile = useGlobalStore(state => state.isMobile);
   const navigate = useNavigate();
+  const { setPageTitle } = usePageTitle();
 
   const transformMenus = useCallback((nodes: IMenus[]): MenuItem[] => {
     const menusItems: MenuItem[] = [];
@@ -58,7 +58,7 @@ const MenuRender = () => {
     const menu = menuMap[info.key];
     setBreadcrumb(breadcrumbMap[info.key]);
     const headTitle = menu.local ? t(menu.local) : menu.name;
-    setHeadTitle(title + ' - ' + headTitle);
+    setPageTitle(headTitle || '');
     if(! menu.path) return;
     if (menu.link) {
       window.open(menu.path, '_blank');
