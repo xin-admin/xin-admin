@@ -17,8 +17,6 @@ interface AuthState {
   token: string | null;
   refresh_token: string | null;
   user: ISysUser | null;
-  user_id: number | null;
-  user_name: string | null;
   access: string[];
   menus: IMenus[];
   menuMap: {[key: string]: IMenus };
@@ -38,8 +36,6 @@ const useAuthStore = create<AuthState>()(
       token: null,
       refresh_token: null,
       user: null,
-      user_id: null,
-      user_name: null,
       access: [],
       menus: [],
       menuMap: {},
@@ -86,8 +82,6 @@ const useAuthStore = create<AuthState>()(
           breadcrumbMap,
           user: data.info,
           access: data.access,
-          user_id: data.info.id,
-          user_name: data.info.username,
         });
       },
       setMenus: async (menus: IMenus[]) => {
