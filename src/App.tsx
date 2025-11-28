@@ -5,13 +5,15 @@ import AuthRoute from "@/components/AuthRoute"
 import PageTitle from "@/components/PageTitle";
 import AntdProvider from "@/components/AntdProvider";
 import { useGlobalStore } from "./stores";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { getWebInfo } from "./api";
 
 const App = () => {
   const { menus } = useAuthStore();
   const setWebInfo = useGlobalStore(state => state.setWebInfo);
-  const router = createRouter(menus);
+  
+  // 性能优化: 使用 useMemo 缓存 router，避免每次渲染都重新创建
+  const router = useMemo(() => createRouter(menus), [menus]);
 
   useEffect(() => {
     getWebInfo().then(({data}) => {
