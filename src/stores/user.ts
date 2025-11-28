@@ -14,8 +14,6 @@ type BreadcrumbType = {
 };
 
 interface AuthState {
-  token: string | null;
-  refresh_token: string | null;
   user: ISysUser | null;
   access: string[];
   menus: IMenus[];
@@ -25,16 +23,15 @@ interface AuthState {
   login: (credentials: LoginParams) => Promise<boolean>;
   getInfo: () => Promise<void>;
   logout: () => Promise<void>;
-  setMenus: (rules: IMenus[]) => Promise<void>;
-  setAccess: (access: string[]) => Promise<void>;
-  setLocalRoute: (isLocal: boolean) => Promise<void>;
+  setMenus: (rules: IMenus[]) => void;
+  setAccess: (access: string[]) => void;
+  setLocalRoute: (isLocal: boolean) => void;
+  isAuthenticated: () => boolean;
 }
 
 const useAuthStore = create<AuthState>()(
   persist(
     (set, getState) => ({
-      token: null,
-      refresh_token: null,
       user: null,
       access: [],
       menus: [],
@@ -42,73 +39,89 @@ const useAuthStore = create<AuthState>()(
       breadcrumbMap: {},
       localRoute: true,
       login: async (params) => {
-        const {data} = await login(params);
-        if (!data.success || !data.data) {
+        try {
+          const {data} = await login(params);
+          if (!data.success || !data.data) {
+            return false;
+          }
+          // 只存储到 localStorage，作为单一真实来源
+          localStorage.setItem("token", data.data.plainTextToken);
+          return true;
+        } catch (error) {
+          console.error('登录失败:', error);
           return false;
         }
-        set({token: data.data.plainTextToken})
-        localStorage.setItem("token", data.data.plainTextToken)
-        return true;
       },
       getInfo: async () => {
-        const result = await info();
-        const data: InfoResponse = result.data.data!;
-        const menuMap: {[key: string]: IMenus } = {};
-        const breadcrumbMap: {[key: string]: BreadcrumbType[] } = {};
-        const buildMenuIndexes = (menus: IMenus[], parentBreadcrumb: IMenus[] = []) => {
-          for (const menu of menus) {
-            if (!menu.key) continue;
-            menuMap[menu.key] = menu;
-            const currentBreadcrumb = [
-              ...parentBreadcrumb,
-              { href: menu.path, title: menu.name, icon: menu.icon, local: menu.local }
-            ];
-            breadcrumbMap[menu.key] = currentBreadcrumb;
-            if (menu.children?.length) {
-              buildMenuIndexes(menu.children, currentBreadcrumb);
+        try {
+          const result = await info();
+          const data: InfoResponse = result.data.data!;
+          const menuMap: {[key: string]: IMenus } = {};
+          const breadcrumbMap: {[key: string]: BreadcrumbType[] } = {};
+          const buildMenuIndexes = (menus: IMenus[], parentBreadcrumb: IMenus[] = []) => {
+            for (const menu of menus) {
+              if (!menu.key) continue;
+              menuMap[menu.key] = menu;
+              const currentBreadcrumb = [
+                ...parentBreadcrumb,
+                { href: menu.path, title: menu.name, icon: menu.icon, local: menu.local }
+              ];
+              breadcrumbMap[menu.key] = currentBreadcrumb;
+              if (menu.children?.length) {
+                buildMenuIndexes(menu.children, currentBreadcrumb);
+              }
             }
+          };
+          let menus: IMenus[];
+          if (getState().localRoute) {
+            menus = defaultRoute;
+          }else {
+            menus = data.menus;
           }
-        };
-        let menus: IMenus[];
-        if (getState().localRoute) {
-          menus = defaultRoute;
-        }else {
-          menus = data.menus;
+          buildMenuIndexes(menus);
+          set({
+            menus,
+            menuMap,
+            breadcrumbMap,
+            user: data.info,
+            access: data.access,
+          });
+        } catch (error) {
+          console.error('获取用户信息失败:', error);
+          // 清理状态
+          set({ user: null, access: [], menus: [], menuMap: {}, breadcrumbMap: {} });
         }
-        buildMenuIndexes(menus);
-        set({
-          menus,
-          menuMap,
-          breadcrumbMap,
-          user: data.info,
-          access: data.access,
-        });
       },
-      setMenus: async (menus: IMenus[]) => {
-        set({
-            menus: menus,
-        })
+      setMenus: (menus: IMenus[]) => {
+        set({ menus });
       },
-      setAccess: async (access: string[]) => {
-        set({
-          access: access,
-        })
+      setAccess: (access: string[]) => {
+        set({ access });
       },
       logout: async () => {
-        await logout()
-        localStorage.removeItem('token')
-        localStorage.removeItem('refresh_token')
-        set({
-          token: null,
-          refresh_token: null,
-          user: null,
-          access: [],
-          menus: []
-        })
+        try {
+          await logout();
+        } catch (error) {
+          console.error('登出失败:', error);
+        } finally {
+          // 无论成功失败都清理本地状态
+          localStorage.removeItem('token');
+          set({
+            user: null,
+            access: [],
+            menus: [],
+            menuMap: {},
+            breadcrumbMap: {},
+          });
+        }
       },
-      setLocalRoute: async (isLocal: boolean) => {
-        set({ localRoute: isLocal })
-      }
+      setLocalRoute: (isLocal: boolean) => {
+        set({ localRoute: isLocal });
+      },
+      // 派生方法：检查是否已登录
+      isAuthenticated: () => {
+        return !!localStorage.getItem('token');
+      },
     }),
     {
       name: 'auth-storage',

@@ -1,15 +1,26 @@
-import {type JSX, useEffect} from 'react'
-import useAuthStore from "@/stores/user.ts";
+import { type ReactNode, useEffect } from 'react';
+import useAuthStore from "@/stores/user";
 
-export default function Index({ children }: { children: JSX.Element }) {
-  const token = useAuthStore(state => state.token)
-  
+interface AuthRouteProps {
+  children: ReactNode;
+  redirectTo?: string;
+}
+
+export default function AuthRoute({ children, redirectTo = '/login' }: AuthRouteProps) {
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+
   useEffect(() => {
-    if (!token && location.pathname !== '/login') {
-      console.log('未登录，路由重定向到登录页')
-      location.href = '/login';
+    // 检查登录状态
+    if (!isAuthenticated() && window.location.pathname !== redirectTo) {
+      // 跳转到登录页
+      window.location.href = redirectTo;
     }
-  }, [token])
+  }, [isAuthenticated, redirectTo]);
 
-  return children
+  // 未登录时不渲染子组件
+  if (!isAuthenticated() && window.location.pathname !== redirectTo) {
+    return null;
+  }
+
+  return <>{children}</>;
 }

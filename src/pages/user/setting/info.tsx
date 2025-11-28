@@ -9,7 +9,6 @@ import {useTranslation} from "react-i18next";
 const Info = () => {
   const userInfo = useAuthStore(state => state.user);
   const getInfo = useAuthStore(state => state.getInfo);
-  const token = useAuthStore(state => state.token);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const {t} = useTranslation();
@@ -44,7 +43,8 @@ const Info = () => {
             name="file"
             action={`${import.meta.env.VITE_BASE_URL}/admin/avatar`}
             headers={{
-              Authorization: `Bearer ${token}`
+              // 直接从 localStorage 获取 token
+              Authorization: `Bearer ${localStorage.getItem('token')}`
             }}
             showUploadList={false}
             onChange={uploadChange}

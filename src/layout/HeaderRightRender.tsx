@@ -75,7 +75,7 @@ const HeaderLeftRender = () => {
       onClick: async () => {
         logout().then(() => {
           message.success(t('layout.logoutSuccess'))
-          navigate('/login', {replace: true})
+          window.location.href = '/login';
         }).catch(() => {
           message.error(t('layout.logoutFailed'))
         })

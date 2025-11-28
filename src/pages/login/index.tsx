@@ -77,7 +77,7 @@ const getIconDivStyle = (isDark: boolean): CSSProperties => ({
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { login, token, user } = useAuthStore();
+  const { login, user } = useAuthStore();
   const { t } = useTranslation();
   const themeConfig = useGlobalStore(state => state.themeConfig);
   const setThemeConfig = useGlobalStore(state => state.setThemeConfig);
@@ -89,11 +89,11 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     setPageTitle(subtitle);
-    if(token && user) {
+    if(localStorage.getItem('token') && user) {
       console.log(t('login.alreadyLoggedIn'));
       window.location.href = '/';
     }
-  }, [token, user, navigate, t, subtitle, setPageTitle]);
+  }, [user, navigate, t, subtitle, setPageTitle]);
 
   const handleSubmit = async (values: LoginParams) => {
     await login(values);
