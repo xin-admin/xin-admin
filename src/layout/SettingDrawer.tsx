@@ -6,6 +6,7 @@ import {configTheme, darkColorTheme, defaultColorTheme, greenColorTheme, pinkCol
 import {algorithmOptions} from "@/layout/algorithm.ts";
 import useAuthStore from "@/stores/user.ts";
 import {useTranslation} from 'react-i18next';
+import {useThemeTransition} from '@/hooks/useThemeTransition';
 
 const {useToken} = theme;
 
@@ -102,16 +103,21 @@ const SettingDrawer: React.FC = () => {
   const localRoute = useAuthStore(state => state.localRoute);
   const setLocalRoute = useAuthStore(state => state.setLocalRoute);
   const getUserInfo = useAuthStore(state => state.getInfo);
-
+  
+  // 主题过渡动画 Hook
+  const { transitionTheme, transitionThemeWithCircle, isTransitioning } = useThemeTransition();
+  
   // 翻译后的算法选项
   const translatedAlgorithmOptions = algorithmOptions?.map(option => ({
     ...option,
     label: t(option.label as string)
   })) || [];
 
-  // 防抖更新主题配置
+  // 防抖更新主题配置（带过渡动画）
   const changeSetting = debounce((key: string, value: any) => {
-    setThemeConfig({...themeConfig, [key]: value});
+    transitionTheme(() => {
+      setThemeConfig({...themeConfig, [key]: value});
+    });
   }, 300, {leading: true, trailing: false});
 
   // 切换路由
@@ -120,7 +126,7 @@ const SettingDrawer: React.FC = () => {
     await getUserInfo()
   }
 
-  // 处理主题切换
+  // 处理主题切换（带圆形扩散动画）
   const handleThemeChange = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = (e.target as HTMLElement).closest('[data-theme]');
     if (!target) return;
@@ -134,13 +140,18 @@ const SettingDrawer: React.FC = () => {
     };
 
     if (themeMap[themeName as keyof typeof themeMap]) {
-      setThemeConfig({...themeConfig, ...themeMap[themeName as keyof typeof themeMap]});
+      // 使用圆形扩散动画切换主题
+      transitionThemeWithCircle(e, () => {
+        setThemeConfig({...themeConfig, ...themeMap[themeName as keyof typeof themeMap]});
+      });
     }
   };
 
-  // 重置主题
+  // 重置主题（带过渡动画）
   const resetTheme = () => {
-    setThemeConfig({...configTheme, ...defaultColorTheme});
+    transitionTheme(() => {
+      setThemeConfig({...configTheme, ...defaultColorTheme});
+    });
   };
 
   return (
@@ -153,8 +164,12 @@ const SettingDrawer: React.FC = () => {
       width={392}
       footer={(
         <div className="flex w-full justify-between">
-          <Button onClick={resetTheme}>{t('layout.resetTheme')}</Button>
-          <Button type="primary">{t('layout.saveTheme')}</Button>
+          <Button onClick={resetTheme} disabled={isTransitioning}>
+            {t('layout.resetTheme')}
+          </Button>
+          <Button type="primary" disabled={isTransitioning}>
+            {t('layout.saveTheme')}
+          </Button>
         </div>
       )}
     >

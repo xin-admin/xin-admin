@@ -20,6 +20,7 @@ import { useGlobalStore } from '@/stores';
 import { darkColorTheme, defaultColorTheme } from '@/layout/theme';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import {useThemeTransition} from '@/hooks/useThemeTransition';
 
 // 样式定义函数，支持暗黑模式
 const getBodyStyle = (isDark: boolean): CSSProperties => ({
@@ -86,6 +87,8 @@ const Login: React.FC = () => {
   const subtitle = useGlobalStore(state => state.subtitle);
   const [isDark, setIsDark] = useState(themeConfig.algorithm === 'darkAlgorithm');
   const { setPageTitle } = usePageTitle();
+  // 主题过渡动画 Hook
+  const { transitionThemeWithCircle } = useThemeTransition();
 
   useEffect(() => {
     setPageTitle(subtitle);
@@ -102,13 +105,15 @@ const Login: React.FC = () => {
   };
   
   // 暗黑模式切换
-  const toggleTheme = () => {
+  const toggleTheme = (e: any) => {
     const newIsDark = !isDark;
     setIsDark(newIsDark);
-    setThemeConfig({
-      ...themeConfig,
-      ...newIsDark ? darkColorTheme : defaultColorTheme,
-    });
+    transitionThemeWithCircle(e, () => {
+      setThemeConfig({
+        ...themeConfig,
+        ...newIsDark ? darkColorTheme : defaultColorTheme,
+      });
+    })
   };
 
   return (

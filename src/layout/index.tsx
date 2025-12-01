@@ -4,13 +4,13 @@ import {useGlobalStore} from "@/stores";
 import {Button, Layout} from "antd";
 import HeaderRender from "@/layout/HeaderRender";
 import FooterRender from "@/layout/FooterRender";
-import SettingDrawer from "@/layout/SettingDrawer";
 import ColumnSiderRender from "@/layout/ColumnSiderRender";
 import MenuRender from "@/layout/MenuRender";
 import MobileDrawerMenu from "@/layout/MobileDrawerMenu";
 import {useMobile} from "@/hooks/useMobile";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import useAuthStore from '@/stores/user';
+import SettingDrawer from "@/layout/SettingDrawer";
 
 const {Content, Sider} = Layout;
 
@@ -18,28 +18,22 @@ const LayoutRender = () => {
   const themeConfig = useGlobalStore(state => state.themeConfig);
   const layout = useGlobalStore(state => state.layout);
   const collapsed = useGlobalStore(state => state.collapsed);
-  const setIsMobile = useGlobalStore(state => state.setIsMobile);
   const isMobile = useGlobalStore(state => state.isMobile);
   const mobileMenuOpen = useGlobalStore(state => state.mobileMenuOpen);
   const setMobileMenuOpen = useGlobalStore(state => state.setMobileMenuOpen);
-  const getInfo = useAuthStore(state => state.getInfo);
-  // 使用移动端检测Hook
-  const mobileDetected = useMobile();
 
-  // 当移动端状态改变时更新全局状态
-  useEffect(() => { setIsMobile(mobileDetected) }, [mobileDetected]);
-  useEffect(() => { 
-    if( localStorage.getItem("token") ) {
-      getInfo()
-    }
-  }, []);
 
   return (
     <Layout
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
-      style={{background: themeConfig.background}}
+      style={{
+        background: themeConfig.background,
+        transition: 'background 0.3s ease-in-out',
+      }}
     >
-      <SettingDrawer></SettingDrawer>
+      
+      {/* 主题设置抽屉 */}
+      <SettingDrawer />
 
       {/* 移动端布局：隐藏侧边栏，使用抽屉菜单 */}
       {isMobile ? (

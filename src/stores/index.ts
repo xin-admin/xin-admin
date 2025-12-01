@@ -11,6 +11,13 @@ type BreadcrumbType = {
   local?: string;
 };
 
+type WebInfoProps = {
+  title: string;
+  subtitle: string; 
+  describe: string;
+   logo: string;
+}
+
 interface GlobalState {
   logo: string;
   title: string;
@@ -26,7 +33,7 @@ interface GlobalState {
   menuParentKey: string | null;
   isMobile: boolean;
   mobileMenuOpen: boolean;
-  setWebInfo: (title: string, subtitle: string, describe: string, logo: string) => void;
+  setWebInfo: (info: WebInfoProps) => void;
   setDocumentTitle: (documentTitle: string) => void;
   setCollapsed: (collapsed: boolean) => void;
   setThemeConfig: (themeConfig: ThemeProps) => void;
@@ -55,8 +62,13 @@ export const useGlobalStore = create<GlobalState>()(
       menuParentKey: null,
       isMobile: false,
       mobileMenuOpen: false,
-      setWebInfo: (title: string, subtitle: string, describe: string, logo: string) => {
-        setState({title, subtitle, describe, logo})
+      setWebInfo: (info) => {
+        setState({
+          title: info.title, 
+          subtitle: info.subtitle, 
+          describe: info.describe,
+          logo: info.logo,
+        })
       },
       setDocumentTitle: (documentTitle: string) => {
         setState({documentTitle})
