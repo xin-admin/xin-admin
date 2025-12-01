@@ -9,13 +9,13 @@ const OtherIcons = createFromIconfontCN({
   scriptUrl: oauthScriptUrl,
 });
 
-const IconFont = (props: {name?: string}) => {
+const IconFont = (props: {name?: string, style?: React.CSSProperties}) => {
   if (!props.name || !categories.allIcons.includes(props.name)) {
-    return <ExclamationOutlined />
+    return <ExclamationOutlined style={props.style} />
   } else if(allIcons[props.name]) {
-    return React.createElement(allIcons[props.name])
+    return React.createElement(allIcons[props.name] , {style: props.style})
   } else {
-    return <OtherIcons type={props.name} className={props.name} />
+    return <OtherIcons type={props.name} className={props.name} style={props.style} />
   }
 }
 

@@ -5,7 +5,7 @@ import IconFont from "@/components/IconFont";
 import XinTable from "@/components/XinTable";
 import type {XinTableColumn, XinTableRef} from "@/components/XinTable/typings.ts";
 import {Button, message, Switch, Tag, Tooltip} from "antd";
-import IconSelect from "@/components/XinForm/IconSelect";
+import IconSelector from "@/components/XinForm/IconSelector";
 import {PlusOutlined} from "@ant-design/icons";
 import {useRef} from "react";
 import type {ProFormInstance} from "@ant-design/pro-components";
@@ -31,9 +31,7 @@ const Rule =  () => {
     title: t("sysUserRule.icon"),
     dataIndex: 'icon',
     valueType: 'text',
-    renderFormItem: (form, config, schema) => (
-      <IconSelect dataIndex={form.key} form={schema} value={config.value}></IconSelect>
-    ),
+    renderFormItem: () => <IconSelector />,
   };
   /** 多语言表单项 */
   const localeItem: XinTableColumn<ISysRule> = {
