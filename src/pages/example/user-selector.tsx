@@ -13,8 +13,8 @@ const UserSelectorExample: React.FC = () => {
   const [multipleUsers, setMultipleUsers] = useState<number[]>([]);
 
   return (
-    <div className="p-6">
-      <Typography>
+    <div>
+      <Typography style={{ margin: '12px 0 24px 0' }}>
         <Title level={2}>用户选择器组件示例</Title>
         <Paragraph>
           基于 AntDesign ProComponents 封装的用户选择器表单组件，支持单选和多选模式。
@@ -22,51 +22,44 @@ const UserSelectorExample: React.FC = () => {
       </Typography>
 
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        {/* 示例1：独立使用 */}
-        <Card title="示例1：独立使用" bordered>
-          <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-            <div>
-              <Text strong>单选模式：</Text>
-              <div className="mt-2">
-                <UserSelector
-                  value={singleUser}
-                  onChange={(value) => {
-                    setSingleUser(value as number);
-                    message.success(`选中用户ID: ${value}`);
-                  }}
-                  placeholder="请选择用户"
-                />
-              </div>
-              <Text type="secondary" className="mt-2 block">
-                当前选中: {singleUser || '未选择'}
-              </Text>
-            </div>
+        <Card title="独立使用" bordered>
+          
+          <Text>单选模式：</Text>
+          <div className="mt-2">
+            <UserSelector
+              value={singleUser}
+              onChange={(value) => {
+                setSingleUser(value as number);
+                message.success(`选中用户ID: ${value}`);
+              }}
+              placeholder="请选择用户"
+            />
+          </div>
+          <Text type="secondary" className="mt-2 block">
+            当前选中: {singleUser || '未选择'}
+          </Text>
 
-            <Divider />
+          <Divider />
 
-            <div>
-              <Text strong>多选模式：</Text>
-              <div className="mt-2">
-                <UserSelector
-                  mode="multiple"
-                  value={multipleUsers}
-                  onChange={(value) => {
-                    setMultipleUsers(value as number[]);
-                    message.success(`选中${(value as number[]).length}个用户`);
-                  }}
-                  placeholder="请选择多个用户"
-                  maxTagCount={3}
-                />
-              </div>
-              <Text type="secondary" className="mt-2 block">
-                当前选中: {multipleUsers.length > 0 ? multipleUsers.join(', ') : '未选择'}
-              </Text>
-            </div>
-          </Space>
+          <Text>多选模式：</Text>
+          <div className="mt-2">
+            <UserSelector
+              mode="multiple"
+              value={multipleUsers}
+              onChange={(value) => {
+                setMultipleUsers(value as number[]);
+                message.success(`选中${(value as number[]).length}个用户`);
+              }}
+              placeholder="请选择多个用户"
+              maxTagCount={3}
+            />
+          </div>
+          <Text type="secondary" className="mt-2 block">
+            当前选中: {multipleUsers.length > 0 ? multipleUsers.join(', ') : '未选择'}
+          </Text>
         </Card>
 
-        {/* 示例2：在 ProForm 中使用 */}
-        <Card title="示例2：在 ProForm 中使用" bordered>
+        <Card title="在 ProForm 中使用" bordered>
           <ProForm
             onFinish={async (values) => {
               console.log('表单提交:', values);

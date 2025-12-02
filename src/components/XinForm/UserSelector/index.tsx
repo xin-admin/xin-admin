@@ -144,6 +144,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
     columns,
     rowKey: 'id',
     params: tableParams,
+    cardProps: { bodyStyle: { padding: 0 } },
     rowSelection: {
       type: mode === 'single' ? 'radio' : 'checkbox',
       selectedRowKeys,

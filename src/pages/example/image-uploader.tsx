@@ -33,9 +33,9 @@ const ImageUploaderExample: React.FC = () => {
   return (
     <div>
       <Typography style={{ margin: '12px 0 24px 0' }}>
-        <Title level={2}>图标选择器组件示例</Title>
+        <Title level={2}>图片上传组件示例</Title>
         <Paragraph>
-          基于 Ant Design Select + Modal + Tabs 封装的图标选择器组件，支持多分类图标选择。
+          基于 Ant Design Upload 封装的图片上传组件，支持图片剪裁、多张图片上传、尺寸限制、禁用状态等。
         </Paragraph>
       </Typography>
       <Card title="基础用法" style={{ marginBottom: 24 }}>
