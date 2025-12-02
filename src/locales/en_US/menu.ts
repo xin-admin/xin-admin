@@ -28,6 +28,7 @@ export default {
   "menu.example": "Example Components",
   "menu.example.user-selector": "User Selector",
   "menu.example.icon-selector": "Icon Selector",
+  "menu.example.image-uploader": "Image Uploader",
   "menu.user": "User Center",
   "menu.user.index": "Profile",
   "menu.user.setting": "User Settings",

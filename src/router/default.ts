@@ -364,6 +364,18 @@ const defaultRoute: IMenus[] = [
         local: "menu.example.icon-selector",
         hidden: 1,
         link: 0 
+      },
+      {
+        type: "route",
+        key: "example.image-uploader",
+        name: "图片上传器",
+        path: "/example/image-uploader",
+        icon: "PictureOutlined",
+        elementPath: "/example/image-uploader",
+        order: 2,
+        local: "menu.example.image-uploader",
+        hidden: 1,
+        link: 0 
       }
     ]
   },

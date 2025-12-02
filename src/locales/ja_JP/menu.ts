@@ -28,6 +28,7 @@ export default {
   "menu.example": "例 コンポーネント",
   "menu.example.user-selector": "ユーザー選択",
   "menu.example.icon-selector": "アイコン選択",
+  "menu.example.image-uploader": "画像アップローダ",
   "menu.user": "ユーザーセンター",
   "menu.user.index": "プロフィール",
   "menu.user.setting": "ユーザー設定",

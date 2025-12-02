@@ -28,6 +28,7 @@ export default {
   "menu.example": "Примеры компонентов",
   "menu.example.user-selector": "Выбор пользователя",
   "menu.example.icon-selector": "Выбор иконки",
+  "menu.example.image-uploader": "Загрузчик изображений",
   "menu.user": "Личный кабинет",
   "menu.user.index": "Личный кабинет",
   "menu.user.setting": "Настройки пользователя",
