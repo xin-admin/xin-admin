@@ -6,6 +6,7 @@ import type { UploadFile, UploadProps } from 'antd';
 import type { RcFile } from 'antd/es/upload';
 import type { ImageUploaderProps } from './typings';
 import type { ISysFileInfo } from '@/domain/iSysFile';
+import { useTranslation } from 'react-i18next';
 
 /**
  * 图片上传组件
@@ -23,6 +24,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   croppable = false,
   cropperOptions,
 }) => {
+  const { t } = useTranslation();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   // 计算最大上传数量
@@ -58,7 +60,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       // 1. 文件类型校验
       const isImage = file.type.startsWith('image/');
       if (!isImage) {
-        message.error('只能上传图片文件！');
+        message.error(t('xinForm.imageUploader.error.notImage'));
         reject(false);
         return;
       }
@@ -66,7 +68,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       // 2. 文件大小校验
       const isLtMaxSize = file.size / 1024 / 1024 < maxSize;
       if (!isLtMaxSize) {
-        message.error(`图片大小不能超过 ${maxSize}MB！`);
+        message.error(t('xinForm.imageUploader.error.sizeExceeded', { maxSize }));
         reject(false);
         return;
       }
@@ -82,7 +84,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           const isValidHeight = img.height <= maxHeight;
 
           if (!isValidWidth || !isValidHeight) {
-            message.error(`图片尺寸不能超过 ${maxWidth}x${maxHeight}px！`);
+            message.error(t('xinForm.imageUploader.error.dimensionExceeded', { maxWidth, maxHeight }));
             reject(false);
             return;
           }
@@ -90,12 +92,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           resolve(true);
         };
         img.onerror = () => {
-          message.error('图片加载失败！');
+          message.error(t('xinForm.imageUploader.error.loadFailed'));
           reject(false);
         };
       };
       reader.onerror = () => {
-        message.error('图片读取失败！');
+        message.error(t('xinForm.imageUploader.error.readFailed'));
         reject(false);
       };
     });
@@ -123,9 +125,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   const uploadButton = useMemo(() => (
     <button style={{ border: 0, background: 'none' }} type="button">
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>上传图片</div>
+      <div style={{ marginTop: 8 }}>{t('xinForm.imageUploader.uploadText')}</div>
     </button>
-  ), []);
+  ), [t]);
 
   // Upload 组件
   const uploadComponent = (

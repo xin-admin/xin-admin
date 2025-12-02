@@ -12,6 +12,7 @@ import sysSetting from "./sys-setting";
 import dashboard from "./dashboard";
 import layout from "./layout";
 import login from "./login";
+import xinForm from "./xin-form";
 
 export default {
   ...xinTable,
@@ -28,4 +29,5 @@ export default {
   ...dashboard,
   ...layout,
   ...login,
+  ...xinForm,
 };

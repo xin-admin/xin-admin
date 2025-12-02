@@ -221,7 +221,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
           : selectedUsers.map(u => u.id!)
         }
         onChange={handleSelectChange}
-        placeholder={placeholder || '请选择用户'}
+        placeholder={placeholder || t('xinForm.userSelector.placeholder')}
         disabled={disabled}
         loading={loading}
         maxTagCount={maxTagCount}
@@ -238,13 +238,13 @@ const UserSelector: React.FC<UserSelectorProps> = ({
       />
 
       <Modal
-        title={'选择用户'}
+        title={t('xinForm.userSelector.modal.title')}
         open={open}
         onCancel={() => setOpen(false)}
         onOk={handleSelect}
         width={1000}
-        okText={'确定'}
-        cancelText={'取消'}
+        okText={t('xinForm.userSelector.modal.okText')}
+        cancelText={t('xinForm.userSelector.modal.cancelText')}
       >
         <ProTable {...proTableProps} />
       </Modal>

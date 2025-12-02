@@ -3,6 +3,7 @@ import { Select, Modal, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import { categories, type CategoriesKeys } from '@/utils/iconFields';
 import IconFont from '@/components/IconFont';
+import { useTranslation } from 'react-i18next';
 
 /**
  * 图标选择器组件属性
@@ -29,10 +30,11 @@ export interface IconSelectProps {
 const IconSelect: React.FC<IconSelectProps> = ({
   value,
   onChange,
-  placeholder = '请选择图标',
+  placeholder,
   disabled = false,
   readonly = false,
 }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState<string | undefined>(value);
 
@@ -76,40 +78,40 @@ const IconSelect: React.FC<IconSelectProps> = ({
   const tabItems: TabsProps['items'] = useMemo(() => [
     {
       key: 'use',
-      label: '自定义图标',
+      label: t('xinForm.iconSelector.tabs.use'),
       children: <IconsList type="useIcons" />,
     },
     {
       key: 'suggestion',
-      label: '网站通用图标',
+      label: t('xinForm.iconSelector.tabs.suggestion'),
       children: <IconsList type="suggestionIcons" />,
     },
     {
       key: 'direction',
-      label: '方向性图标',
+      label: t('xinForm.iconSelector.tabs.direction'),
       children: <IconsList type="directionIcons" />,
     },
     {
       key: 'editor',
-      label: '编辑类图标',
+      label: t('xinForm.iconSelector.tabs.editor'),
       children: <IconsList type="editorIcons" />,
     },
     {
       key: 'data',
-      label: '数据类图标',
+      label: t('xinForm.iconSelector.tabs.data'),
       children: <IconsList type="dataIcons" />,
     },
     {
       key: 'logo',
-      label: '品牌和标识',
+      label: t('xinForm.iconSelector.tabs.logo'),
       children: <IconsList type="logoIcons" />,
     },
     {
       key: 'other',
-      label: '其它图标',
+      label: t('xinForm.iconSelector.tabs.other'),
       children: <IconsList type="otherIcons" />,
     },
-  ], [IconsList]);
+  ], [IconsList, t]);
 
   // Select 选项
   const selectOptions = useMemo(() => {
@@ -129,7 +131,7 @@ const IconSelect: React.FC<IconSelectProps> = ({
     <>
       <Select
         value={selectedIcon}
-        placeholder={placeholder}
+        placeholder={placeholder || t('xinForm.iconSelector.placeholder')}
         disabled={disabled}
         open={false}
         onClick={() => !disabled && !readonly && setOpen(true)}
@@ -141,7 +143,7 @@ const IconSelect: React.FC<IconSelectProps> = ({
       />
 
       <Modal
-        title="选择图标"
+        title={t('xinForm.iconSelector.modal.title')}
         open={open}
         onCancel={() => setOpen(false)}
         footer={null}
